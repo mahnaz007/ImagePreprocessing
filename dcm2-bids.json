@@ -1,0 +1,11 @@
+{
+  "descriptions": [
+      {
+          "datatype": "anat",
+          "suffix": "T1w",
+          "criteria": {
+              "SeriesDescription": "*localizer_20_Kanal*"
+          }
+      }
+  ]
+}
