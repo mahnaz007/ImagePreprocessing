@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/opt/conda/bin/dcm2bids", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/dcm2bids/cli/dcm2bids.py", line 125, in main
+    app = Dcm2BidsGen(**vars(args)).run()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/dcm2bids/dcm2bids_gen.py", line 53, in __init__
+    self.config = load_json(valid_path(config, type="file"))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/dcm2bids/utils/io.py", line 52, in valid_path
+    raise FileNotFoundError(in_path)
+FileNotFoundError: /Users/mahi021/Psychatry-department-data/Rawdata_MRscanner/aOC01/T0/dcm2bids_config.json

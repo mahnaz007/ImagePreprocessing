@@ -1,0 +1,28 @@
+INFO    | --- dcm2bids start ---
+INFO    | Running the following command: /opt/conda/bin/dcm2bids -d 01_localizer_20_Kanal -p 01 -c /Users/mahi021/Psychatry-department-data/Rawdata_MRscanner/aOC01/T0/dcm2bids_config.json -o bids_output
+INFO    | OS version: Linux-6.1.75-060175-generic-x86_64-with-glibc2.35
+INFO    | Python version: 3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 20:50:58) [GCC 12.3.0]
+INFO    | dcm2bids version: 3.1.1
+INFO    | dcm2niix version: v1.0.20240202
+INFO    | Checking for software update
+INFO    | Currently using the latest version of dcm2bids.
+INFO    | Currently using the latest version of dcm2niix.
+INFO    | participant: sub-01
+INFO    | config: /Users/mahi021/Psychatry-department-data/Rawdata_MRscanner/aOC01/T0/dcm2bids_config.json
+INFO    | BIDS directory: /workspace/gitpod/nf-training/IP18042024-imagepreprocessing/work/ee/23b53b542c1e0a5c891313a446e935/bids_output
+INFO    | Auto extract entities: False
+INFO    | Validate BIDS: False
+
+Traceback (most recent call last):
+  File "/opt/conda/bin/dcm2bids", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/dcm2bids/cli/dcm2bids.py", line 125, in main
+    app = Dcm2BidsGen(**vars(args)).run()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/dcm2bids/dcm2bids_gen.py", line 53, in __init__
+    self.config = load_json(valid_path(config, type="file"))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/dcm2bids/utils/io.py", line 52, in valid_path
+    raise FileNotFoundError(in_path)
+FileNotFoundError: /Users/mahi021/Psychatry-department-data/Rawdata_MRscanner/aOC01/T0/dcm2bids_config.json

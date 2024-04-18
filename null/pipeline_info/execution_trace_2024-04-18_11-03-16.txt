@@ -1,0 +1,2 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	6b/a059dc	3570	ConvertDicomToBIDS (01)	FAILED	127	2024-04-18 11:03:22.903	105ms	42ms	-	-	-	-	-
