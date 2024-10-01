@@ -1,0 +1,555 @@
+{
+    "descriptions": [
+        {
+            "datatype": "anat",
+            "suffix": "T1w",
+            "criteria": {
+                "SeriesDescription": "T1w_MPR",
+                "EchoTime": 0.00222
+            }
+        },
+        {
+            "datatype": "anat",
+            "suffix": "T2w",
+            "criteria": {
+                "SeriesDescription": "T2w_SPC"
+            }
+        },
+        {
+            "datatype": "dwi", 
+            "suffix": "sbref",
+            "modalityLabel": "sbref",
+            "custom_entities": "acq-DGD103_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP_SBRef",
+                "EchoTime": 0.071
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-",
+                "bids_ignore": ["bval", "bvec"]
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "dwi",
+            "custom_entities": "acq-DGD103_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP",
+                "EchoTime": 0.071
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "ADC",
+            "modalityLabel": "ADC",
+            "custom_entities": "acq-DGD103_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP_ADC",
+                "EchoTime": 0.071
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "sbref",
+            "modalityLabel": "sbref",
+            "custom_entities": "acq-DGD006_dir-PA",
+            "criteria": {
+                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA_SBRef"
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j",
+                "bids_ignore": ["bval", "bvec"]
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "dwi",
+            "custom_entities": "acq-DGD006_dir-PA",
+            "criteria": {
+                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA",
+                "EchoTime": 0.0668
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "ADC",
+            "modalityLabel": "ADC",
+            "custom_entities": "acq-DGD006_dir-PA",
+            "criteria": {
+                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA_ADC",
+                "EchoTime": 0.0668
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "sbref",
+            "modalityLabel": "sbref",
+            "custom_entities": "acq-DGD074_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP_SBRef"
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-",
+                "bids_ignore": ["bval", "bvec"]
+               
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "dwi",
+            "custom_entities": "acq-DGD074_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP",
+                "EchoTime": 0.0668
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "ADC",
+            "modalityLabel": "ADC",
+            "custom_entities": "acq-DGD074_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP_ADC",
+                "EchoTime": 0.0668
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-MIST_dir-AP_run-01",
+            "criteria": {
+                "SeriesDescription": "MIST1_cmrr_mbep2d_bold_TR1.4_AP_SBRef"
+            },
+            "sidecar_changes": {
+                "TaskName": "MIST1"
+            }
+        },
+        {
+            "id": "task-MIST1",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-MIST_dir-AP_run-01",
+            "criteria": {
+                "SeriesDescription": "MIST1_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "MIST1",
+		"B0FieldSource": "phasediff_fmap_MIST"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-MIST_dir-AP_run-02",
+            "criteria": {
+                "SeriesDescription": "MIST2_cmrr_mbep2d_bold_TR1.4_AP_SBRef"
+            },
+            "sidecar_changes": {
+                "TaskName": "MIST2"
+            }
+        },
+        {
+            "id": "task-MIST2",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-MIST_dir-AP_run-02",
+            "criteria": {
+                "SeriesDescription": "MIST2_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "MIST2",
+		"B0FieldSource": "phasediff_fmap_MIST"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-MIST_dir-AP_run-03",
+            "criteria": {
+                "SeriesDescription": "MIST3_cmrr_mbep2d_bold_TR1.4_AP_SBRef"
+            },
+            "sidecar_changes": {
+                "TaskName": "MIST3"
+            }
+        },
+        {
+            "id": "task-MIST3",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-MIST_dir-AP_run-03",
+            "criteria": {
+                "SeriesDescription": "MIST3_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "MIST3",
+		"B0FieldSource": "phasediff_fmap_MIST"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude1",
+            "customLabel": "acq-MIST",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_MIST",
+                "EchoTime": 0.00519,
+                "EchoNumber": 1
+            },
+            "sidecar_changes": {
+                "IntendedFor": [
+                    "task-MIST1",
+                    "task-MIST2",
+                    "task-MIST3"
+                ],
+		"B0FieldIdentifier": "phasediff_fmap_MIST"
+
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude2",
+            "customLabel": "acq-MIST",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_MIST",
+                "EchoTime": 0.00765,
+                "EchoNumber": 2,
+                "ImageType": ["ORIGINAL", "PRIMARY", "M", "NONE"]
+            },
+            "sidecar_changes": {
+                "IntendedFor": [
+                    "task-MIST1",
+                    "task-MIST2",
+                    "task-MIST3"
+                ],
+		"B0FieldIdentifier": "phasediff_fmap_MIST"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "phasediff",
+            "customLabel": "acq-MIST",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_MIST",
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "NONE", "PHASE"]
+            },
+            "sidecar_changes": {
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "IntendedFor": [
+                    "task-MIST1",
+                    "task-MIST2",
+                    "task-MIST3"
+                ],
+		"B0FieldIdentifier": "phasediff_fmap_MIST"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude1",
+            "customLabel": "acq-rest",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_rest",
+                "EchoTime": 0.00519,
+                "EchoNumber": 1
+            },
+            "sidecar_changes": {
+                "IntendedFor": "task-rest",
+		"B0FieldIdentifier": "phasediff_fmap_rest"
+            }
+		
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude2",
+            "customLabel": "acq-rest",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_rest",
+                "EchoTime": 0.00765,
+                "EchoNumber": 2,
+                "ImageType": ["ORIGINAL", "PRIMARY", "M", "NONE"]
+            },
+            "sidecar_changes": {
+                "IntendedFor": "task-rest",
+		"B0FieldIdentifier": "phasediff_fmap_rest"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "phasediff",
+            "customLabel": "acq-rest",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_rest",
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "NONE", "PHASE"]
+            },
+            "sidecar_changes": {
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "IntendedFor": "task-rest",
+		"B0FieldIdentifier": "phasediff_fmap_rest"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude1",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping",
+                "EchoTime": 0.00519,
+                "EchoNumber": 1
+            },
+            "sidecar_changes": {
+                "IntendedFor": [
+                    "task-EATlong",
+                    "task-EATshort",
+                    "task-ERT",
+                    "task-rest"
+                ],
+		"B0FieldIdentifier": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude2",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping",
+                "EchoTime": 0.00765,
+                "EchoNumber": 2,
+                "ImageType": ["ORIGINAL", "PRIMARY", "M", "NONE"]
+            },
+            "sidecar_changes": {
+                "IntendedFor": [
+                    "task-EATlong",
+                    "task-EATshort",
+                    "task-ERT",
+                    "task-rest"
+                ],
+		"B0FieldIdentifier": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "phasediff",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping",
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "NONE", "PHASE"]
+            },
+            "sidecar_changes": {
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "IntendedFor": [
+                    "task-EATlong",
+                    "task-EATshort",
+                    "task-ERT",
+                    "task-rest"
+                ],
+		"B0FieldIdentifier": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-all_dir-PA",
+            "criteria": {
+                "SeriesDescription": "ref_cmrr_mbep2d_bold_TR1.4_PA_SBRef",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "ref",
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-all_dir-PA",
+            "criteria": {
+                "SeriesDescription": "ref_cmrr_mbep2d_bold_TR1.4_PA",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "ref",
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-EATlong_dir-AP",
+            "criteria": {
+                "SeriesDescription": "EATlong_cmrr_mbep2d_bold_TR1.4_AP_SBRef",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "EATlong"
+            }
+        },
+        {
+            "id": "task-EATlong",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-EATlong_dir-AP",
+            "criteria": {
+                "SeriesDescription": "EATlong_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "EATlong",
+		"B0FieldSource": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-rest_dir-PA",
+            "criteria": {
+                "SeriesDescription": "refRest_cmrr_mbep2d_bold_TR1.4_PA_SBRef"
+            },
+            "sidecar_changes": {
+                "TaskName": "refRest",
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-rest_dir-PA",
+            "criteria": {
+                "SeriesDescription": "refRest_cmrr_mbep2d_bold_TR1.4_PA"
+            },
+            "sidecar_changes": {
+                "TaskName": "refRest",
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-MIST_dir-PA",
+            "criteria": {
+                "SeriesDescription": "refMIST_cmrr_mbep2d_bold_TR1.4_PA_SBRef"
+            },
+            "sidecar_changes": {
+                "TaskName": "refMIST",
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-MIST_dir-PA",
+            "criteria": {
+                "SeriesDescription": "refMIST_cmrr_mbep2d_bold_TR1.4_PA",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "refMIST",
+                "PhaseEncodingDirection": "j"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-rest_dir-AP",
+            "criteria": {
+                "SeriesDescription": "rest_cmrr_mbep2d_bold_TR1.4_AP_SBRef"
+            },
+            "sidecar_changes": {
+                "TaskName": "rest"
+            }
+        },
+        {
+            "id": "task-rest",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-rest_dir-AP",
+            "criteria": {
+                "SeriesDescription": "rest_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "rest",
+		"B0FieldSource": [
+                    "phasediff_fmap",
+                    "phasediff_fmap_rest"
+                ]
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-ERT_dir-AP",
+            "criteria": {
+                "SeriesDescription": "ERT_cmrr_mbep2d_bold_TR1.4_AP_SBRef",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "ERT"
+            }
+        },
+        {
+            "id": "task-ERT",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-ERT_dir-AP",
+            "criteria": {
+                "SeriesDescription": "ERT_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "ERT",
+		"B0FieldSource": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-EATshort_dir-AP",
+            "criteria": {
+                "SeriesDescription": "EATshort_cmrr_mbep2d_bold_TR1.4_AP_SBRef",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "EATshort"
+            }
+        },
+        {
+            "id": "task-EATshort",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-EATshort_dir-AP",
+            "criteria": {
+                "SeriesDescription": "EATshort_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "EATshort",
+		"B0FieldSource": "phasediff_fmap"
+            }
+        }
+    ]
+}
