@@ -1,8 +1,93 @@
-# IP18042024/imagepreprocessing: Usage
+# imagepreprocessing: Usage
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Introduction
+# Preprocessing Pipeline for Neuroimaging Data (BIDS, Validation, and Defacing)
+This pipeline automates the preprocessing of neuroimaging data, including conversion to the BIDS format, validation of the dataset, and defacing for anonymization. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before conducting further analysis.
+
+The pipeline consists of three main steps:
+- **BIDSing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
+- **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
+- **Defacing**: Applying defacing to NIfTI files in the anatomical data to anonymize participants.
+
+This guide will walk you through the setup, usage, and execution of the preprocessing pipeline.
+
+## Prerequisites
+Before running this pipeline, ensure you have the following installed:
+
+- [Nextflow](https://www.nextflow.io/)
+- [Apptainer/Singularity](https://apptainer.org/)
+- [bids-validator](https://github.com/bids-standard/bids-validator)
+- [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
+
+Make sure these tools are accessible in your environment, and that the paths to necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
+
+##Multiple Session
+If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Below is an example structure:
+
+sub-001001/ses-01/anat
+sub-001001/ses-02/anat
+sub-001002/ses-01/anat
+
+##Full input directory structure
+input/
+├── sub-001001
+│   ├── ses-01
+│   │   └── anat
+├── sub-001002
+│   ├── ses-01
+│   │   └── anat
+
+
+## Pipeline Workflow
+
+### Step 1: BIDSing (Convert DICOM to BIDS)
+The first step of the pipeline is converting raw neuroimaging data, such as DICOM files, into the standardized BIDS format using the `dcm2bids` tool. This ensures that the dataset is structured in a way that is widely accepted and compatible with various neuroimaging analysis tools.
+
+**Process**: `ConvertDicomToBIDS`
+
+**Input**:
+- DICOM files (e.g., `sub-001001`, `ses-01`)
+- Configuration file specifying how to map DICOM data to BIDS
+
+**Output**:
+- BIDS-compliant dataset (`bids_output`)
+
+### Step 2: BIDS Validation
+Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator`. This step checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
+
+**Process**: `ValidateBIDS`
+
+**Input**:
+- BIDS dataset from the previous step
+
+**Output**:
+- Log indicating success or any issues found during validation
+
+### Step 3: Defacing
+The final preprocessing step is defacing the anatomical NIfTI files to anonymize participants by removing facial features. This step uses `pydeface` to process files located in the `anat` folder.
+
+**Process**: `PyDeface`
+
+**Input**:
+- NIfTI files (from the `anat` folder)
+
+**Output**:
+- Defaced NIfTI files (`defaced_*.nii.gz`)
+
+## Installation
+To use this pipeline, first clone the repository and set up the required environment.
+
+```bash
+git clone https://github.com/mahnaz007/imagepreprocessing.git
+cd imagepreprocessing
+
+## Usage
+You can run the preprocessing pipeline using the following command:
+
+```bash
+nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif
 
 <!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
 
@@ -96,11 +181,9 @@ You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-c
 
 ### Updating the pipeline
 
-When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
+To ensure that you are using the latest version of the pipeline, regularly update the cached version:
 
-```bash
-nextflow pull IP18042024/imagepreprocessing
-```
+nextflow pull nf-core/imagepreprocessing
 
 ### Reproducibility
 
@@ -118,56 +201,30 @@ If you wish to share such profile (such as upload as supplementary material for 
 
 ## Core Nextflow arguments
 
-:::note
-These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
-:::
+The pipeline supports standard Nextflow arguments. Here are some key options:
 
-### `-profile`
+    -profile: Choose a configuration profile such as apptainer and singularity.
+    -resume: Continue the pipeline from where it left off using cached results.
+    -c: Specify a custom configuration file for resource allocation or tool-specific options
+    
+nextflow run nf-core/imagepreprocessing --input /data/dicom --output /data/bids_output -profile singularity
 
-Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
 
-Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
-:::info
-We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
-:::
+### Resource Customization
 
-Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
-They are loaded in sequence, so later profiles can overwrite earlier profiles.
+If you need to customize the resource requests (CPU, memory, etc.) for specific steps in the pipeline, use the -c option to pass a custom configuration file. For example, to increase memory for the ConvertDicomToBIDS step:
 
-If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer enviroment.
+process {
+    withName: ConvertDicomToBIDS {
+        memory = 32.GB
+    }
+}
 
-- `test`
-  - A profile with a complete configuration for automated testing
-  - Includes links to test data so needs no other parameters
-- `docker`
-  - A generic configuration profile to be used with [Docker](https://docker.com/)
-- `singularity`
-  - A generic configuration profile to be used with [Singularity](https://sylabs.io/docs/)
-- `podman`
-  - A generic configuration profile to be used with [Podman](https://podman.io/)
-- `shifter`
-  - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
-- `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
-- `apptainer`
-  - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
-- `conda`
-  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
-### `-resume`
 
-Specify this when restarting a pipeline. Nextflow will use cached results from any pipeline steps where the inputs are the same, continuing from where it got to previously. For input to be considered the same, not only the names must be identical but the files' contents as well. For more info about this parameter, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
 
-You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
-### `-c`
-
-Specify the path to a specific config file (this is a core Nextflow command). See the [nf-core website documentation](https://nf-co.re/usage/configuration) for more information.
-
-## Custom configuration
-
-### Resource requests
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
