@@ -1,7 +1,6 @@
-# IP18042024/imagepreprocessing: Documentation
+# imagepreprocessing: Documentation
 
-The IP18042024/imagepreprocessing documentation is split into the following pages:
-
+The imagepreprocessing documentation is split into the following pages:
 - [Usage](usage.md)
   - An overview of how the pipeline works, how to run it and a description of all of the different command-line flags.
 - [Output](output.md)
