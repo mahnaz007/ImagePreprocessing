@@ -6,7 +6,7 @@ params.inputDir = params.inputDir ?: 'path/to/input'
 params.outputDir = params.outputDir ?: 'path/to/output'
 params.configFile = params.configFile ?: 'path/to/config/configPHASEDIFF_B0identifier.json'
 params.containerPath_dcm2bids = params.containerPath_dcm2bids ?: 'path/to/container/dcm2bids_3.2.0.sif' // Apptainer image for dcm2bids
-params.containerPath_pydeface = params.containerPath_pydeface ?: 'path/to/container/pydeface_latest.sif' // Container image for pydeface
+params.containerPath_pydeface = params.containerPath_pydeface ?: 'path/to/container/pydeface_latest.sif' // Singularity image for pydeface
 params.defacedOutputDir = "${params.outputDir}/defaced"
 
 // Ensure subdirectories exist
