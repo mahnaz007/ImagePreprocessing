@@ -187,7 +187,45 @@ work                # Directory containing the nextflow working files
 .nextflow_log       # Log file from Nextflow
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
+## Batch script for running the entire project
 
+```
+#!/bin/bash
+# Define the base directories
+bidsdir="/path/to/BIDSProject"
+sourceDir="/path/to/sourcedata/"
+
+# Loop over all subdirectories in the source directory
+for folder in "$sourceDir"/*/; do
+  if [ -d "$folder" ]; then
+    # Extract subject from the folder name
+    subject=$(basename "$folder" | cut -d '_' -f 2)
+    
+    # Extract session identifier
+    sesStr=$(basename "$folder" | cut -d '_' -f 3)
+    ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
+    
+    # Check if session is empty and set to 01 if it is
+    if [ -z "$ses" ]; then
+      ses="01"
+    fi
+    
+    # Format the session label
+    session_label="ses-$(printf '%02d' "$ses")"
+    
+    echo "Processing participant: sub-${subject}, session: $session_label"
+    
+    # Call dcm2bids
+    dcm2bids -d "$folder" \
+             -p "sub-${subject}" \
+             -s "$session_label" \
+             -c /path/to/config/config.json \
+             -o /path/to/output/
+  else
+    echo "$folder not found."
+  fi
+done
+```
 ### Updating the pipeline
 
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
