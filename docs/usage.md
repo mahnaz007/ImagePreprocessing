@@ -25,6 +25,7 @@ Make sure these tools are accessible in your environment, and that the paths to 
 
 
 ##Full input directory structure
+```
 input/
 IRTG01/
 ├── 01_AAHead_Scout_r1/
@@ -32,6 +33,7 @@ IRTG01/
 ├── 03_AAHead_Scout_r1_MPR_cor/
 ├── 05_gre_field_mapping_MIST/
 └── ... (other DICOM folders)
+```
 
 ## Pipeline Workflow
 
