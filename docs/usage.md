@@ -189,9 +189,11 @@ work                # Directory containing the nextflow working files
 
 ## Batch script for running 1 participant
 
+
 ```
 dcm2bids -d /home/mzaz021/sourcedata/ 	-p 00x00x 	-s ses-0x 	-c /path/to/config.json 	-o /path/to/output/
 ```
+
 ```
 ## Batch script for running the entire project
 
