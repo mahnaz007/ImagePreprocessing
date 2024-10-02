@@ -110,18 +110,7 @@ The final preprocessing step is defacing the anatomical NIfTI files to anonymize
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
-## Installation
-To use this pipeline, first clone the repository and set up the required environment.
 
-```bash
-git clone https://github.com/mahnaz007/imagepreprocessing.git
-cd imagepreprocessing
-
-## Usage
-You can run the preprocessing pipeline using the following command:
-
-```bash
-nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif
 
 
 
@@ -179,10 +168,9 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run IP18042024/imagepreprocessing --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
-```
+nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif```
 
-This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
+This will launch the pipeline with the `singularity` and 'apptainer' configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -193,34 +181,9 @@ work                # Directory containing the nextflow working files
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
 
-If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
-
-Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
-
-:::warning
-Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
-:::
-
-The above pipeline run specified with a params file in yaml format:
-
-```bash
-nextflow run IP18042024/imagepreprocessing -profile docker -params-file params.yaml
-```
-
-with `params.yaml` containing:
-
-```yaml
-input: './samplesheet.csv'
-outdir: './results/'
-genome: 'GRCh37'
-<...>
-```
-
-You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
-
 ### Updating the pipeline
 
-To ensure that you are using the latest version of the pipeline, regularly update the cached version:
+When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
 
 nextflow pull nf-core/imagepreprocessing
 
@@ -230,13 +193,7 @@ It is a good idea to specify a pipeline version when running the pipeline on you
 
 First, go to the [IP18042024/imagepreprocessing releases page](https://github.com/IP18042024/imagepreprocessing/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
-This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
-
-To further assist in reproducbility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
-
-:::tip
-If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
-:::
+This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. 
 
 ## Core Nextflow arguments
 
@@ -250,20 +207,8 @@ nextflow run nf-core/imagepreprocessing --input /data/dicom --output /data/bids_
 
 
 
-### Resource Customization
-
-If you need to customize the resource requests (CPU, memory, etc.) for specific steps in the pipeline, use the -c option to pass a custom configuration file. For example, to increase memory for the ConvertDicomToBIDS step:
-
-process {
-    withName: ConvertDicomToBIDS {
-        memory = 32.GB
-    }
-}
-
-
-
-
-
+### Custom Customization
+##Resouce Request
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
