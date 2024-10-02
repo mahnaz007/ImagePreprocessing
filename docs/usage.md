@@ -56,35 +56,35 @@ The first step of the pipeline is converting raw neuroimaging data, such as DICO
 If the same subject has two sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Below is an example structure:
 
 ##Example of BIDS-compliant output structure:
-
 output/
 ├── sub-001001
 │   ├── ses-01
 │   │   ├── anat
-│   │   │   ├── sub-001001_ses-01_T1w.nii.gz            # NIfTI file (T1-weighted image)
-│   │   │   ├── sub-001001_ses-01_T1w.json              # Metadata for T1w image
-│   │   │   ├── sub-001001_ses-01_T2w.nii.gz            # NIfTI file (T2-weighted image)
-│   │   │   ├── sub-001001_ses-01_T2w.json              # Metadata for T2w image
+│   │   │   ├── sub-001001_ses-01_T1w.nii.gz              # NIfTI file (T1-weighted image)
+│   │   │   ├── sub-001001_ses-01_T1w.json                # Metadata for T1w image
+│   │   │   ├── sub-001001_ses-01_T2w.nii.gz              # NIfTI file (T2-weighted image)
+│   │   │   ├── sub-001001_ses-01_T2w.json                # Metadata for T2w image
 │   │   ├── func
-│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.nii.gz # NIfTI file for BOLD fMRI
-│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.json   # Metadata for BOLD fMRI
+│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.nii.gz   # NIfTI file for BOLD fMRI
+│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.json     # Metadata for BOLD fMRI
 │   │   ├── fmap
-│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.nii.gz     # NIfTI file for magnitude fieldmap
-│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.json       # Metadata for magnitude1
-│   │   │   ├── sub-001001_ses-01_run-01_phasediff.nii.gz         # NIfTI file for phase difference map
-│   │   │   ├── sub-001001_ses-01_run-01_phasediff.json           # Metadata for phase difference map
+│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.nii.gz       # NIfTI file for magnitude fieldmap
+│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.json         # Metadata for magnitude1
+│   │   │   ├── sub-001001_ses-01_run-01_phasediff.nii.gz        # NIfTI file for phase difference map
+│   │   │   ├── sub-001001_ses-01_run-01_phasediff.json          # Metadata for phase difference map
 │   │   ├── dwi
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.nii.gz           # NIfTI file for diffusion-weighted imaging
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bvec              # Diffusion gradient directions
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bval              # Diffusion weighting factors
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.json              # Metadata for DWI
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.nii.gz   # NIfTI file for diffusion-weighted imaging
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bvec     # Diffusion gradient directions
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bval     # Diffusion weighting factors
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.json     # Metadata for DWI
 │   ├── ses-02
 │   │   ├── anat
-│   │   │   ├── sub-001001_ses-02_T1w.nii.gz            # NIfTI file for session 2
-│   │   │   └── sub-001001_ses-02_T1w.json              # Metadata for session 2
+│   │   │   ├── sub-001001_ses-02_T1w.nii.gz              # NIfTI file for session 2
+│   │   │   └── sub-001001_ses-02_T1w.json                # Metadata for session 2
 ├── dataset_description.json  # Metadata file describing the dataset
 ├── participants.tsv          # Participant-level metadata
 └── README                    # Optional readme file describing the dataset
+
 
 
 
@@ -122,6 +122,11 @@ You can run the preprocessing pipeline using the following command:
 
 ```bash
 nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif
+
+
+
+
+
 
 <!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
 
