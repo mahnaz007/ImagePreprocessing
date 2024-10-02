@@ -23,18 +23,6 @@ Before running this pipeline, ensure you have the following installed:
 
 Make sure these tools are accessible in your environment, and that the paths to necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
-
-##Full input directory structure
-```
-input/
-IRTG01/
-├── 01_AAHead_Scout_r1/
-├── 02_AAHead_Scout_r1_MPR_sag/
-├── 03_AAHead_Scout_r1_MPR_cor/
-├── 05_gre_field_mapping_MIST/
-└── ... (other DICOM folders)
-```
-
 ## Pipeline Workflow
 
 ### Step 1: BIDSing (Convert DICOM to BIDS)
@@ -45,6 +33,16 @@ The first step of the pipeline is converting raw neuroimaging data, such as DICO
 **Input**:
 - DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be organized DICOM data from an MRI scan.
 - Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format.
+ ##Example of DIcom input structure: 
+  ```
+input/
+IRTG01/
+├── 01_AAHead_Scout_r1/
+├── 02_AAHead_Scout_r1_MPR_sag/
+├── 03_AAHead_Scout_r1_MPR_cor/
+├── 05_gre_field_mapping_MIST/
+└── ... (other DICOM folders)
+```
 
 **Output**:
 - NIfTI files (.nii.gz): The actual neuroimaging data converted from DICOM.
