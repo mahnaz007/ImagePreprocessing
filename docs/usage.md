@@ -53,6 +53,7 @@ IRTG01/
 If the same subject has two sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Below is an example structure:
 
 ##Example of BIDS-compliant output structure:
+
 ```
 output/
 ├── sub-001001
