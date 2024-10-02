@@ -55,6 +55,7 @@ The first step of the pipeline is converting raw neuroimaging data, such as DICO
 If the same subject has two sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Below is an example structure:
 
 ##Example of BIDS-compliant output structure:
+```
 output/
 ├── sub-001001
 │   ├── ses-01
@@ -83,7 +84,7 @@ output/
 ├── dataset_description.json  # Metadata file describing the dataset
 ├── participants.tsv          # Participant-level metadata
 └── README                    # Optional readme file describing the dataset
-
+```
 
 
 
@@ -158,6 +159,10 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 
 The typical command for running the pipeline is as follows:
 
+```bash
+nextflow run main.nf```
+
+If you want the flexibility to override these default values, you can still pass them as command-line parameters, which will take precedence over the default values in the script. For example:
 ```bash
 nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif```
 
