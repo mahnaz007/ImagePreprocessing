@@ -16,9 +16,6 @@ This guide will walk you through the setup, usage, and execution of the preproce
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
 
-## Prerequisites
-Before running this pipeline, ensure you have the following installed:
-
 - [Nextflow](https://www.nextflow.io/)
 - [Apptainer/Singularity](https://apptainer.org/) or [Singularity](https://sylabs.io/)
 - [bids-validator](https://github.com/bids-standard/bids-validator)
@@ -110,14 +107,6 @@ The final preprocessing step is defacing the anatomical NIfTI files to anonymize
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
-
-
-
-
-
-
-
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
 
 ## Samplesheet input
 
