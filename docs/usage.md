@@ -7,38 +7,34 @@
 This pipeline automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, and defacing for anonymization. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before conducting further analysis.
 
 The pipeline consists of three main steps:
-- BIDSing: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
-- BIDS Validation: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
-- Defacing: Applying defacing to NIfTI files in the anatomical data to anonymize participants.
+- **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
+- **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
+- **Defacing**: Applying defacing to NIfTI files in the anatomical data to anonymize participants.
 
 This guide will walk you through the setup, usage, and execution of the preprocessing pipeline.
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
 
+## Prerequisites
+Before running this pipeline, ensure you have the following installed:
+
 - [Nextflow](https://www.nextflow.io/)
-- [Apptainer/Singularity](https://apptainer.org/)
+- [Apptainer/Singularity](https://apptainer.org/) or [Singularity](https://sylabs.io/)
 - [bids-validator](https://github.com/bids-standard/bids-validator)
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 
 Make sure these tools are accessible in your environment, and that the paths to necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
-##Multiple Session
-If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Below is an example structure:
-
-sub-001001/ses-01/anat
-sub-001001/ses-02/anat
-sub-001002/ses-01/anat
 
 ##Full input directory structure
 input/
-├── sub-001001
-│   ├── ses-01
-│   │   └── anat
-├── sub-001002
-│   ├── ses-01
-│   │   └── anat
-
+IRTG01/
+├── 01_AAHead_Scout_r1/
+├── 02_AAHead_Scout_r1_MPR_sag/
+├── 03_AAHead_Scout_r1_MPR_cor/
+├── 05_gre_field_mapping_MIST/
+└── ... (other DICOM folders)
 
 ## Pipeline Workflow
 
@@ -48,11 +44,49 @@ The first step of the pipeline is converting raw neuroimaging data, such as DICO
 **Process**: `ConvertDicomToBIDS`
 
 **Input**:
-- DICOM files (e.g., `sub-001001`, `ses-01`)
-- Configuration file specifying how to map DICOM data to BIDS
+- DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be organized DICOM data from an MRI scan.
+- Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format.
 
 **Output**:
-- BIDS-compliant dataset (`bids_output`)
+- NIfTI files (.nii.gz): The actual neuroimaging data converted from DICOM.
+- JSON metadata files (.json): Associated metadata for each NIfTI file, providing information about the scan and its parameters.
+- Sidecar files: Such as .bvec and .bval files for diffusion-weighted imaging (DWI), if applicable.
+
+##Multiple Session
+If the same subject has two sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Below is an example structure:
+
+##Example of BIDS-compliant output structure:
+
+output/
+├── sub-001001
+│   ├── ses-01
+│   │   ├── anat
+│   │   │   ├── sub-001001_ses-01_T1w.nii.gz            # NIfTI file (T1-weighted image)
+│   │   │   ├── sub-001001_ses-01_T1w.json              # Metadata for T1w image
+│   │   │   ├── sub-001001_ses-01_T2w.nii.gz            # NIfTI file (T2-weighted image)
+│   │   │   ├── sub-001001_ses-01_T2w.json              # Metadata for T2w image
+│   │   ├── func
+│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.nii.gz # NIfTI file for BOLD fMRI
+│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.json   # Metadata for BOLD fMRI
+│   │   ├── fmap
+│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.nii.gz     # NIfTI file for magnitude fieldmap
+│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.json       # Metadata for magnitude1
+│   │   │   ├── sub-001001_ses-01_run-01_phasediff.nii.gz         # NIfTI file for phase difference map
+│   │   │   ├── sub-001001_ses-01_run-01_phasediff.json           # Metadata for phase difference map
+│   │   ├── dwi
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.nii.gz           # NIfTI file for diffusion-weighted imaging
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bvec              # Diffusion gradient directions
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bval              # Diffusion weighting factors
+│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.json              # Metadata for DWI
+│   ├── ses-02
+│   │   ├── anat
+│   │   │   ├── sub-001001_ses-02_T1w.nii.gz            # NIfTI file for session 2
+│   │   │   └── sub-001001_ses-02_T1w.json              # Metadata for session 2
+├── dataset_description.json  # Metadata file describing the dataset
+├── participants.tsv          # Participant-level metadata
+└── README                    # Optional readme file describing the dataset
+
+
 
 ### Step 2: BIDS Validation
 Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator`. This step checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
