@@ -157,14 +157,14 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 
 ## Running the pipeline
 
-# Step 1: Set Up Proxy Identification
+#### Step 1: Set Up Proxy Identification
 Before running Nextflow, ensure that you have set the proxy variables that allow Singularity to access the internet through your proxy. Typically, the required commands would look like this:
 ```bash
 nic
 proxy
 echo $https_proxy
 ```
-# Step 2: Run the Nextflow Pipeline:
+#### Step 2: Run the Nextflow Pipeline:
 After setting up the proxy, you can run your Nextflow pipeline with the default or customized paths.The typical command for running the pipeline is as follows:
 
 ```bash
