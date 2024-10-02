@@ -1,4 +1,4 @@
-# IP18042024/imagepreprocessing: Output
+imagepreprocessing: Output
 
 ## Introduction
 
