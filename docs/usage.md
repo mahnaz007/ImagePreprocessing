@@ -186,10 +186,8 @@ work                # Directory containing the nextflow working files
 <OUTDIR>            # Finished results in specified location (defined with --outdir)
 .nextflow_log       # Log file from Nextflow
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
-
+```
 ## Batch script for running 1 participant
-
-
 ```
 dcm2bids -d /home/mzaz021/sourcedata/ 	-p 00x00x 	-s ses-0x 	-c /path/to/config.json 	-o /path/to/output/
 ```
