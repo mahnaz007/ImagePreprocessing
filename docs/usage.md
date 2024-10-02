@@ -3,13 +3,13 @@
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Introduction
-# Preprocessing Pipeline for Neuroimaging Data (BIDSING, BIDS-Validation, and Defacing)
-This pipeline automates the preprocessing of neuroimaging data, including conversion to the BIDS format, validation of the dataset, and defacing for anonymization. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before conducting further analysis.
+# Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, and Defacing)
+This pipeline automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, and defacing for anonymization. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before conducting further analysis.
 
 The pipeline consists of three main steps:
-- **BIDSing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
-- **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
-- **Defacing**: Applying defacing to NIfTI files in the anatomical data to anonymize participants.
+- BIDSing: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
+- BIDS Validation: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
+- Defacing: Applying defacing to NIfTI files in the anatomical data to anonymize participants.
 
 This guide will walk you through the setup, usage, and execution of the preprocessing pipeline.
 
