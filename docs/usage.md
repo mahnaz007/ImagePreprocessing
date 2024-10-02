@@ -166,7 +166,8 @@ nextflow run main.nf
 If you want the flexibility to override these default values, you can still pass them as command-line parameters, which will take precedence over the default values in the script. For example:
 
 ```bash
-nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif```
+nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif
+```
 
 This will launch the pipeline with the `singularity` and 'apptainer' configuration profile. See below for more information about profiles.
 
