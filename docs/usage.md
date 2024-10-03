@@ -157,14 +157,14 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 
 ## Running the pipeline
 
-#### Step 1: Set Up Proxy Identification
+### Step 1: Set Up Proxy Identification
 Before running Nextflow, ensure that you have set the proxy variables that allow Singularity to access the internet through your proxy. Typically, the required commands would look like this:
 ```bash
 nic
 proxy
 echo $https_proxy
 ```
-#### Step 2: Run the Nextflow Pipeline:
+### Step 2: Run the Nextflow Pipeline:
 After setting up the proxy, you can run your Nextflow pipeline with the default or customized paths.The typical command for running the pipeline is as follows:
 
 ```bash
@@ -187,50 +187,228 @@ work                # Directory containing the nextflow working files
 .nextflow_log       # Log file from Nextflow
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
-## Batch script for running 1 participant
+### DCM2BIDS and BIDS-Validator batch script
+#### For running 1 participant
 ```
-dcm2bids -d /home/mzaz021/sourcedata/ 	-p 00x00x 	-s ses-0x 	-c /path/to/config.json 	-o /path/to/output/
+apptainer run -e --containall \
+-B /path/to/source/directory:/dicoms:ro \
+-B /path/to/config.json:/config.json:ro \
+-B /path/to/output/directory:/bids \
+/path/to/dcm2bids_3.2.0.sif \
+--auto_extract_entities \
+--bids_validate \
+-o /bids \
+-d /dicoms \
+-c /config.json \
+-p <participant_id> \
+-s <session_id>
 ```
-## Batch script for running the entire project
+#### For running the entire project
 
 ```
 #!/bin/bash
-# Define the base directories
-bidsdir="/path/to/BIDSProject"
-sourceDir="/path/to/sourcedata/"
+# Define the base directory
+bidsdir="/path/to/output"
+sourceDir="/path/to/sourcedata"
 
 # Loop over all subdirectories in the source directory
 for folder in "$sourceDir"/*/; do
-  if [ -d "$folder" ]; then
-    # Extract subject from the folder name
-    subject=$(basename "$folder" | cut -d '_' -f 2)
-    
-    # Extract session identifier
-    sesStr=$(basename "$folder" | cut -d '_' -f 3)
-    ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
-    
-    # Check if session is empty and set to 01 if it is
-    if [ -z "$ses" ]; then
-      ses="01"
-    fi
-    
-    # Format the session label
-    session_label="ses-$(printf '%02d' "$ses")"
-    
-    echo "Processing participant: sub-${subject}, session: $session_label"
-    
-    # Call dcm2bids
-    dcm2bids -d "$folder" \
-             -p "sub-${subject}" \
-             -s "$session_label" \
-             -c /path/to/config/config.json \
-             -o /path/to/output/
-  else
-    echo "$folder not found."
-  fi
+	if [ -d "$folder" ]; then
+    	# Extract subject and session from the folder name
+    	subject=$(basename "$folder" | cut -d '_' -f 2)
+    	sesStr=$(basename "$folder" | cut -d '_' -f 3)
+    	ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
+   	 
+    	# Default session to 01 if empty
+    	[ -z "$ses" ] && ses="01"
+    	session_label="ses-$(printf '%02d' "$ses")"
+    	echo "Processing participant: sub-${subject}, session: $session_label"
+
+    	# Call dcm2bids using Apptainer, without BIDS validation
+    	apptainer run \
+        	-e --containall \
+        	-B "$folder:/dicoms:ro" \
+        	-B /path/to/config.json:/config.json:ro \
+        	-B "$bidsdir":/bids \
+        	/path/to/dcm2bids_3.2.0.sif --auto_extract_entities \
+        	-d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
+	else
+    	echo "$folder not found."
+	fi
 done
+
+```
+#### Running by nextflow 
+```
+#!/usr/bin/env nextflow
+
+nextflow.enable.dsl=2
+
+// Set input directory, output directory, config file, and container path (Generalized)
+params.inputDir = "input/directory"
+params.outputDir = "output/directory"
+params.configFile = "input/directory/config.json"
+params.containerPath = "input/directory/dcm2bids_3.2.0.sif"  // Path to dcm2bids Apptainer image (version 3.2.0)
+
+// Find all subdirectories inside the input directory
+def subDirs = new File(params.inputDir).listFiles().findAll { it.isDirectory() }
+
+if (subDirs.isEmpty()) {
+	error "No subdirectories found in the input directory: ${params.inputDir}"
+}
+
+workflow {
+	// Create a channel from the list of subdirectories and extract participant IDs and session_id
+	subDirChannel = Channel
+    	.from(subDirs)
+    	.map { dir ->
+        	def folderName = dir.name
+        	// Extract participant ID from the folder name (Generalized Pattern)
+        	def participantIDMatch = folderName =~ /PROJECT\d+_(\d+)_/
+
+        	if (!participantIDMatch) {
+            	error "Could not extract participant ID from the folder name: ${folderName}"
+        	}
+       	 
+        	def participantID = participantIDMatch[0][1]
+
+        	// Determine the session number (Generalized for S1 and S2)
+        	def session_id = folderName.contains("S1") ? "ses-01" :
+                        	folderName.contains("S2") ? "ses-02" : "ses-01"
+
+        	return tuple(file(dir), participantID, session_id)  // Include session_id in the tuple
+    	}
+
+	// Execute the ConvertDicomToBIDS process with the channel
+	bidsFiles = subDirChannel | ConvertDicomToBIDS
+}
+
+process ConvertDicomToBIDS {
+	tag { participantID }
+
+	publishDir "${params.outputDir}/bids_output", mode: 'copy', saveAs: { filename -> "${filename}" }
+
+	input:
+    	tuple path(dicomDir), val(participantID), val(session_id)
+
+	output:
+    	path "bids_output/**", emit: bids_files
+
+	script:
+	"""
+	mkdir -p bids_output
+	apptainer run -e --containall -B ${dicomDir}:/dicoms:ro -B ${params.configFile}:/config.json:ro -B ./bids_output:/bids ${params.containerPath} --auto_extract_entities --bids_validate -o /bids -d /dicoms -c /config.json -p ${participantID} | tee bids_output/validation_log_${participantID}.txt
+	"""
+}
+
 ```
 
+### Pydeface batch script
+
+#### For runnig 1 participant 
+```
+singularity run \
+   --bind /path/to/input/directory:/input \ (should follow the BIDS structure)
+   --bind /path/to/output/directory:/output \
+   /path/to/pydeface_0.3.0.sif \
+   pydeface /input/sub-<subject>_ses-<session>_T1w.nii.gz \
+   --outfile /output/sub-<subject>_ses-<session>_T1w_defaced.nii.gz
+```
+
+#### For running the entire project
+```
+#!/bin/bash
+
+# Path to the Singularity container
+CONTAINER="/path/to/pydeface_0.3.0.sif"
+
+# Base input and output directories
+INPUT_BASE="/path/to/input/directory" (should follow the BIDS structure)
+OUTPUT_BASE="/path/to/output/directory"
+
+# Loop through each subject directory in the base input directory
+for subject_dir in $INPUT_BASE/sub-*/; do
+	# Loop through each session directory within the current subject directory
+	for session_dir in $subject_dir/ses-*/; do
+    	# Check if the anatomical directory exists
+    	anat_dir="${session_dir}anat"
+    	if [[ -d "$anat_dir" ]]; then
+        	# Loop through each NIfTI file within the anatomical directory
+        	for nifti_file in $anat_dir/*.nii.gz; do
+            	# Define output directory and ensure it exists
+            	output_dir="${OUTPUT_BASE}/$(basename ${subject_dir})/$(basename ${session_dir})/anat"
+            	mkdir -p "$output_dir"
+           	 
+            	# Define output file path
+            	output_file="${output_dir}/$(basename "${nifti_file}" .nii.gz)_defaced.nii.gz"
+           	 
+            	# Run pydeface
+            	singularity run \
+                	--bind $session_dir:/input \
+                	--bind $output_dir:/output \
+                	--bind /path/to/home:/home \
+                	$CONTAINER \
+                	pydeface "/input/anat/$(basename "$nifti_file")" \
+                	--outfile "/output/$(basename "$output_file")"
+        	done
+    	fi
+	done
+done
+
+```
+#### Running by nextflow 
+```
+#!/usr/bin/env nextflow
+nextflow.enable.dsl=2
+
+// Set generalized input directory and output directory
+params.inputDir = "input/directory"
+params.defacedOutputDir = "output/directory"
+params.singularityImg = "path/to/pydeface_0.3.0.sif"  // Specify the version of the Singularity image (0.3.0 in this case)
+
+workflow {
+	// Option 1: Use toAbsolutePath() to get absolute paths of NIfTI files
+	niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
+                  	.map { file -> file.toAbsolutePath() }
+
+	// Option 2: Remove the map operation (if absolute paths are not needed)
+	// niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
+
+	// Apply defacing to the NIfTI files using Singularity
+	niiFiles | PyDeface
+}
+
+process PyDeface {
+	tag { niiFile.name }
+
+	publishDir "${params.defacedOutputDir}", mode: 'copy'
+
+	input:
+    	file niiFile
+
+	output:
+    	path "defaced_${niiFile.simpleName}.nii.gz", emit: defaced_nii
+
+	shell:
+	'''
+	#!/usr/bin/env bash
+
+	# Define variables for input and output
+	input_file="!{niiFile.getName()}"
+	output_file="defaced_!{niiFile.simpleName}.nii.gz"
+	input_dir="$(dirname '!{niiFile}')"
+	singularity_img="!{params.singularityImg}"
+
+	# Run pydeface using Singularity
+	singularity run \
+    	--bind "${input_dir}:/input" \
+    	"${singularity_img}" \
+    	pydeface /input/"${input_file}" \
+    	--outfile "${output_file}"
+	'''
+}
+
+```
 
 ### Updating the pipeline
 
