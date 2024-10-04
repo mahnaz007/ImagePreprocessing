@@ -9,9 +9,7 @@ This pipeline automates the preprocessing of neuroimaging data, including conver
 The pipeline consists of three main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
-- **Defacing**: Applying defacing to NIfTI files in the anatomical data to anonymize participants.
-
-This guide will walk you through the setup, usage, and execution of the preprocessing pipeline.
+- **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facisal features.
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
@@ -21,7 +19,7 @@ Before running this pipeline, ensure you have the following installed:
 - [bids-validator](https://github.com/bids-standard/bids-validator)
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 
-Make sure these tools are accessible in your environment, and that the paths to necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
+Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
 ## Pipeline Workflow
 
@@ -31,9 +29,9 @@ The first step of the pipeline is converting raw neuroimaging data, such as DICO
 **Process**: `ConvertDicomToBIDS`
 
 **Input**:
-- DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be organized DICOM data from an MRI scan.
+- DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be DICOM data from an MRI scan.
 - Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format.
- ##Example of DIcom input structure:
+ ##Example of DICOM input structure:
 
 ```
 input/
@@ -51,7 +49,7 @@ IRTG01/
 - Sidecar files: Such as .bvec and .bval files for diffusion-weighted imaging (DWI), if applicable.
 
 ##Multiple Session
-If the same subject has two sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Below is an example structure:
+If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). Below is an example structure:
 
 ##Example of BIDS-compliant output structure:
 
@@ -100,7 +98,7 @@ Once the data is converted to BIDS format, the pipeline performs validation usin
 - Log indicating success or any issues found during validation
 
 ### Step 3: Defacing
-The final preprocessing step is defacing the anatomical NIfTI files to anonymize participants by removing facial features. This step uses `pydeface` to process files located in the `anat` folder.
+The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes pydeface to process the files stored in the anat folder.
 
 **Process**: `PyDeface`
 
@@ -110,83 +108,43 @@ The final preprocessing step is defacing the anatomical NIfTI files to anonymize
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
-
-## Samplesheet input
-
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
-
-```bash
---input '[path to samplesheet file]'
-```
-
-### Multiple runs of the same sample
-
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
-```
-
-### Full samplesheet
-
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
-
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
-```
-
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
-
 ## Running the pipeline
 
 ### Step 1: Set Up Proxy Identification
-Before running Nextflow, ensure that you have set the proxy variables that allow Singularity to access the internet through your proxy. Typically, the required commands would look like this:
+
+Before running Nextflow, ensure that you have set the proxy variables that allow Singularity to access the internet through your proxy. Typically, the required commands  looks like this:
+
 ```bash
 nic
 proxy
 echo $https_proxy
 ```
-### Step 2: Run the Nextflow Pipeline:
+### Step 2: Install the Nextflow:
+Install [Nextflow](https://www.nextflow.io/docs/stable/install.html)
+### Step 3: Clone the Repository
+```git clone https://github.com/repo-name.git
+cd repo-name```
+
+### Step 3: Run the Nextflow Pipeline:
 After setting up the proxy, you can run your Nextflow pipeline with the default or customized paths.The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run main.nf
 ```
-
-If you want the flexibility to override these default values, you can still pass them as command-line parameters, which will take precedence over the default values in the script. For example:
-
-```bash
-nextflow run main.nf --inputDir /path/to/your/data --outputDir /path/to/output --configFile /path/to/config.json --containerPath_dcm2bids /path/to/dcm2bids.sif --containerPath_pydeface /path/to/pydeface.sif
+If you need to specify parameters such as input data or output paths, you can pass them in the command:
 ```
+nextflow run main.nf --input /path/to/input --output /path/to/output```
 
-This will launch the pipeline with the `singularity` and 'apptainer' configuration profile. See below for more information about profiles.
+## Core Nextflow arguments
 
-Note that the pipeline will create the following files in your working directory:
+The pipeline supports standard Nextflow arguments. Here are some key options:
 
-```bash
-work                # Directory containing the nextflow working files
-<OUTDIR>            # Finished results in specified location (defined with --outdir)
-.nextflow_log       # Log file from Nextflow
-# Other nextflow hidden files, eg. history of pipeline runs and old logs.
-```
+    -profile: Choose a configuration profile such as apptainer and singularity.
+```nextflow run main.nf -profile local```
+    -resume: Continue the pipeline from where it left off using cached results.
+```nextflow run main.nf -resume```
+    -c: Specify a custom configuration file for resource allocation or tool-specific options
+
 ### DCM2BIDS and BIDS-Validator batch script
 #### For running 1 participant
 ```
@@ -416,57 +374,5 @@ When you run the above command, Nextflow automatically pulls the pipeline code f
 
 nextflow pull nf-core/imagepreprocessing
 
-### Reproducibility
-
-It is a good idea to specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
-
-First, go to the [IP18042024/imagepreprocessing releases page](https://github.com/IP18042024/imagepreprocessing/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
-
-This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. 
-
-## Core Nextflow arguments
-
-The pipeline supports standard Nextflow arguments. Here are some key options:
-
-    -profile: Choose a configuration profile such as apptainer and singularity.
-    -resume: Continue the pipeline from where it left off using cached results.
-    -c: Specify a custom configuration file for resource allocation or tool-specific options
-    
-nextflow run nf-core/imagepreprocessing --input /data/dicom --output /data/bids_output -profile singularity
 
 
-
-### Custom Customization
-##Resouce Request
-
-Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
-
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
-
-### Custom Containers
-
-In some cases you may wish to change which container or conda environment a step of the pipeline uses for a particular tool. By default nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However in some cases the pipeline specified version maybe out of date.
-
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
-
-### Custom Tool Arguments
-
-A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
-
-## Running in the background
-
-Nextflow handles job submissions and supervises the running jobs. The Nextflow process must run until the pipeline is finished.
-
-The Nextflow `-bg` flag launches Nextflow in the background, detached from your terminal so that the workflow does not stop if you log out of your session. The logs are saved to a file.
-
-Alternatively, you can use `screen` / `tmux` or similar tool to create a detached session which you can log back into at a later time.
-Some HPC setups also allow you to run nextflow within a cluster job submitted your job scheduler (from where it submits more jobs).
-
-## Nextflow memory requirements
-
-In some cases, the Nextflow Java virtual machines can start to request a large amount of memory.
-We recommend adding the following line to your environment to limit this (typically in `~/.bashrc` or `~./bash_profile`):
-
-```bash
-NXF_OPTS='-Xms1g -Xmx4g'
-```
