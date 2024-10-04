@@ -2,13 +2,13 @@
 nextflow.enable.dsl=2
 
 // Define input and output parameters
-params.input_file = "/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ses-01/anat/sub-009002_ses-01_T1w.nii.gz"
-params.output_dir = "/home/mzaz021/BIDSProject/pydeface009002Git/"
+params.input = "/Users/mahi021/pydeface009002Input/sub-009002_ses-01_T1w.nii.gz"
+params.output_dir = "/Users/mahi021/pydeface009002Output"
 
 // Define the workflow
 workflow {
     // Create a channel with the input file
-    input_file = Channel.value(params.input_file)
+    input_file = Channel.value(params.input)
 
     // Execute the pydeface process
     defaced_file = pydeface_process(input_file)
