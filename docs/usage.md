@@ -133,7 +133,8 @@ nextflow run main.nf
 ```
 If you need to specify parameters such as input data or output paths, you can pass them in the command:
 ```
-nextflow run main.nf --input /path/to/input --output /path/to/output```
+nextflow run main.nf --input /path/to/input --output /path/to/output
+```
 
 ## Core Nextflow arguments
 
@@ -194,9 +195,8 @@ for folder in "$sourceDir"/*/; do
     	echo "$folder not found."
 	fi
 done
-
 ```
-#### Running by nextflow 
+#### Running using nextflow 
 ```
 #!/usr/bin/env nextflow
 
