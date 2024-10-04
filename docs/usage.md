@@ -142,15 +142,15 @@ nextflow run main.nf --input /path/to/input --output /path/to/output
 
 The pipeline supports standard Nextflow arguments. Here are some key options:
 
-    -profile: Choose a configuration profile such as apptainer and singularity.
+-profile: Choose a configuration profile such as apptainer and singularity.
 ```
 nextflow run main.nf -profile local
 ```
-    -resume: Continue the pipeline from where it left off using cached results.
+-resume: Continue the pipeline from where it left off using cached results.
 ```
 nextflow run main.nf -resume
 ```
-    -c: Specify a custom configuration file for resource allocation or tool-specific options
+-c: Specify a custom configuration file for resource allocation or tool-specific options
 
 ### DCM2BIDS and BIDS-Validator batch script
 #### For running 1 participant
