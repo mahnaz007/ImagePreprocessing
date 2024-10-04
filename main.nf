@@ -1,38 +1,42 @@
-nextflow.enable.dsl = 2
+#!/usr/bin/env nextflow
+nextflow.enable.dsl=2
 
-process pydeface {
+// Define input and output parameters
+params.input = "/Users/mahi021/pydeface009002Input/sub-009002_ses-01_T1w.nii.gz"
+params.output_dir = "/Users/mahi021/pydeface009002Output"
 
-	input:
-	val input_file
-	val output_file
-	val singularity_img
-	path input_dir
-	path output_dir
+// Define the workflow
+workflow {
+    // Create a channel with the input file
+    input_file = Channel.value(params.input)
 
-	script:
-	"""
-	singularity run \
-  	--bind ${input_dir}:/input \
-  	--bind ${output_dir}:/output \
-  	${singularity_img} \
-  	pydeface /input/${input_file} \
-  	--outfile /output/${output_file}
-	"""
+    // Execute the pydeface process
+    defaced_file = pydeface_process(input_file)
+
+    // Optionally, display the path of the defaced file
+    defaced_file.view()
 }
 
-workflow {
+// Define the pydeface_process
+process pydeface_process {
+    // Assign a tag for easier identification in logs
+    tag "Pydeface"
 
-	params.input_file = "sub-009002_ses-01_T1w.nii.gz"
-	params.output_file = "sub-009002_ses-01_T1w_defaced.nii.gz"
-	params.input_dir = "/home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat"
-	params.output_dir = "/home/mzaz021/BIDSProject/newPydeface"
-	params.singularity_img = "/home/mzaz021/pydeface_latest.sif"
+    // Publish the output to the specified output directory
+    publishDir params.output_dir, mode: 'copy', pattern: '*.nii.gz'
 
-	pydeface(
-    	params.input_file,
-    	params.output_file,
-    	params.singularity_img,
-    	file(params.input_dir),
-    	file(params.output_dir)
-	)
+    // Define the input for the process
+    input:
+    path in_file
+
+    // Define the output for the process
+    output:
+    path "${in_file.getBaseName()}_defaced.nii.gz"
+
+    // Define the script to execute
+    script:
+    """
+    # Run pydeface on the input file and specify the output filename
+    pydeface "$in_file" --out "${in_file.getBaseName()}_defaced.nii.gz"
+    """
 }
