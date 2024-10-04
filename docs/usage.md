@@ -198,7 +198,7 @@ for folder in "$sourceDir"/*/; do
 	fi
 done
 ```
-#### Running using nextflow 
+#### Running using nextflow (this NF script is compined with bids-validator) 
 ```
 #!/usr/bin/env nextflow
 
