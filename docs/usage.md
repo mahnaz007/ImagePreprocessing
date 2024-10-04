@@ -152,29 +152,25 @@ nextflow run main.nf -resume
 ```
 -c: Specify a custom configuration file for resource allocation or tool-specific options
 
-### DCM2BIDS and BIDS-Validator batch script
+### DCM2BIDS batch script
 #### For running 1 participant
 ```
 apptainer run -e --containall \
--B /path/to/source/directory:/dicoms:ro \
--B /path/to/config.json:/config.json:ro \
--B /path/to/output/directory:/bids \
-/path/to/dcm2bids_3.2.0.sif \
---auto_extract_entities \
---bids_validate \
--o /bids \
--d /dicoms \
--c /config.json \
--p <participant_id> \
--s <session_id>
+  -B /home/mzaz021/BIDSProject/sourcecode/IRTG09/IRTG09_009002_S1_b20090101:/dicoms:ro \
+  -B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro \
+  -B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids \
+  /home/mzaz021/dcm2bids_3.2.0.sif \
+  --auto_extract_entities \
+  -o /bids -d /dicoms -c /config.json \
+  -p 009002 -s 01
 ```
 #### For running the entire project
 
 ```
 #!/bin/bash
 # Define the base directory
-bidsdir="/path/to/output"
-sourceDir="/path/to/sourcedata"
+bidsdir="/home/mzaz021/BIDSProject"
+sourceDir="/home/mzaz021/BIDSProject/sourcecode/IRTG09"
 
 # Loop over all subdirectories in the source directory
 for folder in "$sourceDir"/*/; do
@@ -193,9 +189,9 @@ for folder in "$sourceDir"/*/; do
     	apptainer run \
         	-e --containall \
         	-B "$folder:/dicoms:ro" \
-        	-B /path/to/config.json:/config.json:ro \
-        	-B "$bidsdir":/bids \
-        	/path/to/dcm2bids_3.2.0.sif --auto_extract_entities \
+        	-B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro \
+        	-B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids \
+        	/home/mzaz021/dcm2bids_3.2.0.sif --auto_extract_entities \
         	-d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
 	else
     	echo "$folder not found."
@@ -266,7 +262,36 @@ process ConvertDicomToBIDS {
 }
 
 ```
+### BIDS Validator batch script
 
+#### For runnig 1 participant
+```
+singularity run --cleanenv \
+  /home/mzaz021/validator_latest.sif \
+  /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ \
+  --verbose > /home/mzaz021/BIDSProject/bidsValidatorLogs/validation_log.txt 2>&1
+#it creates a log in the output directory
+```
+
+#### For runnig the entire project
+```
+#!/bin/bash
+input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier"
+output_dir="/home/mzaz021/BIDSProject/bidsValidatorLogs"
+# Create the output directory if it doesn't exist
+mkdir -p $output_dir
+# Loop through all participant folders (assuming they are named 'sub-XXXXXX')
+for participant in $input_dir/sub-*; do
+participant_id=$(basename $participant)
+echo "Running BIDS validation for $participant_id..."
+# Run bids-validator for each participant and save the log in bidsValidatorLogs
+singularity run --cleanenv \
+/home/mzaz021/validator_latest.sif \
+$participant \
+--verbose > $output_dir/${participant_id}_validation_log.txt 2>&1
+echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
+done
+```
 ### Pydeface batch script
 
 #### For runnig 1 participant 
