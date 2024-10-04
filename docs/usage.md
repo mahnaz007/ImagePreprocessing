@@ -122,8 +122,10 @@ echo $https_proxy
 ### Step 2: Install the Nextflow:
 Install [Nextflow](https://www.nextflow.io/docs/stable/install.html)
 ### Step 3: Clone the Repository
-```git clone https://github.com/repo-name.git
-cd repo-name```
+```
+git clone https://github.com/repo-name.git
+cd repo-name
+```
 
 ### Step 3: Run the Nextflow Pipeline:
 After setting up the proxy, you can run your Nextflow pipeline with the default or customized paths.The typical command for running the pipeline is as follows:
