@@ -1,29 +1,29 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-// Define parameters for input directory, output directory, config file, and container paths
-params.inputDir = params.inputDir ?: 'path/to/input'
-params.outputDir = params.outputDir ?: 'path/to/output'
-params.configFile = params.configFile ?: 'path/to/config/configPHASEDIFF_B0identifier.json'
-params.containerPath_dcm2bids = params.containerPath_dcm2bids ?: 'path/to/container/dcm2bids_3.2.0.sif' // Apptainer image for dcm2bids
-params.containerPath_pydeface = params.containerPath_pydeface ?: 'path/to/container/pydeface_latest.sif' // Singularity image for pydeface
+// تعریف پارامترها
+params.inputDir = "/home/mzaz021/BIDSProject/sourcecode/IRTG09"
+params.outputDir = "/home/mzaz021/BIDSProject/combinedOutput"
+params.configFile = "/home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json"
+params.containerPath_dcm2bids = "/home/mzaz021/dcm2bids_3.2.0.sif" // مسیر کانتینر Apptainer برای dcm2bids
+params.containerPath_pydeface = "/home/mzaz021/pydeface_latest.sif" // مسیر کانتینر Apptainer برای pydeface
 params.defacedOutputDir = "${params.outputDir}/defaced"
 
-// Ensure subdirectories exist
+// اطمینان از وجود زیرشاخه‌ها
 def subDirs = new File(params.inputDir).listFiles().findAll { it.isDirectory() }
 
 if (subDirs.isEmpty()) {
     error "No subdirectories found in the input directory: ${params.inputDir}"
 }
 
-// Define the workflow
+// تعریف Workflow
 workflow {
-    // Create a channel from the list of subdirectories and extract participant ID and session_id
+    // ایجاد کانال از لیست زیرشاخه‌ها و استخراج participantID و session_id
     subDirChannel = Channel
         .from(subDirs)
         .map { dir ->
             def folderName = dir.name
-            // Extract participant ID from the folder name
+            // استخراج participant ID از نام پوشه
             def participantIDMatch = folderName =~ /IRTG\d+_(\d+)_/
     
             if (!participantIDMatch) {
@@ -31,19 +31,19 @@ workflow {
             }
     
             def participantID = participantIDMatch[0][1]
-            // Determine the session number
+            // تعیین شماره جلسه
             def session_id = folderName.contains("S1") ? "ses-01" :
                             folderName.contains("S2") ? "ses-02" : "ses-01"
             return tuple(file(dir), participantID, session_id)
         }
 
-    // Execute the ConvertDicomToBIDS process with the channel
+    // اجرای فرآیند ConvertDicomToBIDS با کانال
     bidsFiles = subDirChannel | ConvertDicomToBIDS
 
-    // (Optional) Validate BIDS
+    // اعتبارسنجی BIDS (اختیاری)
     validatedBids = bidsFiles | ValidateBIDS
 
-    // Filter NIfTI 3D files
+    // فیلتر کردن فایل‌های NIfTI 3D
     niiFiles = bidsFiles
         .flatMap { it }
         .filter { it.name.endsWith(".nii.gz") }
@@ -59,16 +59,16 @@ workflow {
         return is_3d
     }
 
-    // Filter files from the anat folder
+    // فیلتر کردن فایل‌های مربوط به پوشه anat
     anatFiles = niiFiles3D.filter { file ->
         file.toString().contains("/anat/")
     }
 
-    // Apply defacing to the anat files using PyDeface
+    // اعمال Deface به فایل‌های anat با استفاده از PyDeface
     defacedFiles = anatFiles | PyDeface
 }
 
-// Process for ConvertDicomToBIDS
+// تعریف فرآیند ConvertDicomToBIDS
 process ConvertDicomToBIDS {
     tag { participantID }
 
@@ -93,11 +93,11 @@ process ConvertDicomToBIDS {
         -o /bids \
         -d /dicoms \
         -c /config.json \
-        -p ${participantID}
+        -p ${participantID} | tee bids_output/validation_log_${participantID}.txt
     """
 }
 
-// (Optional) Process for ValidateBIDS
+// تعریف فرآیند ValidateBIDS (اختیاری)
 process ValidateBIDS {
     tag "BIDS Validation"
 
@@ -117,12 +117,12 @@ process ValidateBIDS {
     else
         echo "BIDS validation failed. Check the validation_report.json for details."
         cat validation_report.json
-        # Continue pipeline even if validation fails
+        # ادامه اجرای pipeline حتی در صورت شکست اعتبارسنجی
     fi
     """
 }
 
-// Process for PyDeface
+// تعریف فرآیند PyDeface
 process PyDeface {
     tag { niiFile.name }
 
@@ -138,13 +138,13 @@ process PyDeface {
     '''
     #!/usr/bin/env bash
 
-    # Define variables for input and output
+    # تعریف متغیرها برای ورودی و خروجی
     input_file="!{niiFile.getName()}"
     output_file="defaced_!{niiFile.simpleName}.nii.gz"
     input_dir="$(dirname '!{niiFile}')"
     singularity_img="!{params.containerPath_pydeface}"
 
-    # Run pydeface using Apptainer
+    # اجرای pydeface با استفاده از Apptainer
     apptainer run \
         --bind "${input_dir}:/input" \
         "${singularity_img}" \
