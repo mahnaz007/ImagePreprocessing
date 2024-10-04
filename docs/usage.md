@@ -128,7 +128,7 @@ cd repo-name
 ```
 
 ### Step 3: Run the Nextflow Pipeline:
-After setting up the proxy, you can run your Nextflow pipeline with the default or customized paths.The typical command for running the pipeline is as follows:
+You can run your Nextflow pipeline with the default or customized paths.The typical command for running the pipeline is as follows:
 
 ```bash
 nextflow run main.nf
@@ -143,9 +143,13 @@ nextflow run main.nf --input /path/to/input --output /path/to/output
 The pipeline supports standard Nextflow arguments. Here are some key options:
 
     -profile: Choose a configuration profile such as apptainer and singularity.
-```nextflow run main.nf -profile local```
+```
+nextflow run main.nf -profile local
+```
     -resume: Continue the pipeline from where it left off using cached results.
-```nextflow run main.nf -resume```
+```
+nextflow run main.nf -resume
+```
     -c: Specify a custom configuration file for resource allocation or tool-specific options
 
 ### DCM2BIDS and BIDS-Validator batch script
