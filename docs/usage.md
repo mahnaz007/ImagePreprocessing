@@ -130,6 +130,8 @@ fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functiona
 
 ## Running the pipeline
 
+### General Instructions
+
 ### Step 1: Set Up Proxy Identification
 
 Before running Nextflow, ensure that you have set the proxy variables that allow Singularity to access the internet through your proxy. Typically, the required commands  looks like this:
