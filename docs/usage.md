@@ -6,10 +6,12 @@
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, and Defacing)
 This pipeline automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, and defacing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
-The pipeline consists of three main steps:
+The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
 - **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facisal features.
+- **MRIQC**: Performing quality control checks on the anatomical and functional data.
+- - **fMRIPrep**: : Preprocessing functional MRI data for subsequent analysis.
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
@@ -18,6 +20,9 @@ Before running this pipeline, ensure you have the following installed:
 - [Apptainer/Singularity](https://apptainer.org/) or [Singularity](https://sylabs.io/)
 - [bids-validator](https://github.com/bids-standard/bids-validator)
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
+- [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
+- [fMRIPrep](https://fmriprep.org/en/stable/) (for preprocessing functional MRI data)
+
 
 Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
@@ -108,6 +113,21 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
+### Step 4: MRIQC
+
+**Input**:
+    BIDS-structured dataset from the Defacing step
+    
+**Output**:
+MRIQC reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
+
+### Step 5: fMRIPrep
+**Input**:
+    BIDS-structured dataset from the Defacing step
+    
+**Output**:
+fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
+
 ## Running the pipeline
 
 ### Step 1: Set Up Proxy Identification
@@ -127,11 +147,13 @@ git clone https://github.com/repo-name.git
 cd repo-name
 ```
 
-### Step 3: Run the Nextflow Pipeline:
-You can run your Nextflow pipeline with the default or customized paths.The typical command for running the pipeline is as follows:
+### Step 4: Run the Nextflow Pipeline:
+The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface,etc are organized in the modules/local/ directory. Please should refer to these individual scripts if you wish to run or modify specific parts of the pipeline.
+You can run your Nextflow pipeline with the default or customized paths.
+The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run main.nf
+nextflow run modules/local/module_name.nf
 ```
 If you need to specify parameters such as input data or output paths, you can pass them in the command:
 ```
@@ -152,7 +174,7 @@ nextflow run main.nf -resume
 ```
 -c: Specify a custom configuration file for resource allocation or tool-specific options
 
-### DCM2BIDS batch script
+### Running DCM2BIDS batch script
 #### For running 1 participant
 ```
 apptainer run -e --containall \
@@ -198,101 +220,8 @@ for folder in "$sourceDir"/*/; do
 	fi
 done
 ```
-#### Running using nextflow (this NF script is compined with bids-validator) 
-```
-#!/usr/bin/env nextflow
 
-nextflow.enable.dsl=2
-
-// Set input directory and output directory
-params.inputDir = "/home/mzaz021/BIDSProject/sourcecode/IRTG09"
-params.outputDir = "/home/mzaz021/BIDSProject/dcm2bidsNF"
-params.configFile = "/home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json"
-params.containerPath = "/home/mzaz021/dcm2bids_3.2.0.sif" // Path to your Apptainer image
-
-// Validate that the input directory exists
-if (!new File(params.inputDir).exists()) {
-    error "Input directory does not exist: ${params.inputDir}"
-}
-
-// Find all subdirectories inside the input directory
-def subDirs = new File(params.inputDir).listFiles().findAll { it.isDirectory() }
-
-if (subDirs.isEmpty()) {
-    error "No subdirectories found in the input directory: ${params.inputDir}"
-}
-
-workflow {
-    // Create a channel from the list of subdirectories and extract participant IDs and session_id
-    subDirChannel = Channel
-        .from(subDirs)
-        .map { dir ->
-            def folderName = dir.name
-            // Extract participant ID from the folder name using regex
-            // Adjust the regex based on your actual folder naming convention
-            def participantIDMatch = folderName =~ /IRTG\d+_(\d+)_?/
-
-            if (!participantIDMatch) {
-                // Handle cases where the folder name does not match expected pattern
-                // Attempt to extract participant ID without trailing underscore
-                participantIDMatch = folderName =~ /IRTG\d+_(\d+)$/
-                if (!participantIDMatch) {
-                    error "Could not extract participant ID from the folder name: ${folderName}"
-                }
-            }
-
-            def participantID = participantIDMatch[0][1]
-
-            // Determine the session number based on the subfolder's name
-            def session_id
-            switch (folderName) {
-                case ~/.*S1.*/:
-                    session_id = "ses-01"
-                    break
-                case ~/.*S2.*/:
-                    session_id = "ses-02"
-                    break
-                default:
-                    session_id = "ses-01" // Default session
-            }
-
-            return tuple(file(dir), participantID, session_id)  // Include session_id in the tuple
-        }
-
-    // Execute the ConvertDicomToBIDS process with the channel
-    bidsFiles = subDirChannel | ConvertDicomToBIDS
-}
-
-process ConvertDicomToBIDS {
-    tag { "Participant: ${participantID}, Session: ${session_id}" }
-
-    publishDir "${params.outputDir}/bids_output", mode: 'copy', saveAs: { filename -> "${filename}" }
-
-    input:
-        tuple path(dicomDir), val(participantID), val(session_id)
-
-    output:
-        path "bids_output/**", emit: bids_files
-
-    script:
-    """
-    mkdir -p bids_output
-    apptainer run -e --containall \
-        -B ${dicomDir}:/dicoms:ro \
-        -B ${params.configFile}:/config.json:ro \
-        -B ./bids_output:/bids \
-        ${params.containerPath} \
-        --auto_extract_entities \
-        --bids_validate \
-        -o /bids \
-        -d /dicoms \
-        -c /config.json \
-        -p ${participantID} \
-        --session ${session_id} | tee bids_output/validation_log_${participantID}.txt
-    """
-}
-```
-### BIDS Validator batch script
+### Running BIDS Validator batch script
 
 #### For runnig 1 participant
 ```
@@ -322,7 +251,7 @@ $participant \
 echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
 done
 ```
-### Pydeface batch script
+### Running Pydeface batch script
 
 #### For runnig 1 participant 
 ```
@@ -373,61 +302,4 @@ for subject_dir in $INPUT_BASE/sub-*/; do
     	fi
 	done
 done
-
 ```
-#### Running by nextflow 
-```
-#!/usr/bin/env nextflow
-nextflow.enable.dsl=2
-
-// Set generalized input directory and output directory
-params.inputDir = "input/directory"
-params.defacedOutputDir = "output/directory"
-params.singularityImg = "path/to/pydeface_0.3.0.sif"  // Specify the version of the Singularity image (0.3.0 in this case)
-
-workflow {
-	// Option 1: Use toAbsolutePath() to get absolute paths of NIfTI files
-	niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
-                  	.map { file -> file.toAbsolutePath() }
-
-	// Option 2: Remove the map operation (if absolute paths are not needed)
-	// niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
-
-	// Apply defacing to the NIfTI files using Singularity
-	niiFiles | PyDeface
-}
-
-process PyDeface {
-	tag { niiFile.name }
-
-	publishDir "${params.defacedOutputDir}", mode: 'copy'
-
-	input:
-    	file niiFile
-
-	output:
-    	path "defaced_${niiFile.simpleName}.nii.gz", emit: defaced_nii
-
-	shell:
-	'''
-	#!/usr/bin/env bash
-
-	# Define variables for input and output
-	input_file="!{niiFile.getName()}"
-	output_file="defaced_!{niiFile.simpleName}.nii.gz"
-	input_dir="$(dirname '!{niiFile}')"
-	singularity_img="!{params.singularityImg}"
-
-	# Run pydeface using Singularity
-	singularity run \
-    	--bind "${input_dir}:/input" \
-    	"${singularity_img}" \
-    	pydeface /input/"${input_file}" \
-    	--outfile "${output_file}"
-	'''
-}
-
-```
-
-
-
