@@ -1,15 +1,18 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-// Set input directory, output directory, and Singularity image path as parameters
-params.inputDir = params.inputDir ?: 'path/to/input'
-params.defacedOutputDir = params.defacedOutputDir ?: 'path/to/output/defaced'
-params.singularityImg = params.singularityImg ?: 'path/to/singularity/pydeface_latest.sif'
+// Set input directory and output directory
+params.inputDir = "/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier"
+params.defacedOutputDir = "/home/mzaz021/BIDSProject/defaced/defacedIRTG09"
+params.singularityImg = "/home/mzaz021/pydeface_latest.sif"
 
 workflow {
-	// Use Channel.fromPath to find NIfTI files in a generic directory structure
+	// Option 1: Use toAbsolutePath()
 	niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
-                      .map { file -> file.toAbsolutePath() }
+                  	.map { file -> file.toAbsolutePath() }
+
+	// Option 2: Remove the map operation
+	// niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
 
 	// Apply defacing to the NIfTI files using Singularity
 	niiFiles | PyDeface
@@ -18,7 +21,6 @@ workflow {
 process PyDeface {
 	tag { niiFile.name }
 
-	// Generic output directory
 	publishDir "${params.defacedOutputDir}", mode: 'copy'
 
 	input:
