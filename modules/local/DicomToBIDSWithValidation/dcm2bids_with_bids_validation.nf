@@ -8,6 +8,11 @@ params.outputDir = "/home/mzaz021/BIDSProject/dcm2bidsNF"
 params.configFile = "/home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json"
 params.containerPath = "/home/mzaz021/dcm2bids_3.2.0.sif" // Path to your Apptainer image
 
+// Validate that the input directory exists
+if (!new File(params.inputDir).exists()) {
+    error "Input directory does not exist: ${params.inputDir}"
+}
+
 // Find all subdirectories inside the input directory
 def subDirs = new File(params.inputDir).listFiles().findAll { it.isDirectory() }
 
@@ -21,26 +26,32 @@ workflow {
         .from(subDirs)
         .map { dir ->
             def folderName = dir.name
-            // Extract participant ID from the folder name
-            def participantIDMatch = folderName =~ /IRTG\d+_(\d+)_/
+            // Extract participant ID from the folder name using regex
+            // Adjust the regex based on your actual folder naming convention
+            def participantIDMatch = folderName =~ /IRTG\d+_(\d+)_?/
 
             if (!participantIDMatch) {
-                error "Could not extract participant ID from the folder name: ${folderName}"
+                // Handle cases where the folder name does not match expected pattern
+                // Attempt to extract participant ID without trailing underscore
+                participantIDMatch = folderName =~ /IRTG\d+_(\d+)$/
+                if (!participantIDMatch) {
+                    error "Could not extract participant ID from the folder name: ${folderName}"
+                }
             }
 
             def participantID = participantIDMatch[0][1]
 
-            // Determine the session number by searching within DICOM file names
-            def session_id = "ses-01" // Default session
-
-            // List all files in the directory (recursively if needed)
-            def dicomFiles = dir.listFiles().findAll { it.isFile() && it.name.toLowerCase().endsWith('.dcm') }
-
-            // Check for 'S1' or 'S2' in any of the DICOM file names
-            if (dicomFiles.any { it.name.contains("S1") }) {
-                session_id = "ses-01"
-            } else if (dicomFiles.any { it.name.contains("S2") }) {
-                session_id = "ses-02"
+            // Determine the session number based on the subfolder's name
+            def session_id
+            switch (folderName) {
+                case ~/.*S1.*/:
+                    session_id = "ses-01"
+                    break
+                case ~/.*S2.*/:
+                    session_id = "ses-02"
+                    break
+                default:
+                    session_id = "ses-01" // Default session
             }
 
             return tuple(file(dir), participantID, session_id)  // Include session_id in the tuple
@@ -51,7 +62,7 @@ workflow {
 }
 
 process ConvertDicomToBIDS {
-    tag { participantID }
+    tag { "Participant: ${participantID}, Session: ${session_id}" }
 
     publishDir "${params.outputDir}/bids_output", mode: 'copy', saveAs: { filename -> "${filename}" }
 
