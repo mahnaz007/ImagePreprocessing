@@ -1,49 +1,67 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-// تعریف پارامترها
+// Define parameters
 params.inputDir = "/home/mzaz021/BIDSProject/sourcecode/IRTG09"
 params.outputDir = "/home/mzaz021/BIDSProject/combinedOutput"
 params.configFile = "/home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json"
-params.containerPath_dcm2bids = "/home/mzaz021/dcm2bids_3.2.0.sif" // مسیر کانتینر Apptainer برای dcm2bids
-params.containerPath_pydeface = "/home/mzaz021/pydeface_latest.sif" // مسیر کانتینر Apptainer برای pydeface
+params.containerPath_dcm2bids = "/home/mzaz021/dcm2bids_3.2.0.sif" // Path to Apptainer container for dcm2bids
+params.containerPath_pydeface = "/home/mzaz021/pydeface_latest.sif" // Path to Apptainer container for pydeface
 params.defacedOutputDir = "${params.outputDir}/defaced"
 
-// اطمینان از وجود زیرشاخه‌ها
+// Ensure subdirectories exist
 def subDirs = new File(params.inputDir).listFiles().findAll { it.isDirectory() }
 
 if (subDirs.isEmpty()) {
     error "No subdirectories found in the input directory: ${params.inputDir}"
 }
 
-// تعریف Workflow
+// Define Workflow
 workflow {
-    // ایجاد کانال از لیست زیرشاخه‌ها و استخراج participantID و session_id
+    // Create a channel from the list of subdirectories and extract participantID and session_id
     subDirChannel = Channel
         .from(subDirs)
         .map { dir ->
             def folderName = dir.name
-            // استخراج participant ID از نام پوشه
-            def participantIDMatch = folderName =~ /IRTG\d+_(\d+)_/
-    
+            // Extract participant ID from the folder name using regex
+            def participantIDMatch = folderName =~ /IRTG\d+_(\d+)_?/
+
             if (!participantIDMatch) {
-                error "Could not extract participant ID from the folder name: ${folderName}"
+                // Attempt to extract participant ID without trailing underscore
+                participantIDMatch = folderName =~ /IRTG\d+_(\d+)$/
+                if (!participantIDMatch) {
+                    error "Could not extract participant ID from the folder name: ${folderName}"
+                }
             }
-    
+
             def participantID = participantIDMatch[0][1]
-            // تعیین شماره جلسه
-            def session_id = folderName.contains("S1") ? "ses-01" :
-                            folderName.contains("S2") ? "ses-02" : "ses-01"
-            return tuple(file(dir), participantID, session_id)
+
+            // Determine session number based on folder name
+            def session_id
+            switch (folderName) {
+                case ~/.*S1.*/:
+                    session_id = "ses-01"
+                    break
+                case ~/.*S2.*/:
+                    session_id = "ses-02"
+                    break
+                default:
+                    session_id = "ses-01" // Default session
+            }
+
+            // Logging for verification
+            println "Processing folder: ${folderName}, Participant ID: ${participantID}, Session ID: ${session_id}"
+
+            return tuple(file(dir), participantID, session_id)  // Include session_id in the tuple
         }
 
-    // اجرای فرآیند ConvertDicomToBIDS با کانال
+    // Execute ConvertDicomToBIDS process with the channel
     bidsFiles = subDirChannel | ConvertDicomToBIDS
 
-    // اعتبارسنجی BIDS (اختیاری)
+    // BIDS Validation (Optional)
     validatedBids = bidsFiles | ValidateBIDS
 
-    // فیلتر کردن فایل‌های NIfTI 3D
+    // Filter 3D NIfTI files
     niiFiles = bidsFiles
         .flatMap { it }
         .filter { it.name.endsWith(".nii.gz") }
@@ -59,18 +77,18 @@ workflow {
         return is_3d
     }
 
-    // فیلتر کردن فایل‌های مربوط به پوشه anat
+    // Filter files related to the anat folder
     anatFiles = niiFiles3D.filter { file ->
         file.toString().contains("/anat/")
     }
 
-    // اعمال Deface به فایل‌های anat با استفاده از PyDeface
+    // Apply Deface to anat files using PyDeface
     defacedFiles = anatFiles | PyDeface
 }
 
-// تعریف فرآیند ConvertDicomToBIDS
+// Define ConvertDicomToBIDS process
 process ConvertDicomToBIDS {
-    tag { participantID }
+    tag { "Participant: ${participantID}, Session: ${session_id}" }
 
     publishDir "${params.outputDir}/bids_output", mode: 'copy', saveAs: { filename -> "${filename}" }
 
@@ -90,6 +108,7 @@ process ConvertDicomToBIDS {
         ${params.containerPath_dcm2bids} \
         --auto_extract_entities \
         --bids_validate \
+        --session ${session_id} \
         -o /bids \
         -d /dicoms \
         -c /config.json \
@@ -97,7 +116,7 @@ process ConvertDicomToBIDS {
     """
 }
 
-// تعریف فرآیند ValidateBIDS (اختیاری)
+// Define ValidateBIDS process (Optional)
 process ValidateBIDS {
     tag "BIDS Validation"
 
@@ -117,12 +136,12 @@ process ValidateBIDS {
     else
         echo "BIDS validation failed. Check the validation_report.json for details."
         cat validation_report.json
-        # ادامه اجرای pipeline حتی در صورت شکست اعتبارسنجی
+        # Continue pipeline execution even if validation fails
     fi
     """
 }
 
-// تعریف فرآیند PyDeface
+// Define PyDeface process
 process PyDeface {
     tag { niiFile.name }
 
@@ -138,13 +157,13 @@ process PyDeface {
     '''
     #!/usr/bin/env bash
 
-    # تعریف متغیرها برای ورودی و خروجی
+    # Define variables for input and output
     input_file="!{niiFile.getName()}"
     output_file="defaced_!{niiFile.simpleName}.nii.gz"
     input_dir="$(dirname '!{niiFile}')"
     singularity_img="!{params.containerPath_pydeface}"
 
-    # اجرای pydeface با استفاده از Apptainer
+    # Run pydeface using Apptainer
     apptainer run \
         --bind "${input_dir}:/input" \
         "${singularity_img}" \
