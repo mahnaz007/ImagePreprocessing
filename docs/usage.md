@@ -150,8 +150,7 @@ cd repo-name
 ```
 
 ### Step 4: Run the Nextflow Pipeline:
-The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface,etc are organized in the modules/local/ directory. Please should refer to these individual scripts if you wish to run or modify specific parts of the pipeline.
-You can run your Nextflow pipeline with the default or customized paths.
+The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface, are organized in the modules/local/ directory. Please refer to these individual scripts if you would like to run or modify specific parts of the pipeline.
 The typical command for running the pipeline is as follows:
 
 ```bash
@@ -176,7 +175,7 @@ nextflow run main.nf -resume
 ```
 -c: Specify a custom configuration file for resource allocation or tool-specific options
 
-### Running DCM2BIDS batch script
+### Running DCM2BIDS 
 #### For running 1 participant
 ```
 apptainer run -e --containall \
@@ -223,7 +222,7 @@ for folder in "$sourceDir"/*/; do
 done
 ```
 
-### Running BIDS Validator batch script
+### Running BIDS Validator 
 
 #### For runnig 1 participant
 ```
@@ -253,7 +252,7 @@ $participant \
 echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
 done
 ```
-### Running Pydeface batch script
+### Running Pydeface 
 
 #### For runnig 1 participant 
 ```
@@ -305,3 +304,69 @@ for subject_dir in $INPUT_BASE/sub-*/; do
 	done
 done
 ```
+### Running MRIQC 
+#### For running 1 participant
+```
+singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/09 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
+	--participant-label 009005 \
+	--nprocs 4 \
+	--omp-nthreads 4 \
+	--mem_gb 8 \
+	--no-sub \
+	-vvv \
+	--verbose-reports
+```
+#### For running the entire project
+```
+#!/bin/bash
+
+# Path to your BIDS input directory
+input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
+
+# Path to your MRIQC output directory
+output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
+
+# Path to your MRIQC work directory
+work_dir="/home/mzaz021/BIDSProject/work"
+
+# Path to the Singularity container
+singularity_image="/home/mzaz021/mriqc_24.0.2.sif"
+
+# Loop through each participant folder starting with 'sub-'
+for participant in $(ls $input_dir | grep 'sub-'); do
+	echo "Running MRIQC on $participant"
+	singularity run --bind $work_dir:$work_dir $singularity_image \
+    	$input_dir $output_dir participant \
+    	--participant_label ${participant#sub-} \
+    	--nprocs 4 \
+    	--omp-nthreads 4 \
+    	--mem_gb 8 \
+    	--no-sub \
+    	-vvv \
+    	--verbose-reports \
+    	--work-dir $work_dir
+	echo "Finished processing $participant"
+done
+```
+### Running fMRIPrep 
+#### For running 1 participant
+```
+singularity run --cleanenv \
+  --bind /home/mzaz021/new_workdir:/home/mzaz021/work \
+  /home/mzaz021/fmriprep_latest.sif \
+  /home/mzaz021/BIDSProject/dcm2bidsSin/09 \
+  /home/mzaz021/BIDSProject/fmriPrepSin \
+  participant \
+  --participant-label 009004 \
+  --fs-license-file /home/mzaz021/freesurfer/license.txt \
+  --skip_bids_validation \
+  --omp-nthreads 1 \
+  --random-seed 13 \
+  --skull-strip-fixed-seed
+
+```
+#### For running the entire project
+```
+
+```
+
