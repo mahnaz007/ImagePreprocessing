@@ -6,18 +6,6 @@ params.inputDir = "/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifi
 params.defacedOutputDir = "/home/mzaz021/BIDSProject/defaced/defacedIRTG09"
 params.singularityImg = "/home/mzaz021/pydeface_latest.sif"
 
-workflow {
-	// Option 1: Use toAbsolutePath()
-	niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
-                  	.map { file -> file.toAbsolutePath() }
-
-	// Option 2: Remove the map operation
-	// niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
-
-	// Apply defacing to the NIfTI files using Singularity
-	niiFiles | PyDeface
-}
-
 process PyDeface {
 	tag { niiFile.name }
 
@@ -46,4 +34,12 @@ process PyDeface {
     	pydeface /input/"${input_file}" \
     	--outfile "${output_file}"
 	'''
+}
+
+workflow {
+	// Option 1: Use toAbsolutePath()
+	niiFiles = Channel.fromPath("${params.inputDir}/sub-*/ses-*/anat/*.nii.gz")
+
+	// Apply defacing to the NIfTI files using Singularity
+	niiFiles | PyDeface
 }
