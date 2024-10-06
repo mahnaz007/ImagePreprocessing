@@ -17,7 +17,7 @@ The pipeline consists of five main steps:
 Before running this pipeline, ensure you have the following installed:
 
 - [Nextflow](https://www.nextflow.io/)
-- [Apptainer/Singularity](https://apptainer.org/) or [Singularity](https://sylabs.io/)
+- [Apptainer](https://apptainer.org/) or [Singularity](https://sylabs.io/)
 - [bids-validator](https://github.com/bids-standard/bids-validator)
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
