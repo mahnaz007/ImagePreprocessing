@@ -134,7 +134,7 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 
 ### Step 1: Set Up Proxy Identification
 
-Before running Nextflow or cloning a GitHub repository, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow, cloning a GitHub repository, or executing any processes such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
