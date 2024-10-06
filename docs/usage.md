@@ -36,7 +36,7 @@ The first step of the pipeline is converting raw neuroimaging data, such as DICO
 
 **Input**:
 - DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be DICOM data from an MRI scan.
-- Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](assets/configPHASEDIFF_B0identifier.json).
+- Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](ImagePreprocessing/assets/configPHASEDIFF_B0identifier.json).
  ##Example of DICOM input structure:
 ```
 input/
