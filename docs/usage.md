@@ -150,7 +150,8 @@ cd repo-name
 ```
 
 ### Step 4: Run the Nextflow Pipeline:
-The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface, are organized in the [./modules/local/] directory. Please refer to these individual scripts if you wish to run or modify specific parts of the pipeline.
+The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface, are organized The Nextflow pipeline scripts for each process, such as dcm2bids and pydeface, are organized [here](https://github.com/mahnaz007/ImagePreprocessing/tree/main/modules/local).
+ directory. Please refer to these individual scripts if you wish to run or modify specific parts of the pipeline.
 The typical command for running the pipeline is:
 
 ```bash
