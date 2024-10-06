@@ -195,7 +195,7 @@ apptainer run -e --containall \
 bidsdir="/home/mzaz021/BIDSProject"
 sourceDir="/home/mzaz021/BIDSProject/sourcecode/IRTG09"
 
-# Loop over all subdirectories in the source directory
+# Loop through all subdirectories in the source directory
 for folder in "$sourceDir"/*/; do
 	if [ -d "$folder" ]; then
     	# Extract subject and session from the folder name
@@ -203,7 +203,7 @@ for folder in "$sourceDir"/*/; do
     	sesStr=$(basename "$folder" | cut -d '_' -f 3)
     	ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
    	 
-    	# Default session to 01 if empty
+    	# Set session to 01 if not specified
     	[ -z "$ses" ] && ses="01"
     	session_label="ses-$(printf '%02d' "$ses")"
     	echo "Processing participant: sub-${subject}, session: $session_label"
@@ -230,7 +230,7 @@ singularity run --cleanenv \
   /home/mzaz021/validator_latest.sif \
   /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ \
   --verbose > /home/mzaz021/BIDSProject/bidsValidatorLogs/validation_log.txt 2>&1
-#it creates a log in the output directory
+#Creates a log in the output directory
 ```
 
 #### For runnig the entire project
@@ -238,18 +238,19 @@ singularity run --cleanenv \
 #!/bin/bash
 input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier"
 output_dir="/home/mzaz021/BIDSProject/bidsValidatorLogs"
-# Create the output directory if it doesn't exist
-mkdir -p $output_dir
+
 # Loop through all participant folders (assuming they are named 'sub-XXXXXX')
-for participant in $input_dir/sub-*; do
-participant_id=$(basename $participant)
-echo "Running BIDS validation for $participant_id..."
-# Run bids-validator for each participant and save the log in bidsValidatorLogs
-singularity run --cleanenv \
-/home/mzaz021/validator_latest.sif \
-$participant \
---verbose > $output_dir/${participant_id}_validation_log.txt 2>&1
-echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
+for participant in "$input_dir"/sub-*; do
+    participant_id=$(basename "$participant")
+    echo "Running BIDS validation for $participant_id..."
+
+    # Run bids-validator for each participant and save the log in bidsValidatorLogs
+    singularity run --cleanenv \
+        /home/mzaz021/validator_latest.sif \
+        "$participant" \
+        --verbose > "$output_dir/${participant_id}_validation_log.txt" 2>&1
+
+    echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
 done
 ```
 ### Running Pydeface 
@@ -257,7 +258,7 @@ done
 #### For runnig 1 participant 
 ```
 singularity run \
-   --bind /path/to/input/directory:/input \ (should follow the BIDS structure)
+   --bind /path/to/input/directory:/input \ (input should follow the BIDS structure)
    --bind /path/to/output/directory:/output \
    /path/to/pydeface_0.3.0.sif \
    pydeface /input/sub-<subject>_ses-<session>_T1w.nii.gz \
@@ -268,35 +269,28 @@ singularity run \
 ```
 #!/bin/bash
 
-# Path to the Singularity container
-CONTAINER="/path/to/pydeface_0.3.0.sif"
+INPUT_BASE="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
+OUTPUT_BASE="/home/mzaz021/BIDSProject/newPydeface"
+CONTAINER="/home/mzaz021/pydeface_latest.sif"
 
-# Base input and output directories
-INPUT_BASE="/path/to/input/directory" (should follow the BIDS structure)
-OUTPUT_BASE="/path/to/output/directory"
-
-# Loop through each subject directory in the base input directory
-for subject_dir in $INPUT_BASE/sub-*/; do
+# Loop through each subject directory in the input directory
+for subject_dir in "$INPUT_BASE"/sub-*/; do
 	# Loop through each session directory within the current subject directory
-	for session_dir in $subject_dir/ses-*/; do
-    	# Check if the anatomical directory exists
+	for session_dir in "$subject_dir"/ses-*/; do
     	anat_dir="${session_dir}anat"
     	if [[ -d "$anat_dir" ]]; then
         	# Loop through each NIfTI file within the anatomical directory
-        	for nifti_file in $anat_dir/*.nii.gz; do
-            	# Define output directory and ensure it exists
-            	output_dir="${OUTPUT_BASE}/$(basename ${subject_dir})/$(basename ${session_dir})/anat"
+        	for nifti_file in "$anat_dir"/*.nii.gz; do
+            	# Create output directory and define output file path
+            	output_dir="${OUTPUT_BASE}/$(basename "$subject_dir")/$(basename "$session_dir")/anat"
             	mkdir -p "$output_dir"
-           	 
-            	# Define output file path
             	output_file="${output_dir}/$(basename "${nifti_file}" .nii.gz)_defaced.nii.gz"
            	 
-            	# Run pydeface
+            	# Run pydeface with Singularity
             	singularity run \
-                	--bind $session_dir:/input \
-                	--bind $output_dir:/output \
-                	--bind /path/to/home:/home \
-                	$CONTAINER \
+                	--bind "$session_dir":/input \
+                	--bind "$output_dir":/output \
+                	"$CONTAINER" \
                 	pydeface "/input/anat/$(basename "$nifti_file")" \
                 	--outfile "/output/$(basename "$output_file")"
         	done
@@ -320,16 +314,10 @@ singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preproc
 ```
 #!/bin/bash
 
-# Path to your BIDS input directory
 input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
-
-# Path to your MRIQC output directory
 output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
-
 # Path to your MRIQC work directory
 work_dir="/home/mzaz021/BIDSProject/work"
-
-# Path to the Singularity container
 singularity_image="/home/mzaz021/mriqc_24.0.2.sif"
 
 # Loop through each participant folder starting with 'sub-'
