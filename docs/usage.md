@@ -3,26 +3,27 @@
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Introduction
-# Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, and Defacing)
-This pipeline automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, and defacing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
+# Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
+This pipeline automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
 The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
 - **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facisal features.
 - **MRIQC**: Performing quality control checks on the anatomical and functional data.
-- - **fMRIPrep**: : Preprocessing functional MRI data for subsequent analysis.
+- **fMRIPrep**: : Preprocessing functional MRI data for subsequent analysis.
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
 
 - [Nextflow](https://www.nextflow.io/)
-- [Apptainer](https://apptainer.org/) or [Singularity](https://sylabs.io/)
+- [Apptainer](https://apptainer.org/) and [Singularity](https://sylabs.io/)
 - [bids-validator](https://github.com/bids-standard/bids-validator)
+- [dcm2bids](https://github.com/UNFmontreal/Dcm2Bids)
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
 - [fMRIPrep](https://fmriprep.org/en/stable/) (for preprocessing functional MRI data)
-
+**Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html).
 
 Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
@@ -35,9 +36,8 @@ The first step of the pipeline is converting raw neuroimaging data, such as DICO
 
 **Input**:
 - DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be DICOM data from an MRI scan.
-- Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format.
+- Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](./assets/configPHASEDIFF_B0identifier.json).
  ##Example of DICOM input structure:
-
 ```
 input/
 IRTG01/
@@ -54,10 +54,10 @@ IRTG01/
 - Sidecar files: Such as .bvec and .bval files for diffusion-weighted imaging (DWI), if applicable.
 
 ##Multiple Session
-If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). Below is an example structure:
+If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. 
+**Note**: Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). 
 
 ##Example of BIDS-compliant output structure:
-
 ```
 output/
 ├── sub-001001
@@ -88,11 +88,8 @@ output/
 ├── participants.tsv          # Participant-level metadata
 └── README                    # Optional readme file describing the dataset
 ```
-
-
-
 ### Step 2: BIDS Validation
-Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator`. This step checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
+Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator`tool. This step checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
 
 **Process**: `ValidateBIDS`
 
@@ -103,7 +100,7 @@ Once the data is converted to BIDS format, the pipeline performs validation usin
 - Log indicating success or any issues found during validation
 
 ### Step 3: Defacing
-The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes pydeface to process the files stored in the anat folder.
+The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
 
 **Process**: `PyDeface`
 
@@ -116,17 +113,20 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 ### Step 4: MRIQC
 
 **Input**:
-    BIDS-structured dataset from the Defacing step
+    BIDS-structured dataset 
     
 **Output**:
-MRIQC reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
+- HTML reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
+- SVG figures that generates visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
 ### Step 5: fMRIPrep
 **Input**:
-    BIDS-structured dataset from the Defacing step
+    BIDS-structured dataset 
     
 **Output**:
-fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
+- fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
+- HTML reports for quality control metrics.
+- SVG figures that display multiple visualizations, including brain masks and quality control.
 
 ## Running the pipeline
 
@@ -134,7 +134,7 @@ fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functiona
 
 ### Step 1: Set Up Proxy Identification
 
-Before running Nextflow, ensure that you have set the proxy variables that allow Singularity to access the internet through your proxy. Typically, the required commands  looks like this:
+Before running Nextflow or cloning a GitHub repository, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
@@ -150,8 +150,8 @@ cd repo-name
 ```
 
 ### Step 4: Run the Nextflow Pipeline:
-The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface, are organized in the modules/local/ directory. Please refer to these individual scripts if you would like to run or modify specific parts of the pipeline.
-The typical command for running the pipeline is as follows:
+The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface, are organized in the [./modules/local/] directory. Please refer to these individual scripts if you wish to run or modify specific parts of the pipeline.
+The typical command for running the pipeline is:
 
 ```bash
 nextflow run modules/local/module_name.nf
@@ -160,9 +160,7 @@ If you need to specify parameters such as input data or output paths, you can pa
 ```
 nextflow run main.nf --input /path/to/input --output /path/to/output
 ```
-
 ## Core Nextflow arguments
-
 The pipeline supports standard Nextflow arguments. Here are some key options:
 
 -profile: Choose a configuration profile such as apptainer and singularity.
@@ -174,6 +172,8 @@ nextflow run main.nf -profile local
 nextflow run main.nf -resume
 ```
 -c: Specify a custom configuration file for resource allocation or tool-specific options
+## Running the Pipeline Processes
+For each step of the pipeline, different processes (e.g., DCM2BIDS, Pydeface, MRIQC) need to be run using specific command lines. These commands assume you are using Apptainer or Singularity to containerize the execution environment.
 
 ### Running DCM2BIDS 
 #### For running 1 participant
@@ -188,7 +188,6 @@ apptainer run -e --containall \
   -p 009002 -s 01
 ```
 #### For running the entire project
-
 ```
 #!/bin/bash
 # Define the base directory
@@ -223,7 +222,6 @@ done
 ```
 
 ### Running BIDS Validator 
-
 #### For runnig 1 participant
 ```
 singularity run --cleanenv \
@@ -254,7 +252,6 @@ for participant in "$input_dir"/sub-*; do
 done
 ```
 ### Running Pydeface 
-
 #### For runnig 1 participant 
 ```
 singularity run \
