@@ -3,7 +3,7 @@
 nextflow.enable.dsl=2
 
 // Parameters for input and output directories
-params.inputDir = "/home/mzaz021/BIDSProject/sourcecode/IRTG09"
+params.inputDir = "/home/mzaz021/BIDSProject/sourcecode/IRTG01"
 params.outputDir = "/home/mzaz021/BIDSProject/dcm2bidsNF"
 params.configFile = "/home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json"
 params.containerPath = "/home/mzaz021/dcm2bids_3.2.0.sif"
