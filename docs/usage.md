@@ -124,6 +124,7 @@ Before running fMRIPrep, make sure to update your dataset:
 - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
 - After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
 - If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensures the dataset complies with the BIDS standard.
+
 **Input**:
     BIDS-structured dataset 
     
