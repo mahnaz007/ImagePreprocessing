@@ -80,10 +80,6 @@ Additionally, ensure the following Singularity .sif container files are correctl
 
 Make sure these .sif container files are downloaded and placed in an accessible directory. If it is needed, you can create them using the appropriate Singularity or Apptainer commands.
 
-## Running the Pipeline Processes.
-
-For each step of the pipeline, different processes (e.g., DCM2BIDS, Pydeface, MRIQC) need to be run using specific Singularity or Apptainer.
-
 
 ## Pipeline Workflow
 
