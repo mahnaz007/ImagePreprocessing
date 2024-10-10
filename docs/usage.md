@@ -62,7 +62,7 @@ Additionally, ensure the following Singularity .sif container files are correctl
     singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
 
 ### 4. pydeface_latest.sif
-    Source Code: PyDeface GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
+    Source Code: PyDeface GitHub Repository[https://github.com/poldracklab/pydeface]
     Singularity Recipe:
     Steps to Build (using a community Docker image):
     bash
