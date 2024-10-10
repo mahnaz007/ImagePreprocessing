@@ -38,7 +38,8 @@ Additionally, ensure the following Singularity .sif container files are correctl
 ### 1. dcm2bids_3.2.0.sif
     Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
     Version: 3.2.0
-    Singularity Recipe:
+    Singularity Recipe: 
+    Create a Singularity image using the Docker image available on Docker Hub.
     Steps to Build:  
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
 
@@ -55,7 +56,7 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
     Latest Version: Refer to the GitHub repository for updates.
     Singularity Recipe:
-    fMRIPrep offers Docker images suitable for conversion.
+    fMRIPrep offers Docker images which is suitable for conversion.
     Steps to Build:
     bash
     singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
@@ -63,6 +64,7 @@ Additionally, ensure the following Singularity .sif container files are correctl
 ### 4. pydeface_latest.sif
     Source Code: PyDeface GitHub Repository[https://github.com/poldracklab/pydeface]
     Singularity Recipe:
+    Using a community-maintained image
     Steps to Build (using a community Docker image):
     bash
     singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
@@ -76,11 +78,11 @@ Additionally, ensure the following Singularity .sif container files are correctl
     bash
     singularity build bids_validator_latest.sif docker://bids/validator:latest
 
-Make sure these .sif container files are downloaded and placed in an accessible directory. If needed, you can create them using the appropriate Singularity or Apptainer commands (refer to the individual tool documentation for specific instructions).
-Running the Pipeline Processes.
+Make sure these .sif container files are downloaded and placed in an accessible directory. If it is needed, you can create them using the appropriate Singularity or Apptainer commands.
+
+## Running the Pipeline Processes.
 
 For each step of the pipeline, different processes (e.g., DCM2BIDS, Pydeface, MRIQC) need to be run using specific Singularity or Apptainer.
-
 
 
 ## Pipeline Workflow
