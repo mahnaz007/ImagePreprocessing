@@ -40,9 +40,9 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Version: 3.2.0
     Singularity Recipe:
     Steps to Build:
-    bash
+    ```
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
-
+```
 ### 2. mriqc-latest.sif
 
     Source Code: MRIQC GitHub Repository[https://github.com/nipreps/mriqc]
