@@ -344,8 +344,8 @@ done
 ### Running MRIQC 
 #### For running 1 participant
 ```
-singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/09 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
-	--participant-label 009005 \
+singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
+	--participant-label 001004 \
 	--nprocs 4 \
 	--omp-nthreads 4 \
 	--mem_gb 8 \
@@ -357,7 +357,7 @@ singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preproc
 ```
 #!/bin/bash
 
-input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
+input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/01"
 output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
 # Path to your MRIQC work directory
 work_dir="/home/mzaz021/BIDSProject/work"
