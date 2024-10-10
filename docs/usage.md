@@ -27,6 +27,63 @@ Before running this pipeline, ensure you have the following installed:
 
 Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
+Additionally, ensure the following Singularity .sif container files are correctly installed and accessible in your environment:
+
+    dcm2bids_3.2.0.sif – Required for DICOM to BIDS conversion.
+    mriqc-latest.sif – Required for running MRIQC for quality control.
+    fmriprep_latest.sif – Required for fMRI preprocessing.
+    pydeface_latest.sif – Used for defacing anatomical data.
+    bids_validator_latest.sif – Used for validating BIDS datasets.
+    
+### 1. dcm2bids_3.2.0.sif
+    Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
+    Version: 3.2.0
+    Singularity Recipe:
+    Steps to Build:
+    bash
+    singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
+
+### 2. mriqc-latest.sif
+
+    Source Code: MRIQC GitHub Repository[https://github.com/nipreps/mriqc]
+    Latest Version: Check the GitHub releases for the most recent version.
+    Singularity Recipe:
+    MRIQC provides Docker images that can be converted into Singularity images.
+    Steps to Build:
+    bash
+    singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
+### 3. fmriprep_latest.sif
+    Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
+    Latest Version: Refer to the GitHub repository for updates.
+    Singularity Recipe:
+    fMRIPrep offers Docker images suitable for conversion.
+    Steps to Build:
+    bash
+    singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
+
+### 4. pydeface_latest.sif
+    Source Code: PyDeface GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
+    Singularity Recipe:
+    Steps to Build (using a community Docker image):
+    bash
+    singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
+    
+### 5. bids_validator_latest.sif
+
+    Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
+    Singularity Recipe:
+    The BIDS Validator has an official Docker image.
+    Steps to Build:
+    bash
+    singularity build bids_validator_latest.sif docker://bids/validator:latest
+
+Make sure these .sif container files are downloaded and placed in an accessible directory. If needed, you can create them using the appropriate Singularity or Apptainer commands (refer to the individual tool documentation for specific instructions).
+Running the Pipeline Processes.
+
+For each step of the pipeline, different processes (e.g., DCM2BIDS, Pydeface, MRIQC) need to be run using specific Singularity or Apptainer.
+
+
+
 ## Pipeline Workflow
 
 ### Step 1: BIDSing (Convert DICOM to BIDS)
