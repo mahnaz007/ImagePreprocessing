@@ -309,7 +309,7 @@ done
 ### Running Pydeface 
 #### For runnig 1 participant 
 ```
-apptainer run -e --containall   -B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro   -B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro   -B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids   /home/mzaz021/dcm2bids_3.2.0.sif   --auto_extract_entities   -o /bids -d /dicoms -c /config.json   -p 001001 -s 01
+singularity run   --bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input   --bind /home/mzaz021/BIDSProject/newPydeface:/output   /home/mzaz021/pydeface_latest.sif   pydeface /input/sub-009002_ses-01_T1w.nii.gz   --outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
 ```
 
 #### For running the entire project
