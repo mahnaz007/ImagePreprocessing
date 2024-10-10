@@ -95,8 +95,11 @@ output/
 You can run the tool for one participant or an entiere project.
 
 To run it for one participant you will run the container from the terminal with the following command:
+
+`TODO: review`
 ```
-appteiner run -e --containall \
+appteiner run \
+-e --containall \
 -B <path/to/dicom/files> \
 -B <path/to/confi.json> \
 -B <path/to/BIDSProject> \
@@ -108,17 +111,31 @@ appteiner run -e --containall \
 -p <?> \
 -s <session_number>
 ```
+
 Example command:
 ```
-apptainer run -e --containall   -B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro   -B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro   -B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids   /home/mzaz021/dcm2bids_3.2.0.sif   --auto_extract_entities   -o /bids -d /dicoms -c /config.json   -p 001001 -s 01
+apptainer run \
+-e --containall \
+-B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro \
+-B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro \
+-B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids \
+/home/mzaz021/dcm2bids_3.2.0.sif \
+--auto_extract_entities \
+-o /bids \
+-d /dicoms \
+-c /config.json \
+-p 001001 \
+-s 01
 
 ```
-#### For running the entire project
+To run an entire project you need to use the following bash script. You need to adjust the `bidsdir` and `sourceDir` as well as the parameters in the `apptainer run`command.
+
+`TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
 ```
 #!/bin/bash
 # Define the base directory
-bidsdir="/home/mzaz021/BIDSProject"
-sourceDir="/home/mzaz021/BIDSProject/sourcecode/IRTG01"
+bidsdir="</path/to/BIDSProject>"
+sourceDir="<path/to/sourcecode/IRTG01>"
 
 # Loop through all subdirectories in the source directory
 for folder in "$sourceDir"/*/; do
@@ -149,7 +166,7 @@ done
 
 
 ### 2. BIDS Validation
-This step checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
+This tool checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
 
 **Process**: `ValidateBIDS`
 
@@ -158,9 +175,55 @@ This step checks that the dataset complies with the BIDS standard, ensuring that
 
 **Output**:
 - Log indicating success or any issues found during validation
+<br/><br/>
 
-### Step 3: Defacing
-The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
+**Execution**
+You can run the tool for one participant or an entiere project.
+
+To run it for one participant you will run the container from the terminal with the following command:
+ 
+ ```
+singularity run --cleanenv \
+  <path/to/container/file.sif> \
+  <path/to/output/dir> \
+  --verbose > <path/to/output/dir/validation_log.txt> 2>&1
+#Creates a log in the output directory
+```
+Example command:
+```
+singularity run --cleanenv \
+  /home/mzaz021/validator_latest.sif \
+  /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ \
+  --verbose > /home/mzaz021/BIDSProject/bidsValidatorLogs/validation_log.txt 2>&1
+#Creates a log in the output directory
+```
+
+
+To run an entire project you need to use the following bash script. You need to adjust the `input_dir` and `output_dir` as well as the parameters in the `singularity run`command.
+
+`TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
+```
+#!/bin/bash
+input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier"
+output_dir="/home/mzaz021/BIDSProject/bidsValidatorLogs"
+
+# Loop through all participant folders (assuming they are named 'sub-XXXXXX')
+for participant in "$input_dir"/sub-*; do
+    participant_id=$(basename "$participant")
+    echo "Running BIDS validation for $participant_id..."
+
+    # Run bids-validator for each participant and save the log in bidsValidatorLogs
+    singularity run --cleanenv \
+        /home/mzaz021/validator_latest.sif \
+        "$participant" \
+        --verbose > "$output_dir/${participant_id}_validation_log.txt" 2>&1
+
+    echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
+done
+```
+
+### 3. Defacing
+This tool performs defacing on the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
 
 **Process**: `PyDeface`
 
@@ -170,7 +233,61 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
-### Step 4: MRIQC
+**Execution**
+You can run the tool for one participant or an entiere project.
+
+To run it for one participant you will run the container from the terminal with the following command:
+```
+singularity run \
+--bind <path/to/input/dir>:/input \
+--bind <path/to/output/dir>:/output \
+</path/to/container/file.sif> \
+pydeface /input/path/to/.nii.gz \
+--outfile /output/file_defaced.nii.gz
+```
+Example command:
+```
+singularity run \
+--bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input \
+--bind /home/mzaz021/BIDSProject/newPydeface:/output \
+/home/mzaz021/pydeface_latest.sif \
+pydeface /input/sub-009002_ses-01_T1w.nii.gz \
+--outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
+```
+
+To run an entire project you need to use the following bash script. You need to adjust the `INPUT_BASE`, `OUTPUT_BASE`, and `CONTAINER`.
+
+`TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
+```
+#!/bin/bash
+
+INPUT_BASE="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
+OUTPUT_BASE="/home/mzaz021/BIDSProject/newPydeface"
+CONTAINER="/home/mzaz021/pydeface_latest.sif"
+
+# Loop through subjects and sessions to run Pydeface
+for subject_dir in "$INPUT_BASE"/sub-*/; do
+    for session_dir in "$subject_dir"/ses-*/; do
+        anat_dir="${session_dir}anat"
+        if [[ -d "$anat_dir" ]]; then
+            for nifti_file in "$anat_dir"/*.nii.gz; do
+                output_dir="${OUTPUT_BASE}/$(basename "$subject_dir")/$(basename "$session_dir")/anat"
+                mkdir -p "$output_dir"
+                
+                # Run pydeface with Singularity
+                singularity run \
+                    --bind "$session_dir":/input \
+                    --bind "$output_dir":/output \
+                    "$CONTAINER" \
+                    pydeface "/input/anat/$(basename "$nifti_file")" \
+                    --outfile "/output/$(basename "$nifti_file" .nii.gz)_defaced.nii.gz"
+            done
+        fi
+    done
+done
+```
+
+### 4. MRIQC
 
 **Input**:
     BIDS-structured dataset 
@@ -179,11 +296,65 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 - HTML reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
 - SVG figures that generates visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
-### Step 5: fMRIPrep
-Before running fMRIPrep, make sure to update your dataset:
-- If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
-- After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
-- If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensures the dataset complies with the BIDS standard.
+**Execution**
+You can run the tool for one participant or an entiere project.
+
+To run it for one participant you will run the container from the terminal with the following command:
+```
+singularity run <path/to/the/container/file.sif> /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
+	--participant-label <lable> \
+	--nprocs <number> \
+	--omp-nthreads <number> \
+	--mem_gb <number> \
+	--no-sub \
+	-vvv \
+	--verbose-reports
+```
+Example command:
+```
+singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
+	--participant-label 001004 \
+	--nprocs 4 \
+	--omp-nthreads 4 \
+	--mem_gb 8 \
+	--no-sub \
+	-vvv \
+	--verbose-reports
+```
+To run an entire project you need to use the following bash script. You need to adjust the `input_dir`, `output_dir`, `work_dir`, and `singularity_image`.
+
+`TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
+```
+#!/bin/bash
+
+input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/01"
+output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
+# Path to your MRIQC work directory
+work_dir="/home/mzaz021/BIDSProject/work"
+singularity_image="/home/mzaz021/mriqc_24.0.2.sif"
+
+# Loop through each participant folder starting with 'sub-'
+for participant in $(ls $input_dir | grep 'sub-'); do
+	echo "Running MRIQC on $participant"
+	singularity run --bind $work_dir:$work_dir $singularity_image \
+    	$input_dir $output_dir participant \
+    	--participant_label ${participant#sub-} \
+    	--nprocs 4 \
+    	--omp-nthreads 4 \
+    	--mem_gb 8 \
+    	--no-sub \
+    	-vvv \
+    	--verbose-reports \
+    	--work-dir $work_dir
+	echo "Finished processing $participant"
+done
+```
+
+### 5. fMRIPrep
+> 💡Before running fMRIPrep, make sure to update your dataset:
+> - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
+> - After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
+> - If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensures the dataset complies with the BIDS standard.
 
 **Input**:
     BIDS-structured dataset 
@@ -192,6 +363,34 @@ Before running fMRIPrep, make sure to update your dataset:
 - fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
 - HTML reports for quality control metrics.
 - SVG figures that display multiple visualizations, including brain masks and quality control.
+
+**Execution**
+You can run the tool for one participant or an entiere project.
+
+To run it for one participant you will run the container from the terminal with the following command:
+
+`TODO: adjsute the code to a general command`:
+```
+singularity run --cleanenv \
+/home/mzaz021/fmriprep_latest.sif \
+/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier \
+/home/mzaz021/BIDSProject/fmriPreprocessing/09 \  
+participant \
+--participant-label <label> \
+--fs-license-file <path/to/license.txt> \
+--skip_bids_validation \
+--omp-nthreads <number> \
+--random-seed <number> \ 
+--skull-strip-fixed-seed
+```
+Example command:
+```
+singularity run --cleanenv /home/mzaz021/fmriprep_latest.sif     /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier     /home/mzaz021/BIDSProject/fmriPreprocessing/09     participant     --participant-label 009004     --fs-license-file /home/mzaz021/freesurfer/license.txt     --skip_bids_validation     --omp-nthreads 1     --random-seed 13     --skull-strip-fixed-seed
+```
+
+
+
+
 
 ## Running the pipeline
 
@@ -228,116 +427,7 @@ nextflow run main.nf -resume
 For each step of the pipeline, different processes (e.g., DCM2BIDS, Pydeface, MRIQC) need to be run using specific command lines. These commands assume you are using Apptainer or Singularity to containerize the execution environment.
 
 
-### Running BIDS Validator 
-#### For runnig 1 participant
-```
-singularity run --cleanenv \
-  /home/mzaz021/validator_latest.sif \
-  /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ \
-  --verbose > /home/mzaz021/BIDSProject/bidsValidatorLogs/validation_log.txt 2>&1
-#Creates a log in the output directory
-```
 
-#### For runnig the entire project
-```
-#!/bin/bash
-input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier"
-output_dir="/home/mzaz021/BIDSProject/bidsValidatorLogs"
-
-# Loop through all participant folders (assuming they are named 'sub-XXXXXX')
-for participant in "$input_dir"/sub-*; do
-    participant_id=$(basename "$participant")
-    echo "Running BIDS validation for $participant_id..."
-
-    # Run bids-validator for each participant and save the log in bidsValidatorLogs
-    singularity run --cleanenv \
-        /home/mzaz021/validator_latest.sif \
-        "$participant" \
-        --verbose > "$output_dir/${participant_id}_validation_log.txt" 2>&1
-
-    echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
-done
-```
-### Running Pydeface 
-#### For runnig 1 participant 
-```
-singularity run   --bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input   --bind /home/mzaz021/BIDSProject/newPydeface:/output   /home/mzaz021/pydeface_latest.sif   pydeface /input/sub-009002_ses-01_T1w.nii.gz   --outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
-```
-
-#### For running the entire project
-```
-#!/bin/bash
-
-INPUT_BASE="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
-OUTPUT_BASE="/home/mzaz021/BIDSProject/newPydeface"
-CONTAINER="/home/mzaz021/pydeface_latest.sif"
-
-# Loop through subjects and sessions to run Pydeface
-for subject_dir in "$INPUT_BASE"/sub-*/; do
-    for session_dir in "$subject_dir"/ses-*/; do
-        anat_dir="${session_dir}anat"
-        if [[ -d "$anat_dir" ]]; then
-            for nifti_file in "$anat_dir"/*.nii.gz; do
-                output_dir="${OUTPUT_BASE}/$(basename "$subject_dir")/$(basename "$session_dir")/anat"
-                mkdir -p "$output_dir"
-                
-                # Run pydeface with Singularity
-                singularity run \
-                    --bind "$session_dir":/input \
-                    --bind "$output_dir":/output \
-                    "$CONTAINER" \
-                    pydeface "/input/anat/$(basename "$nifti_file")" \
-                    --outfile "/output/$(basename "$nifti_file" .nii.gz)_defaced.nii.gz"
-            done
-        fi
-    done
-done
-```
-### Running MRIQC 
-#### For running 1 participant
-```
-singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
-	--participant-label 001004 \
-	--nprocs 4 \
-	--omp-nthreads 4 \
-	--mem_gb 8 \
-	--no-sub \
-	-vvv \
-	--verbose-reports
-```
-#### For running the entire project
-```
-#!/bin/bash
-
-input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/01"
-output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
-# Path to your MRIQC work directory
-work_dir="/home/mzaz021/BIDSProject/work"
-singularity_image="/home/mzaz021/mriqc_24.0.2.sif"
-
-# Loop through each participant folder starting with 'sub-'
-for participant in $(ls $input_dir | grep 'sub-'); do
-	echo "Running MRIQC on $participant"
-	singularity run --bind $work_dir:$work_dir $singularity_image \
-    	$input_dir $output_dir participant \
-    	--participant_label ${participant#sub-} \
-    	--nprocs 4 \
-    	--omp-nthreads 4 \
-    	--mem_gb 8 \
-    	--no-sub \
-    	-vvv \
-    	--verbose-reports \
-    	--work-dir $work_dir
-	echo "Finished processing $participant"
-done
-```
-### Running fMRIPrep 
-#### For running 1 participant
-```
-singularity run --cleanenv /home/mzaz021/fmriprep_latest.sif     /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier     /home/mzaz021/BIDSProject/fmriPreprocessing/09     participant     --participant-label 009004     --fs-license-file /home/mzaz021/freesurfer/license.txt     --skip_bids_validation     --omp-nthreads 1     --random-seed 13     --skull-strip-fixed-seed
-```
-#### For running the entire project
-```
 
 ```
 
