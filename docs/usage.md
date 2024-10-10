@@ -43,7 +43,16 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Steps to Build:  
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
 
-### 2. mriqc-latest.sif
+### 2. bids_validator_latest.sif
+
+    Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
+    Singularity Recipe:
+    The BIDS Validator has an official Docker image.
+    Steps to Build:
+    bash
+    singularity build bids_validator_latest.sif docker://bids/validator:latest
+
+### 3. mriqc-latest.sif
 
     Source Code: MRIQC GitHub Repository[https://github.com/nipreps/mriqc]
     Latest Version: Check the GitHub releases for the most recent version.
@@ -52,14 +61,6 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Steps to Build:
     bash
     singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
-### 3. fmriprep_latest.sif
-    Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
-    Latest Version: Refer to the GitHub repository for updates.
-    Singularity Recipe:
-    fMRIPrep offers Docker images which is suitable for conversion.
-    Steps to Build:
-    bash
-    singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
 
 ### 4. pydeface_latest.sif
     Source Code: PyDeface GitHub Repository[https://github.com/poldracklab/pydeface]
@@ -68,15 +69,15 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Steps to Build (using a community Docker image):
     bash
     singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
-    
-### 5. bids_validator_latest.sif
 
-    Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
+### 5. fmriprep_latest.sif
+    Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
+    Latest Version: Refer to the GitHub repository for updates.
     Singularity Recipe:
-    The BIDS Validator has an official Docker image.
+    fMRIPrep offers Docker images which is suitable for conversion.
     Steps to Build:
     bash
-    singularity build bids_validator_latest.sif docker://bids/validator:latest
+    singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
 
 Make sure these .sif container files are downloaded and placed in an accessible directory. If it is needed, you can create them using the appropriate Singularity or Apptainer commands.
 
