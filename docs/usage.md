@@ -315,12 +315,7 @@ done
 ### Running Pydeface 
 #### For runnig 1 participant 
 ```
-singularity run \
-   --bind /path/to/input/directory:/input \ (input should follow the BIDS structure)
-   --bind /path/to/output/directory:/output \
-   /path/to/pydeface_0.3.0.sif \
-   pydeface /input/sub-<subject>_ses-<session>_T1w.nii.gz \
-   --outfile /output/sub-<subject>_ses-<session>_T1w_defaced.nii.gz
+singularity run   --bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input   --bind /home/mzaz021/BIDSProject/newPydeface:/output   /home/mzaz021/pydeface_latest.sif   pydeface /input/sub-009002_ses-01_T1w.nii.gz   --outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
 ```
 
 #### For running the entire project
