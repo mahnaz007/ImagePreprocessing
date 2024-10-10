@@ -39,10 +39,9 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
     Version: 3.2.0
     Singularity Recipe:
-    Steps to Build:
-    ```
+    Steps to Build:  
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
-```
+
 ### 2. mriqc-latest.sif
 
     Source Code: MRIQC GitHub Repository[https://github.com/nipreps/mriqc]
