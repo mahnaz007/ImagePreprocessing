@@ -382,19 +382,7 @@ done
 ### Running fMRIPrep 
 #### For running 1 participant
 ```
-singularity run --cleanenv \
-  --bind /home/mzaz021/new_workdir:/home/mzaz021/work \
-  /home/mzaz021/fmriprep_latest.sif \
-  /home/mzaz021/BIDSProject/dcm2bidsSin/09 \
-  /home/mzaz021/BIDSProject/fmriPrepSin \
-  participant \
-  --participant-label 009004 \
-  --fs-license-file /home/mzaz021/freesurfer/license.txt \
-  --skip_bids_validation \
-  --omp-nthreads 1 \
-  --random-seed 13 \
-  --skull-strip-fixed-seed
-
+singularity run --cleanenv /home/mzaz021/fmriprep_latest.sif     /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier     /home/mzaz021/BIDSProject/fmriPreprocessing/09     participant     --participant-label 009004     --fs-license-file /home/mzaz021/freesurfer/license.txt     --skip_bids_validation     --omp-nthreads 1     --random-seed 13     --skull-strip-fixed-seed
 ```
 #### For running the entire project
 ```
