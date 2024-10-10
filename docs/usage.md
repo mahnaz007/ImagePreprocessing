@@ -253,7 +253,7 @@ apptainer run -e --containall \
 #!/bin/bash
 # Define the base directory
 bidsdir="/home/mzaz021/BIDSProject"
-sourceDir="/home/mzaz021/BIDSProject/sourcecode/IRTG09"
+sourceDir="/home/mzaz021/BIDSProject/sourcecode/IRTG01"
 
 # Loop through all subdirectories in the source directory
 for folder in "$sourceDir"/*/; do
