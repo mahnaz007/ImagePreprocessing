@@ -1,7 +1,7 @@
 # Usage
 
 For the preprocessing you can run any of the 5 steps individually in a container or
-run all 4 preprocessing steps together by executing the nextflow piepelin.  
+run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline.  
 
 ### Step 1: Set Up Proxy Identification
 
@@ -27,14 +27,14 @@ echo $https_proxy
 
 ### 1. BIDSing (Convert DICOM to BIDS)
 
-This tool is converting raw neuroimaging data, such as DICOM files, into the standardized BIDS format using the `dcm2bids` tool.
+This tool converts raw neuroimaging data - DICOM files - into the standardized BIDS format using the `dcm2bids` tool.
 This ensures that the dataset is structured in a way that is widely accepted and compatible with various neuroimaging analysis tools.
 
 **Process**: DCM2BIDS
 
 **Input**:
-- DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be DICOM data from an MRI scan.
-- Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](https://github.com/mahnaz007/ImagePreprocessing/blob/main/assets/configPHASEDIFF_B0identifier.json).
+- DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) - data from an MRI scan.
+- Configuration file (config.json) - used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](https://github.com/mahnaz007/ImagePreprocessing/blob/main/assets/configPHASEDIFF_B0identifier.json).
 
 Example of DICOM input structure:
 ```
