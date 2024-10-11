@@ -229,7 +229,15 @@ done
 Note that all errors need to be resolved, while warnings do not, though they should be considered.
 
 Common Errors:
-- 
+- code: 54 - BOLD_NOT_4D
+- code: 75 - NIFTI_PIXDIM4
+-> This can happen due to incomplete sequences. This necessitates a check whether there were any sessions that were started, but not completed. The DICOM files within the sequence folder should be fewer than comparable sequences.
+
+Common Warnings:
+- code: 38 - INCONSISTENT_SUBJECTS
+- code: 39 - INCONSISTENT_PARAMETERS
+- code: 97 - MISSING_SESSION
+-> Necessitates a check whether these are congruent with the acquired data or if the subjects/sessions did not get converted correctly.
 
 ### 3. Defacing
 This tool performs defacing on the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
