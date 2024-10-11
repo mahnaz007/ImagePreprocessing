@@ -130,7 +130,7 @@ apptainer run \
 ```
 To run an entire project you need to use the following bash script. You need to adjust the `bidsdir` and `sourceDir` as well as the parameters in the `apptainer run`command.
 
-`TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
+`TODO: explain to store it in a .sh file and provide the command to execute the file in the terminal ! -> one general explanation maybe?`
 ```
 #!/bin/bash
 # Define the base directory
@@ -221,6 +221,13 @@ for participant in "$input_dir"/sub-*; do
     echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
 done
 ```
+
+`TODO: add common errors and warnings`
+**Common Errors and Warnings**
+Note that all errors need to be resolved, while warnings do not, though they should be considered.
+
+Common Errors:
+- 
 
 ### 3. Defacing
 This tool performs defacing on the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
