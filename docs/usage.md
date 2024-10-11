@@ -179,6 +179,8 @@ This tool checks that the dataset complies with the BIDS standard, ensuring that
 
 **Execution**
 You can run the tool for one participant or an entiere project.
+Before the BIDS validation can be run, the tmp_dcm2bids directory should be removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
+
 
 To run it for one participant you will run the container from the terminal with the following command:
  
