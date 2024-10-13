@@ -43,7 +43,11 @@ Additionally, ensure the following Singularity .sif container files are correctl
     fmriprep_latest.sif – Required for fMRI preprocessing.
     pydeface_latest.sif – Used for defacing anatomical data.
     bids_validator_latest.sif – Used for validating BIDS datasets.
-    
+**Note**: All Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensure everyone can easily access the necessary files.
+Location of these files are in the following path:
+  ```
+/nic/sw/IRTG
+  ```   
 ### 1. dcm2bids_3.2.0.sif
 - Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
 - Version: 3.2.0
