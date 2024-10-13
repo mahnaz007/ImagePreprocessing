@@ -36,7 +36,7 @@ Make sure these tools are accessible in your environment, with the paths to the 
 
 Additionally, ensure the following Singularity .sif container files are correctly installed and accessible in your environment:
 
-    dcm2bids_3.2.0.sif – Required for DICOM to BIDS conversion.
+    dcm2bids 3.2.0 – Required for DICOM to BIDS conversion.
     MRIQC v24.1.0.dev0+gd5b13cb5.d20240826 – Required for running MRIQC for quality control.
     fMRIPrep v24.0.1 – Required for fMRI preprocessing.
     pydeface 2.0.0 – Used for defacing anatomical data.
