@@ -46,6 +46,8 @@ Location of these files are in the following path:
   ```
 /nic/sw/IRTG
   ```
+However, if you need to build any of these images (e.g., if there is an update), you can follow these steps to build them using Singularity or Apptainer.
+
 ### Building Singularity Images for Neuroimaging Tools 
 #### 1. dcm2bids_3.2.0.sif
 - Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
