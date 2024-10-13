@@ -45,12 +45,14 @@ Additionally, ensure the following Singularity .sif container files are correctl
     bids_validator_latest.sif – Used for validating BIDS datasets.
     
 ### 1. dcm2bids_3.2.0.sif
-    Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
+Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
     Version: 3.2.0
     Singularity Recipe: 
     Create a Singularity image using the Docker image available on Docker Hub.
-    Steps to Build:  
+    Steps to Build:
+    ```
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
+    ```
 
 ### 2. bids_validator_latest.sif
 
