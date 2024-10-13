@@ -2,20 +2,18 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 ## Option 1: Running the Entire Pipeline Using Nextflow
-
-To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline using this command.
+To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline using this command:
 ```
 nextflow run main.nf
 ```
 ## Option 2: Running Each Process Separately Using Batch Scripts
-
 If you want to run each process individually, you can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. 
 
 ## Introduction
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
 **IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
-This pipeline ingests raw neuroimaging data in DICOM format and processes it through BIDS conversion, validation, and quality control. It outputs preprocessed, ready-to-analyze MRI data for further analysis.
+This pipeline ingests raw neuroimaging data in DICOM format, converts it into the BIDS standard, validates the format, and performs quality control checks. The output is fully preprocessed MRI data that is ready for further analysis and research.
 
 The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
@@ -32,7 +30,7 @@ Before running this pipeline, ensure you have the following installed:
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
 - [fMRIPrep](https://fmriprep.org/en/stable/) (for preprocessing functional MRI data)
-**Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html).
+**Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html)ب.
 
 Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
@@ -43,12 +41,13 @@ Additionally, ensure the following Singularity .sif container files are correctl
     fMRIPrep v24.0.1 – Required for fMRI preprocessing.
     pydeface 2.0.0 – Used for defacing anatomical data.
     bids-validator 1.14.13 – Used for validating BIDS datasets.
-**Note**: All Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensure everyone can easily access the necessary files.
+**Note**: In this project, all Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensure everyone can easily access the necessary files.
 Location of these files are in the following path:
   ```
 /nic/sw/IRTG
-  ```   
-### 1. dcm2bids_3.2.0.sif
+  ```
+### Building Singularity Images for Neuroimaging Tools 
+#### 1. dcm2bids_3.2.0.sif
 - Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
 - Version: 3.2.0
 - Singularity Recipe:
@@ -313,7 +312,8 @@ for folder in "$sourceDir"/*/; do
 done
 ```
 
-### Running BIDS Validator 
+### Running BIDS Validator
+**Note**: Before running BIDS validation, the tmp_dcm2bids directory should be removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
 #### For runnig 1 participant
 ```
 #!/bin/bash
@@ -355,6 +355,18 @@ for participant in "$input_dir"/sub-*; do
     echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
 done
 ```
+**Note**: All errors need to be resolved, while warnings do not, though they should be considered.
+Common Errors:
+- code: 54 - BOLD_NOT_4D
+- code: 75 - NIFTI_PIXDIM4
+-> This can happen due to incomplete sequences. This necessitates a check whether there were any sessions that were started, but not completed. The DICOM files within the sequence folder should be fewer than comparable sequences.
+
+Common Warnings:
+- code: 38 - INCONSISTENT_SUBJECTS
+- code: 39 - INCONSISTENT_PARAMETERS
+- code: 97 - MISSING_SESSION
+-> Necessitates a check whether these are congruent with the acquired data or if the subjects/sessions did not get converted correctly.
+  
 ### Running Pydeface 
 #### For runnig 1 participant 
 ```
@@ -488,5 +500,4 @@ singularity run --cleanenv \
 ```
 
 
-```
 
