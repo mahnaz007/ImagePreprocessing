@@ -256,14 +256,28 @@ For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQ
 ### Running DCM2BIDS 
 #### For running 1 participant
 ```
-apptainer run -e --containall   -B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro   -B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro   -B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids   /home/mzaz021/dcm2bids_3.2.0.sif   --auto_extract_entities   -o /bids -d /dicoms -c /config.json   -p 001001 -s 01
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+DICOM_DIR="/home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/"
+CONFIG_FILE="/home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json"
+OUTPUT_DIR="/home/mzaz021/BIDSProject/dcm2bidsSin"
+SIF_FILE="/home/mzaz021/dcm2bids_3.2.0.sif"
+PARTICIPANT_LABEL="001001"
+SESSION_LABEL="01"
+
+# Apptainer command to run the dcm2bids process
+apptainer run -e --containall \
+  -B "$DICOM_DIR:/dicoms:ro" \
+  -B "$CONFIG_FILE:/config.json:ro" \
+  -B "$OUTPUT_DIR:/bids" \
+  "$SIF_FILE" \
+  -o /bids \
+  -d /dicoms \
+  -c /config.json \
+  -p "$PARTICIPANT_LABEL" \
+  -s "$SESSION_LABEL"
 ```
-    -B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro \  # Input: DICOM files directory
-    -B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro \   # Configuration JSON file
-    -B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids \  # Output: BIDS format data directory
-    /home/mzaz021/dcm2bids_3.2.0.sif \  # Singularity container for dcm2bids
-    -o /bids -d /dicoms -c /config.json \  # Output, DICOM directory, and config file
-    -p 001001 -s 01   # Participant ID and session ID
 #### For running the entire project
 ```
 #!/bin/bash
@@ -301,10 +315,22 @@ done
 ### Running BIDS Validator 
 #### For runnig 1 participant
 ```
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+VALIDATOR_SIF="/home/mzaz021/validator_latest.sif"
+INPUT_DIR="/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/"
+LOG_DIR="/home/mzaz021/BIDSProject/bidsValidatorLogs"
+LOG_FILE="validation_log.txt"
+
+# Make sure the log directory exists
+mkdir -p "$LOG_DIR"
+
+# Singularity command to run the BIDS Validator
 singularity run --cleanenv \
-  /home/mzaz021/validator_latest.sif \
-  /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ \
-  --verbose > /home/mzaz021/BIDSProject/bidsValidatorLogs/validation_log.txt 2>&1
+  "$VALIDATOR_SIF" \
+  "$INPUT_DIR" \
+  --verbose > "$LOG_DIR/$LOG_FILE" 2>&1
 ```
 #Creates a log in the output directory
 
@@ -331,7 +357,22 @@ done
 ### Running Pydeface 
 #### For runnig 1 participant 
 ```
-singularity run   --bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input   --bind /home/mzaz021/BIDSProject/newPydeface:/output   /home/mzaz021/pydeface_latest.sif   pydeface /input/sub-009002_ses-01_T1w.nii.gz   --outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+INPUT_DIR="/home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat"
+OUTPUT_DIR="/home/mzaz021/BIDSProject/newPydeface"
+SIF_FILE="/home/mzaz021/pydeface_latest.sif"
+INPUT_FILE="sub-009002_ses-01_T1w.nii.gz"
+OUTPUT_FILE="sub-009002_ses-01_T1w_defaced.nii.gz"
+
+# Singularity command to run Pydeface
+singularity run \
+  --bind "$INPUT_DIR:/input" \
+  --bind "$OUTPUT_DIR:/output" \
+  "$SIF_FILE" \
+  pydeface /input/"$INPUT_FILE" \
+  --outfile /output/"$OUTPUT_FILE"
 ```
 
 #### For running the entire project
@@ -366,14 +407,30 @@ done
 ### Running MRIQC 
 #### For running 1 participant
 ```
-singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
-	--participant-label 001004 \
-	--nprocs 4 \
-	--omp-nthreads 4 \
-	--mem_gb 8 \
-	--no-sub \
-	-vvv \
-	--verbose-reports
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+SIF_FILE="/home/mzaz021/mriqc_24.0.2.sif"
+INPUT_DIR="/home/mzaz021/BIDSProject/preprocessingOutputDir/01"
+OUTPUT_DIR="/home/mzaz021/BIDSProject/new_mriqcOutput"
+PARTICIPANT_LABEL="001004"
+NPROCS=4
+OMP_THREADS=4
+MEM_GB=8
+
+# Singularity command to run MRIQC
+singularity run \
+  "$SIF_FILE" \
+  "$INPUT_DIR" \
+  "$OUTPUT_DIR" \
+  participant \
+  --participant-label "$PARTICIPANT_LABEL" \
+  --nprocs "$NPROCS" \
+  --omp-nthreads "$OMP_THREADS" \
+  --mem_gb "$MEM_GB" \
+  --no-sub \
+  -vvv \
+  --verbose-reports
 ```
 #### For running the entire project
 ```
@@ -404,10 +461,31 @@ done
 ### Running fMRIPrep 
 #### For running 1 participant
 ```
-singularity run --cleanenv /home/mzaz021/fmriprep_latest.sif     /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier     /home/mzaz021/BIDSProject/fmriPreprocessing/09     participant     --participant-label 009004     --fs-license-file /home/mzaz021/freesurfer/license.txt     --skip_bids_validation     --omp-nthreads 1     --random-seed 13     --skull-strip-fixed-seed
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+SIF_FILE="/home/mzaz021/fmriprep_latest.sif"
+INPUT_DIR="/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier"
+OUTPUT_DIR="/home/mzaz021/BIDSProject/fmriPreprocessing/09"
+PARTICIPANT_LABEL="009004"
+FS_LICENSE_FILE="/home/mzaz021/freesurfer/license.txt"
+OMP_THREADS=1
+RANDOM_SEED=13
+
+# Singularity command to run fMRIPrep
+singularity run --cleanenv \
+  "$SIF_FILE" \
+  "$INPUT_DIR" \
+  "$OUTPUT_DIR" \
+  participant \
+  --participant-label "$PARTICIPANT_LABEL" \
+  --fs-license-file "$FS_LICENSE_FILE" \
+  --skip_bids_validation \
+  --omp-nthreads "$OMP_THREADS" \
+  --random-seed "$RANDOM_SEED" \
+  --skull-strip-fixed-seed
 ```
-#### For running the entire project
-```
+
 
 ```
 
