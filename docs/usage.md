@@ -2,10 +2,8 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 ## Option 1: Running the Entire Pipeline Using Nextflow
-To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline using this command:
-```
-nextflow run main.nf
-```
+To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline.
+
 ## Option 2: Running Each Process Separately Using Batch Scripts
 If you want to run each process individually, you can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. 
 
@@ -226,16 +224,10 @@ cd repo-name
 ```
 
 ### Step 4: Run the Nextflow Pipeline:
-The Nextflow pipeline scripts for each process, such as dcm2bids, pydeface, are organized The Nextflow pipeline scripts for each process, such as dcm2bids and pydeface, are organized [here](https://github.com/mahnaz007/ImagePreprocessing/tree/main/modules/local).
- directory. Please refer to these individual scripts if you wish to run or modify specific parts of the pipeline.
-The typical command for running the pipeline is:
-
+ 
+To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is:
 ```bash
-nextflow run modules/local/module_name.nf
-```
-If you need to specify parameters such as input data or output paths, you can pass them in the command:
-```
-nextflow run main.nf --input /path/to/input --output /path/to/output
+nextflow run main.nf
 ```
 ## Core Nextflow arguments
 The pipeline supports standard Nextflow arguments. Here are some key options:
