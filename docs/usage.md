@@ -45,7 +45,7 @@ Additionally, ensure the following Singularity .sif container files are correctl
     bids_validator_latest.sif – Used for validating BIDS datasets.
     
 ### 1. dcm2bids_3.2.0.sif
-Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
+    Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
     Version: 3.2.0
     Singularity Recipe: 
     Create a Singularity image using the Docker image available on Docker Hub.
@@ -84,11 +84,11 @@ Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
     ```
 
 ### 5. fmriprep_latest.sif
-    Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
-    Latest Version: Refer to the GitHub repository for updates.
-    Singularity Recipe:
-    fMRIPrep offers Docker images which is suitable for conversion.
-    Steps to Build:
+Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
+Latest Version: Refer to the GitHub repository for updates.
+Singularity Recipe:
+fMRIPrep offers Docker images which is suitable for conversion.
+Steps to Build:
     ```
     singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
     ```
