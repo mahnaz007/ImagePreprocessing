@@ -39,10 +39,10 @@ Make sure these tools are accessible in your environment, with the paths to the 
 Additionally, ensure the following Singularity .sif container files are correctly installed and accessible in your environment:
 
     dcm2bids_3.2.0.sif – Required for DICOM to BIDS conversion.
-    mriqc-latest.sif – Required for running MRIQC for quality control.
-    fmriprep_latest.sif – Required for fMRI preprocessing.
-    pydeface_latest.sif – Used for defacing anatomical data.
-    bids_validator_latest.sif – Used for validating BIDS datasets.
+    MRIQC v24.1.0.dev0+gd5b13cb5.d20240826 – Required for running MRIQC for quality control.
+    fMRIPrep v24.0.1 – Required for fMRI preprocessing.
+    pydeface 2.0.0 – Used for defacing anatomical data.
+    bids-validator 1.14.13 – Used for validating BIDS datasets.
 **Note**: All Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensure everyone can easily access the necessary files.
 Location of these files are in the following path:
   ```
@@ -57,9 +57,8 @@ Location of these files are in the following path:
     ```
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
     ```
-
 ### 2. bids_validator_latest.sif
-- Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
+- Source Code: BIDS Validator GitHub Repository[https://hub.docker.com/r/bids/validator]
 - Version: 1.14.13
 - Singularity Recipe:
 - The BIDS Validator has an official Docker image.
@@ -67,9 +66,8 @@ Location of these files are in the following path:
     ```
     singularity build bids_validator_latest.sif docker://bids/validator:latest
     ```
-
 ### 3. mriqc-latest.sif
-- Source Code: MRIQC GitHub Repository[https://github.com/nipreps/mriqc]
+- Source Code: MRIQC GitHub Repository [https://hub.docker.com/r/nipreps/mriqc]
 - Version: v24.1.0.dev0+gd5b13cb5.d20240826
 - Latest Version: Check the GitHub releases for the most recent version.
 - Singularity Recipe:
@@ -79,17 +77,16 @@ Location of these files are in the following path:
     singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
     ```
 ### 4. pydeface_latest.sif
-- Source Code: PyDeface GitHub Repository[https://github.com/poldracklab/pydeface]
-- Version: 2.0.0
+- Source Code: PyDeface GitHub Repository [https://hub.docker.com/r/poldracklab/pydeface]
+- Version: 2.0.0 
 - Singularity Recipe:
 - Using a community-maintained image
 - Steps to Build (using a community Docker image):
     ```
     singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
     ```
-
 ### 5. fmriprep_latest.sif
-- Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
+- Source Code: fMRIPrep GitHub Repository [https://hub.docker.com/r/nipreps/fmriprep]
 - Version: v24.0.1
 - Latest Version: Refer to the GitHub repository for updates.
 - Singularity Recipe:
