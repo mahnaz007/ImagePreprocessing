@@ -122,11 +122,11 @@ IRTG01/
 - JSON metadata files (.json): Associated metadata for each NIfTI file, providing information about the scan and its parameters.
 - Sidecar files: Such as .bvec and .bval files for diffusion-weighted imaging (DWI), if applicable.
 
-## Multiple Session
+### Multiple Session
 If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. 
 **Note**: Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). 
 
-##Example of BIDS-compliant output structure:
+Example of BIDS-compliant output structure:
 ```
 output/
 ├── sub-001001
@@ -204,9 +204,9 @@ Before running fMRIPrep, make sure to update your dataset:
 
 ## Running the pipeline
 
-### General Instructions
+#### General Instructions
 
-### Step 1: Set Up Proxy Identification
+##### Step 1: Set Up Proxy Identification
 
 Before running Nextflow and executing any process seperately, such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
@@ -215,21 +215,21 @@ nic
 proxy
 echo $https_proxy
 ```
-### Step 2: Install the Nextflow:
+##### Step 2: Install the Nextflow:
 Install [Nextflow](https://www.nextflow.io/docs/stable/install.html)
-### Step 3: Clone the Repository
+##### Step 3: Clone the Repository
 ```
 git clone https://github.com/repo-name.git
 cd repo-name
 ```
 
-## Run the full Pipeline with Nextflow
+### Running the full Pipeline with Nextflow
  
 To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is:
 ```bash
 nextflow run main.nf
 ```
-### Core Nextflow arguments
+#### Core Nextflow arguments
 The pipeline supports standard Nextflow arguments. Here are some key options:
 
 -profile: Choose a configuration profile such as apptainer and singularity.
@@ -244,7 +244,7 @@ nextflow run main.nf -profile singularity -resume
 ```
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
-## Run individual pipeline processes with Batch scripts 
+### Running individual pipeline processes with Batch scripts 
 For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
 ### Running DCM2BIDS 
