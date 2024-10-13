@@ -223,13 +223,13 @@ git clone https://github.com/repo-name.git
 cd repo-name
 ```
 
-### Step 4: Run the Nextflow Pipeline:
+## Run the full Pipeline with Nextflow
  
 To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is:
 ```bash
 nextflow run main.nf
 ```
-## Core Nextflow arguments
+### Core Nextflow arguments
 The pipeline supports standard Nextflow arguments. Here are some key options:
 
 -profile: Choose a configuration profile such as apptainer and singularity.
@@ -244,7 +244,7 @@ nextflow run main.nf -profile singularity -resume
 ```
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
-## Running the Pipeline Processes without nextflow (using Batch script). 
+## Run individual pipeline processes with Batch scripts 
 For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
 ### Running DCM2BIDS 
