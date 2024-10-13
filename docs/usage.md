@@ -45,50 +45,52 @@ Additionally, ensure the following Singularity .sif container files are correctl
     bids_validator_latest.sif – Used for validating BIDS datasets.
     
 ### 1. dcm2bids_3.2.0.sif
-    Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
-    Version: 3.2.0
-    Singularity Recipe: 
-    Create a Singularity image using the Docker image available on Docker Hub.
-    Steps to Build:
+- Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
+- Version: 3.2.0
+- Singularity Recipe:
+- Create a Singularity image using the Docker image available on Docker Hub.
+- Steps to Build:
     ```
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
     ```
 
 ### 2. bids_validator_latest.sif
-
-    Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
-    Singularity Recipe:
-    The BIDS Validator has an official Docker image.
-    Steps to Build:
+- Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
+- Version: 1.14.13
+- Singularity Recipe:
+- The BIDS Validator has an official Docker image.
+- Steps to Build:
     ```
     singularity build bids_validator_latest.sif docker://bids/validator:latest
     ```
 
 ### 3. mriqc-latest.sif
-
-    Source Code: MRIQC GitHub Repository[https://github.com/nipreps/mriqc]
-    Latest Version: Check the GitHub releases for the most recent version.
-    Singularity Recipe:
-    MRIQC provides Docker images that can be converted into Singularity images.
-    Steps to Build:
+- Source Code: MRIQC GitHub Repository[https://github.com/nipreps/mriqc]
+- Version: v24.1.0.dev0+gd5b13cb5.d20240826
+- Latest Version: Check the GitHub releases for the most recent version.
+- Singularity Recipe:
+- MRIQC provides Docker images that can be converted into Singularity images.
+- Steps to Build:
     ```
     singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
     ```
 ### 4. pydeface_latest.sif
-    Source Code: PyDeface GitHub Repository[https://github.com/poldracklab/pydeface]
-    Singularity Recipe:
-    Using a community-maintained image
-    Steps to Build (using a community Docker image):
+- Source Code: PyDeface GitHub Repository[https://github.com/poldracklab/pydeface]
+- Version: 2.0.0
+- Singularity Recipe:
+- Using a community-maintained image
+- Steps to Build (using a community Docker image):
     ```
     singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
     ```
 
 ### 5. fmriprep_latest.sif
-Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
-Latest Version: Refer to the GitHub repository for updates.
-Singularity Recipe:
-fMRIPrep offers Docker images which is suitable for conversion.
-Steps to Build:
+- Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
+- Version: v24.0.1
+- Latest Version: Refer to the GitHub repository for updates.
+- Singularity Recipe:
+- fMRIPrep offers Docker images which is suitable for conversion.
+- Steps to Build:
     ```
     singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
     ```
