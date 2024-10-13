@@ -259,12 +259,12 @@ For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQ
 #!/bin/bash
 
 # Define variables for paths to make the script easier to manage
-DICOM_DIR="/path/to/inout/directory/IRTG01_${PARTICIPANT_LABEL}_S1_b20060101/"
+DICOM_DIR="/path/to/input/dicom/directory/IRTGxx"
 CONFIG_FILE="/path/to/config/file/config.json"
-OUTPUT_DIR="/path/to/output/directory/"
+OUTPUT_DIR="/path/to/output/directory"
 SIF_FILE="$IRTG/sif/dcm2bids_3.2.0.sif"  
-PARTICIPANT_LABEL="001001"  # Update as needed 
-SESSION_LABEL="01"  # Update as needed 
+PARTICIPANT_LABEL="xxxxxx"  # Update as needed 
+SESSION_LABEL="xx"  # Update as needed 
 
 # Apptainer (or Singularity) command to run the dcm2bids process
 apptainer run -e --containall \
@@ -321,7 +321,7 @@ done
 # Define variables for paths to make the script easier to manage
 VALIDATOR_SIF="$IRTG/sif/validator_latest.sif"  
 INPUT_DIR="/path/to/input/sub-xxxxxx/"
-LOG_DIR="/path/to/output/"
+LOG_DIR="/path/to/output"
 LOG_FILE="validation_log.txt"
 
 # Make sure the log directory exists
@@ -338,7 +338,7 @@ apptainer run --cleanenv \
 #### For runnig the entire project
 ```
 #!/bin/bash
-input_dir="/path/to/input/"
+input_dir="/path/to/input"
 output_dir="/path/to/output"
 
 # Loop through all participant folders ('sub-XXXXXX')
@@ -374,7 +374,7 @@ Common Warnings:
 
 # Define variables for paths to make the script easier to manage
 INPUT_DIR="/path/to/input/anat" # BIDS dataset
-OUTPUT_DIR="/path/to/output/"
+OUTPUT_DIR="/path/to/output"
 SIF_FILE="$IRTG/sif/pydeface_latest.sif"  
 INPUT_FILE="sub-xxxxxx_ses-xx_T1w.nii.gz"
 OUTPUT_FILE="sub-xxxxxx_ses-xx_T1w_defaced.nii.gz"
@@ -424,8 +424,8 @@ done
 
 # Define variables for paths to make the script easier to manage
 SIF_FILE="$IRTG/sif/mriqc_24.0.2.sif"  
-INPUT_DIR="/path/to/input/" #BIDS dataset 
-OUTPUT_DIR="/path/to/output/"
+INPUT_DIR="/path/to/input" #BIDS dataset 
+OUTPUT_DIR="/path/to/output"
 PARTICIPANT_LABEL="xxxxxx"  # Update as needed 
 NPROCS=4
 OMP_THREADS=4
