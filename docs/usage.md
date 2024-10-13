@@ -124,7 +124,7 @@ IRTG01/
 - JSON metadata files (.json): Associated metadata for each NIfTI file, providing information about the scan and its parameters.
 - Sidecar files: Such as .bvec and .bval files for diffusion-weighted imaging (DWI), if applicable.
 
-##Multiple Session
+## Multiple Session
 If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. 
 **Note**: Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). 
 
