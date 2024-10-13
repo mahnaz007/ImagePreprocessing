@@ -3,7 +3,7 @@
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 ## Option 1: Running the Entire Pipeline Using Nextflow
 
-To run all five processes (BIDsing, BIDS Validation, Defacing, MRIQC, and fMRIPrep) at once, you can use Nextflow. This approach automates the execution of the entire pipeline using this command.
+To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline using this command.
 ```
 nextflow run main.nf
 ```
@@ -99,13 +99,13 @@ Make sure these .sif container files are downloaded and placed in an accessible 
 ## Pipeline Workflow
 
 ### Step 1: BIDSing (Convert DICOM to BIDS)
-The first step of the pipeline is converting raw neuroimaging data, such as DICOM files, into the standardized BIDS format using the `dcm2bids` tool. This ensures that the dataset is structured in a way that is widely accepted and compatible with various neuroimaging analysis tools.
+The first step of the pipeline converts raw neuroimaging data - DICOM files - into the standardized BIDS format using the `dcm2bids` tool. This ensures that the dataset is structured in a way that is widely accepted and compatible with various neuroimaging analysis tools.
 
 **Process**: `ConvertDicomToBIDS`
 
 **Input**:
-- DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) appears to be DICOM data from an MRI scan.
-- Configuration file (config.json) is used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](https://github.com/mahnaz007/ImagePreprocessing/blob/main/assets/configPHASEDIFF_B0identifier.json).
+- DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) - data from an MRI scan.
+- Configuration file (config.json) - used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](https://github.com/mahnaz007/ImagePreprocessing/blob/main/assets/configPHASEDIFF_B0identifier.json).
  ##Example of DICOM input structure:
 ```
 input/
@@ -158,7 +158,7 @@ output/
 └── README                    # Optional readme file describing the dataset
 ```
 ### Step 2: BIDS Validation
-Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator`tool. This step checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
+Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator`tool. This tool checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
 
 **Process**: `ValidateBIDS`
 
@@ -186,7 +186,7 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
     
 **Output**:
 - HTML reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
-- SVG figures that generates visualizations such as histograms, noise maps, and segmentation plots in SVG format.
+- SVG figures that generate visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
 ### Step 5: fMRIPrep
 Before running fMRIPrep, make sure to update your dataset:
@@ -240,13 +240,16 @@ The pipeline supports standard Nextflow arguments. Here are some key options:
 
 -profile: Choose a configuration profile such as apptainer and singularity.
 ```
-nextflow run main.nf -profile local
+nextflow run main.nf -profile singularity
 ```
 -resume: Continue the pipeline from where it left off using cached results.
 ```
-nextflow run main.nf -resume
+nextflow run main.nf -profile singularity -resume
 ```
 -c: Specify a custom configuration file for resource allocation or tool-specific options
+```
+nextflow run main.nf -profile singularity -c /path/to/custom.config
+```
 ## Running the Pipeline Processes without nextflow (using Batch script). 
 For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
@@ -254,8 +257,13 @@ For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQ
 #### For running 1 participant
 ```
 apptainer run -e --containall   -B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro   -B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro   -B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids   /home/mzaz021/dcm2bids_3.2.0.sif   --auto_extract_entities   -o /bids -d /dicoms -c /config.json   -p 001001 -s 01
-
 ```
+    -B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro \  # Input: DICOM files directory
+    -B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro \   # Configuration JSON file
+    -B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids \  # Output: BIDS format data directory
+    /home/mzaz021/dcm2bids_3.2.0.sif \  # Singularity container for dcm2bids
+    -o /bids -d /dicoms -c /config.json \  # Output, DICOM directory, and config file
+    -p 001001 -s 01   # Participant ID and session ID
 #### For running the entire project
 ```
 #!/bin/bash
@@ -297,8 +305,8 @@ singularity run --cleanenv \
   /home/mzaz021/validator_latest.sif \
   /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ \
   --verbose > /home/mzaz021/BIDSProject/bidsValidatorLogs/validation_log.txt 2>&1
-#Creates a log in the output directory
 ```
+#Creates a log in the output directory
 
 #### For runnig the entire project
 ```
