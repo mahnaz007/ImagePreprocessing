@@ -1,10 +1,21 @@
 # imagepreprocessing: Usage
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+## Option 1: Running the Entire Pipeline Using Nextflow
+
+To run all five processes (BIDsing, BIDS Validation, Defacing, MRIQC, and fMRIPrep) at once, you can use Nextflow. This approach automates the execution of the entire pipeline using this command.
+```
+nextflow run main.nf
+```
+## Option 2: Running Each Process Separately Using Batch Scripts
+
+For users who want to run each process individually, they can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation.
 
 ## Introduction
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
-This pipeline automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
+**IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
+
+This pipeline ingests raw neuroimaging data in DICOM format and processes it through BIDS conversion, validation, and quality control. It outputs preprocessed, ready-to-analyze MRI data for further analysis.
 
 The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
@@ -15,8 +26,6 @@ The pipeline consists of five main steps:
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
-
-- [Nextflow](https://www.nextflow.io/)
 - [Apptainer](https://apptainer.org/) and [Singularity](https://sylabs.io/)
 - [bids-validator](https://github.com/bids-standard/bids-validator)
 - [dcm2bids](https://github.com/UNFmontreal/Dcm2Bids)
@@ -49,8 +58,9 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Singularity Recipe:
     The BIDS Validator has an official Docker image.
     Steps to Build:
-    bash
+    ```
     singularity build bids_validator_latest.sif docker://bids/validator:latest
+    ```
 
 ### 3. mriqc-latest.sif
 
@@ -59,16 +69,17 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Singularity Recipe:
     MRIQC provides Docker images that can be converted into Singularity images.
     Steps to Build:
-    bash
+    ```
     singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
-
+    ```
 ### 4. pydeface_latest.sif
     Source Code: PyDeface GitHub Repository[https://github.com/poldracklab/pydeface]
     Singularity Recipe:
     Using a community-maintained image
     Steps to Build (using a community Docker image):
-    bash
+    ```
     singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
+    ```
 
 ### 5. fmriprep_latest.sif
     Source Code: fMRIPrep GitHub Repository[https://github.com/nipreps/fmriprep]
@@ -76,11 +87,10 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Singularity Recipe:
     fMRIPrep offers Docker images which is suitable for conversion.
     Steps to Build:
-    bash
+    ```
     singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
-
+    ```
 Make sure these .sif container files are downloaded and placed in an accessible directory. If it is needed, you can create them using the appropriate Singularity or Apptainer commands.
-
 
 ## Pipeline Workflow
 
@@ -194,7 +204,7 @@ Before running fMRIPrep, make sure to update your dataset:
 
 ### Step 1: Set Up Proxy Identification
 
-Before running Nextflow, cloning a GitHub repository, or executing any processes such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow and executing any process seperately, such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
@@ -233,8 +243,8 @@ nextflow run main.nf -profile local
 nextflow run main.nf -resume
 ```
 -c: Specify a custom configuration file for resource allocation or tool-specific options
-## Running the Pipeline Processes
-For each step of the pipeline, different processes (e.g., DCM2BIDS, Pydeface, MRIQC) need to be run using specific command lines. These commands assume you are using Apptainer or Singularity to containerize the execution environment.
+## Running the Pipeline Processes without nextflow (using Batch script). 
+For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
 ### Running DCM2BIDS 
 #### For running 1 participant
