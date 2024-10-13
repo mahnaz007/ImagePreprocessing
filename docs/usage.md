@@ -9,7 +9,7 @@ nextflow run main.nf
 ```
 ## Option 2: Running Each Process Separately Using Batch Scripts
 
-For users who want to run each process individually, they can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation.
+If you want to run each process individually, you can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. 
 
 ## Introduction
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
