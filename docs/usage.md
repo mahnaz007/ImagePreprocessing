@@ -93,7 +93,7 @@ However, if you need to build any of these images (e.g., if there is an update),
     singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
     ```
 ### 5. fmriprep_latest.sif
-- Source Code: fMRIPrep GitHub Repository [https://hub.docker.com/r/nipreps/fmriprep]
+- Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
 - Docker Hub: [https://hub.docker.com/r/nipreps/fmriprep]
 - Version: v24.0.1
 - Latest Version: Refer to the GitHub repository for updates.
