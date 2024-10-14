@@ -1,11 +1,14 @@
 # imagepreprocessing: Usage
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
+
 ## Option 1: Running the Entire Pipeline Using Nextflow
 To run the four preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline. For more details, please refer to the **Running the Pipeline** section.
 
 ## Option 2: Running Each Process Separately Using Batch Scripts
 If you want to run each process individually, you can use batch scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section.
+
+**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG Psychiatry MRI data processing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20Psychiatry%20MRI%20data%20processing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact
 
 ## Introduction
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
