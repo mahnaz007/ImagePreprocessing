@@ -498,6 +498,3 @@ singularity run --cleanenv \
   --random-seed "$RANDOM_SEED" \
   --skull-strip-fixed-seed
 ```
-
-
-
