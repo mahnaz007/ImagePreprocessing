@@ -11,8 +11,7 @@ If you want to run each process individually, you can use batch scripts with App
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
 **IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
-This pipeline ingests raw neuroimaging data in DICOM format, converts it into the BIDS standard, validates the format, and performs quality control checks. The output is fully preprocessed MRI data that is ready for further analysis and research.
-
+This pipeline ingests raw DICOM neuroimaging data into the BIDS format, performs validation, applies defacing and quality control, and preprocesses functional MRI data. The output is fully preprocessed, anonymized MRI data ready for analysis.
 The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
@@ -39,6 +38,7 @@ Additionally, ensure the following Singularity .sif container files are correctl
     fMRIPrep v24.0.1 – Required for fMRI preprocessing.
     pydeface 2.0.0 – Used for defacing anatomical data.
     bids-validator 1.14.13 – Used for validating BIDS datasets.
+    
 **Note**: In this project, all Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensures everyone can easily access the necessary files.
 Location of these files is in the following path:
   ```
@@ -94,7 +94,6 @@ However, if you need to build any of these images (e.g., if there is an update),
     ```
     singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
     ```
-Make sure these .sif container files are downloaded and placed in an accessible directory. If it is needed, you can create them using the appropriate Singularity or Apptainer commands.
 
 ## Pipeline Workflow
 
@@ -106,7 +105,7 @@ The first step of the pipeline converts raw neuroimaging data - DICOM files - in
 **Input**:
 - DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) - data from an MRI scan.
 - Configuration file (config.json) - used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](https://github.com/mahnaz007/ImagePreprocessing/blob/main/assets/configPHASEDIFF_B0identifier.json).
- ##Example of DICOM input structure:
+ ## Example of DICOM input structure:
 ```
 input/
 IRTG01/
@@ -327,8 +326,6 @@ apptainer run --cleanenv \
   "$INPUT_DIR" \
   --verbose > "$LOG_DIR/$LOG_FILE" 2>&1
 ```
-#Creates a log in the output directory
-
 #### For running the entire project
 ```
 #!/bin/bash
@@ -350,12 +347,13 @@ for participant in "$input_dir"/sub-*; do
 done
 ```
 **Note**: All errors need to be resolved, while warnings do not, though they should be considered.
-Common Errors:
+
+**Common Errors**:
 - code: 54 - BOLD_NOT_4D
 - code: 75 - NIFTI_PIXDIM4
 -> This can happen due to incomplete sequences. This necessitates a check whether there were any sessions that were started, but not completed. The DICOM files within the sequence folder should be fewer than comparable sequences.
 
-Common Warnings:
+**Common Warnings**:
 - code: 38 - INCONSISTENT_SUBJECTS
 - code: 39 - INCONSISTENT_PARAMETERS
 - code: 97 - MISSING_SESSION
