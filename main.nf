@@ -2,17 +2,17 @@
 nextflow.enable.dsl=2
 
 // Define paths
-params.inputDir = "/home/mzaz021/BIDSProject/sourcecode/IRTG01"  // DICOM source for dcm2bids
-params.bidsDir = "/home/mzaz021/BIDSProject/combined4Description/bids_output"  // BIDS output directory for MRIQC
-params.outputDir = "/home/mzaz021/BIDSProject/combined4Description"
-params.configFile = "/home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json"
-params.containerPath_dcm2bids = "/home/mzaz021/dcm2bids_3.2.0.sif"
-params.containerPath_pydeface = "/home/mzaz021/pydeface_latest.sif"
-params.containerPath_mriqc = "/home/mzaz021/mriqc_24.0.2.sif"
-params.datasetDescription = "/home/mzaz021/dataset_description.json"  // Path to dataset_description.json
+params.inputDir = "/path/to/input"  // DICOM source for dcm2bids
+params.bidsDir = "/path/to/bids/output"  // BIDS dataset output directory for MRIQC
+params.outputDir = "/path/to/output/directory"
+params.configFile = "/path/to/config/file/config.json"
+params.containerPath_dcm2bids = "/path/to/container/dcm2bids_3.2.0.sif"
+params.containerPath_pydeface = "/path/to/container/pydeface_latest.sif"
+params.containerPath_mriqc = "/path/to/container/mriqc_latest.sif"
+params.datasetDescription = "/path/to/dataset_description.json"  // Path to dataset_description.json
 params.defacedOutputDir = "${params.outputDir}/defaced"
 params.mriqcOutputDir = "${params.outputDir}/mriQC"
-params.workdir = '/home/mzaz021/BIDSProject/work'
+params.workdir = "/path/to/work/directory"
 
 // Get all subdirectories
 def subDirs = new File(params.inputDir).listFiles().findAll { it.isDirectory() }
