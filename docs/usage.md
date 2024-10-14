@@ -61,7 +61,7 @@ However, if you need to build any of these images (e.g., if there is an update),
     ```
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
     ```
-### 2. bids_validator_latest.sif
+### 2. validator_1.14.13.sif
 - Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
 - Docker Hub: [https://hub.docker.com/r/bids/validator]
 - Version: 1.14.13
@@ -69,9 +69,9 @@ However, if you need to build any of these images (e.g., if there is an update),
 - The BIDS Validator has an official Docker image.
 - Steps to Build:
     ```
-    singularity build bids_validator_latest.sif docker://bids/validator:latest
+    singularity build validator_1.14.13.sif docker://bids/validator:latest
     ```
-### 3. mriqc-latest.sif
+### 3. mriqc_24.0.2.sif
 - Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
 - Docker Hub: [https://hub.docker.com/r/nipreps/mriqc]
 - Version: v24.1.0.dev0+gd5b13cb5.d20240826
@@ -82,7 +82,7 @@ However, if you need to build any of these images (e.g., if there is an update),
     ```
     singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
     ```
-### 4. pydeface_latest.sif
+### 4. pydeface_2.0.0.sif
 - Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
 - Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
 - Version: 2.0.0 
@@ -90,9 +90,9 @@ However, if you need to build any of these images (e.g., if there is an update),
 - Using a community-maintained image
 - Steps to Build (using a community Docker image):
     ```
-    singularity build pydeface_latest.sif docker://neuroinformatics/pydeface:latest
+    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:latest
     ```
-### 5. fmriprep_latest.sif
+### 5. fmriprep_24.0.1.sif
 - Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
 - Docker Hub: [https://hub.docker.com/r/nipreps/fmriprep]
 - Version: v24.0.1
@@ -101,7 +101,7 @@ However, if you need to build any of these images (e.g., if there is an update),
 - fMRIPrep offers Docker images which is suitable for conversion.
 - Steps to Build:
     ```
-    singularity build fmriprep_latest.sif docker://nipreps/fmriprep:latest
+    singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:latest
     ```
 
 ## Pipeline Workflow
@@ -317,7 +317,7 @@ done
 #!/bin/bash
 
 # Define variables for paths to make the script easier to manage
-VALIDATOR_SIF="$IRTG/sif/validator_latest.sif"  
+VALIDATOR_SIF="$IRTG/sif/validator_1.14.13.sif"  
 INPUT_DIR="/path/to/input/sub-xxxxxx/"
 LOG_DIR="/path/to/output"
 LOG_FILE="validation_log.txt"
@@ -344,7 +344,7 @@ for participant in "$input_dir"/sub-*; do
 
     # Run bids-validator for each participant and save the log in bidsValidatorLogs
     singularity run --cleanenv \
-        "$IRTG/sif/validator_latest.sif" \
+        "$IRTG/sif/validator_1.14.13.sif" \
         "$participant" \
         --verbose > "$output_dir/${participant_id}_validation_log.txt" 2>&1
 
@@ -435,7 +435,7 @@ done
 # Define variables for paths to make the script easier to manage
 INPUT_DIR="/path/to/input/anat" # BIDS dataset
 OUTPUT_DIR="/path/to/output"
-SIF_FILE="$IRTG/sif/pydeface_latest.sif"  
+SIF_FILE="$IRTG/sif/pydeface_2.0.0.sif"  
 INPUT_FILE="sub-xxxxxx_ses-xx_T1w.nii.gz"
 OUTPUT_FILE="sub-xxxxxx_ses-xx_T1w_defaced.nii.gz"
 
@@ -454,7 +454,7 @@ singularity run \
 
 INPUT_BASE="/path/to/input/anat" # BIDS dataset
 OUTPUT_BASE="/path/to/output"
-CONTAINER="$IRTG/sif/pydeface_latest.sif"  
+CONTAINER="$IRTG/sif/pydeface_2.0.0.sif"  
 
 # Loop through subjects and sessions to run Pydeface
 for subject_dir in "$INPUT_BASE"/sub-*/; do
@@ -488,7 +488,7 @@ Before running fMRIPrep, make sure to update your dataset:
 #!/bin/bash
 
 # Define variables for paths to make the script easier to manage
-SIF_FILE="$IRTG/sif/fmriprep_latest.sif"  
+SIF_FILE="$IRTG/sif/fmriprep_24.0.1.sif"  
 INPUT_DIR="/path/to/input" #BIDS dataset
 OUTPUT_DIR="/path/to/output"
 PARTICIPANT_LABEL="xxxxxx"  # Update participant label 
