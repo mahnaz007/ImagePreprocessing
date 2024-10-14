@@ -8,11 +8,11 @@ To run the four preprocessing steps (except fMRIPrep) together by executing the 
 ## Option 2: Running Each Process Separately Using Batch Scripts
 If you want to run each process individually, you can use batch scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section.
 
-**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG Psychiatry MRI data processing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20Psychiatry%20MRI%20data%20processing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact
+**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG Psychiatry MRI data processing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20Psychiatry%20MRI%20data%20processing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
 
 ## Introduction
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
-**IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
+**IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of DICOM data to the BIDS format, validation of the dataset, MRIQC for quality control, defacing, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
 This pipeline ingests raw DICOM neuroimaging data into the BIDS format, performs validation, applies quality control and defacing, and preprocesses functional MRI data. The output is fully preprocessed, anonymized MRI data ready for analysis.
 The pipeline consists of five main steps:
@@ -25,8 +25,8 @@ The pipeline consists of five main steps:
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
 - [Apptainer](https://apptainer.org/) and [Singularity](https://sylabs.io/)
-- [bids-validator](https://github.com/bids-standard/bids-validator)
-- [dcm2bids](https://github.com/UNFmontreal/Dcm2Bids)
+- [bids-validator](https://github.com/bids-standard/bids-validator) (for validating BIDS datasets)
+- [dcm2bids](https://github.com/UNFmontreal/Dcm2Bids) (for converting DICOM files to BIDS format)
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
 - [fMRIPrep](https://fmriprep.org/en/stable/) (for preprocessing functional MRI data)
@@ -53,7 +53,7 @@ However, if you need to build any of these images (e.g., if there is an update),
 ### Building Singularity Images for Neuroimaging Tools 
 #### 1. dcm2bids_3.2.0.sif
 - Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
-- Docker Hub: [https://hub.docker.com/r/cbedetti/dcm2bids]
+- Docker Hub: [https://hub.docker.com/r/unfmontreal/dcm2bids]
 - Version: 3.2.0
 - Singularity Recipe:
 - Create a Singularity image using the Docker image available on Docker Hub.
@@ -62,7 +62,7 @@ However, if you need to build any of these images (e.g., if there is an update),
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
     ```
 ### 2. bids_validator_latest.sif
-- Source Code: BIDS Validator GitHub Repository[https://hub.docker.com/r/bids/validator]
+- Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
 - Docker Hub: [https://hub.docker.com/r/bids/validator]
 - Version: 1.14.13
 - Singularity Recipe:
@@ -72,7 +72,7 @@ However, if you need to build any of these images (e.g., if there is an update),
     singularity build bids_validator_latest.sif docker://bids/validator:latest
     ```
 ### 3. mriqc-latest.sif
-- Source Code: MRIQC GitHub Repository [https://hub.docker.com/r/nipreps/mriqc]
+- Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
 - Docker Hub: [https://hub.docker.com/r/nipreps/mriqc]
 - Version: v24.1.0.dev0+gd5b13cb5.d20240826
 - Latest Version: Check the GitHub releases for the most recent version.
