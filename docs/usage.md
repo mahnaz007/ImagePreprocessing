@@ -197,10 +197,6 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
 ### Step 5: fMRIPrep
-Before running fMRIPrep, make sure to update your dataset:
-- If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
-- After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
-- If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensure the dataset complies with the BIDS standard.
 
 **Input**:
     BIDS-structured dataset 
@@ -483,6 +479,10 @@ done
 ```
 
 ### Running fMRIPrep 
+Before running fMRIPrep, make sure to update your dataset:
+- If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
+- After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
+- If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensure the dataset complies with the BIDS standard.
 #### For Running 1 Participant
 ```
 #!/bin/bash
