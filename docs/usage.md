@@ -6,7 +6,7 @@
 To run the four preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline. For more details, please refer to the **Running the Pipeline** section.
 
 ## Option 2: Running Each Process Separately Using Batch Scripts
-If you want to run each process individually, you can use batch scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section.
+If you want to run each process individually, you can use batch scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section.
 
 **Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG Psychiatry MRI data processing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20Psychiatry%20MRI%20data%20processing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
 
@@ -20,12 +20,12 @@ The pipeline consists of five main steps:
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
 - **MRIQC**: Performing quality control checks on the anatomical and functional data.
 - **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
-- **fMRIPrep**: : Preprocessing functional MRI data for subsequent analysis.
+- **fMRIPrep**: Preprocessing functional MRI data for subsequent analysis.
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
 - [Apptainer](https://apptainer.org/) and [Singularity](https://sylabs.io/)
-- [bids-validator](https://github.com/bids-standard/bids-validator) (for validating BIDS datasets)
+- [BIDS-validator](https://github.com/bids-standard/bids-validator) (for validating BIDS datasets)
 - [dcm2bids](https://github.com/UNFmontreal/Dcm2Bids) (for converting DICOM files to BIDS format)
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
@@ -33,7 +33,7 @@ Before running this pipeline, ensure you have the following installed:
 
 **Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html).
 
-Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
+Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2Bids and pydeface) are correctly set up.
 
 Additionally, ensure the following Singularity .sif container files are correctly installed and accessible in your environment:
 
@@ -84,7 +84,7 @@ However, if you need to build any of these images (e.g., if there is an update),
     ```
 ### 4. pydeface_latest.sif
 - Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
-- Docker Hub link: [https://hub.docker.com/r/poldracklab/pydeface]
+- Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
 - Version: 2.0.0 
 - Singularity Recipe:
 - Using a community-maintained image
@@ -166,7 +166,7 @@ output/
 └── README                    # Optional readme file describing the dataset
 ```
 ### Step 2: BIDS Validation
-Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator`tool. This tool checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
+Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator` tool. This tool checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
 
 **Process**: `ValidateBIDS`
 
@@ -212,7 +212,7 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 
 ##### Step 1: Set Up Proxy Identification
 
-Before running Nextflow and executing any process separately, such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow and executing any process separately, such as Pydeface, dcm2bids, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
@@ -249,9 +249,9 @@ nextflow run main.nf -profile singularity -resume
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
 ### Option 2: Running Individual Pipeline Processes with Batch Scripts 
-For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
+For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
-### Running DCM2BIDS 
+### Running Dcm2Bids 
 #### For Running 1 Participant
 ```
 #!/bin/bash
