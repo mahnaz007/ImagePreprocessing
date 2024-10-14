@@ -2,21 +2,21 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 ## Option 1: Running the Entire Pipeline Using Nextflow
-To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline. For more details, please refer to the Running the Pipeline section.
+To run the four preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline. For more details, please refer to the **Running the Pipeline** section.
 
 ## Option 2: Running Each Process Separately Using Batch Scripts
-If you want to run each process individually, you can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the Running the Pipeline section 
+If you want to run each process individually, you can use batch scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section 
 
 ## Introduction
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
-**IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
+**IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of Dicom data to the BIDS format, validation of the dataset, defacing, MRIQC for quality control, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
 This pipeline ingests raw neuroimaging data in DICOM format, converts it into the BIDS standard, validates the format, and performs quality control checks. The output is fully preprocessed MRI data that is ready for further analysis and research.
 
 The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
-- **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facisal features.
+- **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
 - **MRIQC**: Performing quality control checks on the anatomical and functional data.
 - **fMRIPrep**: : Preprocessing functional MRI data for subsequent analysis.
 
@@ -39,8 +39,8 @@ Additionally, ensure the following Singularity .sif container files are correctl
     fMRIPrep v24.0.1 – Required for fMRI preprocessing.
     pydeface 2.0.0 – Used for defacing anatomical data.
     bids-validator 1.14.13 – Used for validating BIDS datasets.
-**Note**: In this project, all Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensure everyone can easily access the necessary files.
-Location of these files are in the following path:
+**Note**: In this project, all Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensures everyone can easily access the necessary files.
+Location of these files is in the following path:
   ```
 /nic/sw/IRTG
   ```
@@ -126,7 +126,7 @@ IRTG01/
 If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. 
 **Note**: Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). 
 
-Example of BIDS-compliant output structure:
+### ##Example of BIDS-compliant output structure:
 ```
 output/
 ├── sub-001001
@@ -192,7 +192,7 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 Before running fMRIPrep, make sure to update your dataset:
 - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
 - After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
-- If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensures the dataset complies with the BIDS standard.
+- If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensure the dataset complies with the BIDS standard.
 
 **Input**:
     BIDS-structured dataset 
@@ -208,14 +208,14 @@ Before running fMRIPrep, make sure to update your dataset:
 
 ##### Step 1: Set Up Proxy Identification
 
-Before running Nextflow and executing any process seperately, such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow and executing any process separately, such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
 proxy
 echo $https_proxy
 ```
-##### Step 2: Install the Nextflow:
+##### Step 2: Install the Nextflow
 Install [Nextflow](https://www.nextflow.io/docs/stable/install.html)
 ##### Step 3: Clone the Repository
 ```
@@ -223,7 +223,7 @@ git clone https://github.com/repo-name.git
 cd repo-name
 ```
 
-### Option 1: Running the full Pipeline with Nextflow
+### Option 1: Running full Pipeline with Nextflow
  
 To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is:
 ```bash
@@ -308,7 +308,7 @@ done
 
 ### Running BIDS Validator
 **Note**: Before running BIDS validation, the tmp_dcm2bids directory should be removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
-#### For runnig 1 participant
+#### For running 1 participant
 ```
 #!/bin/bash
 
@@ -329,7 +329,7 @@ apptainer run --cleanenv \
 ```
 #Creates a log in the output directory
 
-#### For runnig the entire project
+#### For running the entire project
 ```
 #!/bin/bash
 input_dir="/path/to/input"
@@ -370,7 +370,7 @@ The contents of the .bidsignore File are as follows:
 ```
 
 ### Running Pydeface 
-#### For runnig 1 participant 
+#### For running 1 participant 
 ```
 #!/bin/bash
 
