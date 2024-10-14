@@ -2,10 +2,10 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 ## Option 1: Running the Entire Pipeline Using Nextflow
-To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline.
+To run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline. For more details, please refer to the Running the Pipeline section.
 
 ## Option 2: Running Each Process Separately Using Batch Scripts
-If you want to run each process individually, you can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. 
+If you want to run each process individually, you can use batch scripts using Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., DCM2BIDS, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the Running the Pipeline section 
 
 ## Introduction
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
@@ -223,7 +223,7 @@ git clone https://github.com/repo-name.git
 cd repo-name
 ```
 
-### Running the full Pipeline with Nextflow
+### Option 1: Running the full Pipeline with Nextflow
  
 To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is:
 ```bash
@@ -244,7 +244,7 @@ nextflow run main.nf -profile singularity -resume
 ```
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
-### Running individual pipeline processes with Batch scripts 
+### Option 2: Running individual pipeline processes with Batch scripts 
 For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
 ### Running DCM2BIDS 
