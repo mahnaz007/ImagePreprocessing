@@ -14,7 +14,7 @@ If you want to run each process individually, you can use bash scripts with Appt
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
 **IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of DICOM data to the BIDS format, validation of the dataset, MRIQC for quality control, defacing, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
-This pipeline ingests raw DICOM neuroimaging data into the BIDS format, performs validation, applies quality control and defacing, and preprocesses functional MRI data. The output is fully preprocessed, anonymized MRI data ready for analysis.
+This pipeline converts raw DICOM neuroimaging data into the BIDS format, performs validation, applies quality control and defacing, and preprocesses functional MRI data. The output is fully preprocessed, anonymized MRI data ready for analysis.
 The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
@@ -167,6 +167,7 @@ output/
 ```
 ### Step 2: BIDS Validation
 Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator` tool. This tool checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
+Errors need to be addressed, while warnings should be noted; typical errors include BOLD_NOT_4D and NIFTI pixel dimension issues, and common warnings relate to inconsistent subjects, parameters, and missing sessions, with a .bidsignore file created to ignore certain files from BIDS validation.
 
 **Process**: `ValidateBIDS`
 
