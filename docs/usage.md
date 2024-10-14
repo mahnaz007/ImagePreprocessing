@@ -27,7 +27,7 @@ Before running this pipeline, ensure you have the following installed:
 - [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
 - [fMRIPrep](https://fmriprep.org/en/stable/) (for preprocessing functional MRI data)
-**Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html)ب.
+**Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html).
 
 Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
