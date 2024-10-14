@@ -229,7 +229,7 @@ cd repo-name
 
 ### Option 1: Running Full Pipeline With Nextflow
  
-To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is:
+To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is, if you are on the main branch:
 ```bash
 nextflow run main.nf
 ```
