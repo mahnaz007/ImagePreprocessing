@@ -360,7 +360,15 @@ Common Warnings:
 - code: 39 - INCONSISTENT_PARAMETERS
 - code: 97 - MISSING_SESSION
 -> Necessitates a check whether these are congruent with the acquired data or if the subjects/sessions did not get converted correctly.
-  
+
+Moreover, a .bidsignore file has been created to prevent certain files from being flagged during the BIDS validation process. This file allows you to tell the BIDS validator to ignore specific files or patterns that don't adhere to BIDS standards but are still essential for your project.
+The contents of the .bidsignore File are as follows: 
+```
+*_sbref.bval
+*_sbref.bvec
+*_ADC*
+```
+
 ### Running Pydeface 
 #### For runnig 1 participant 
 ```
