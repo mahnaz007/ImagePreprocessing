@@ -105,7 +105,7 @@ The first step of the pipeline converts raw neuroimaging data - DICOM files - in
 **Input**:
 - DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) - data from an MRI scan.
 - Configuration file (config.json) - used in the dcm2bids process to map DICOM metadata to the BIDS format. You can find the full configuration file [here](https://github.com/mahnaz007/ImagePreprocessing/blob/main/assets/configPHASEDIFF_B0identifier.json).
- ## Example of DICOM input structure:
+ ### Example of DICOM input structure:
 ```
 input/
 IRTG01/
@@ -125,7 +125,7 @@ IRTG01/
 If the same subject has multiple sessions (e.g., different MRI scans at different time points), the input data should reflect this, and the pipeline will automatically manage the sessions. 
 **Note**: Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). 
 
-### ##Example of BIDS-compliant output structure:
+### Example of BIDS-compliant Output Structure:
 ```
 output/
 ├── sub-001001
@@ -201,7 +201,7 @@ Before running fMRIPrep, make sure to update your dataset:
 - HTML reports for quality control metrics.
 - SVG figures that display multiple visualizations, including brain masks and quality control.
 
-## Running the pipeline
+## Running the Pipeline
 
 #### General Instructions
 
@@ -222,13 +222,13 @@ git clone https://github.com/repo-name.git
 cd repo-name
 ```
 
-### Option 1: Running full Pipeline with Nextflow
+### Option 1: Running Full Pipeline With Nextflow
  
 To preprocess the four processes at once (as discussed in the Usage section), the typical command for running the pipeline is:
 ```bash
 nextflow run main.nf
 ```
-#### Core Nextflow arguments
+#### Core Nextflow Arguments
 The pipeline supports standard Nextflow arguments. Here are some key options:
 
 -profile: Choose a configuration profile such as apptainer and singularity.
@@ -243,11 +243,11 @@ nextflow run main.nf -profile singularity -resume
 ```
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
-### Option 2: Running individual pipeline processes with Batch scripts 
+### Option 2: Running Individual Pipeline Processes with Batch Scripts 
 For each pipeline step, different processes such as DCM2BIDS, Pydeface, and MRIQC need to be executed using specific command-line batch scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
 ### Running DCM2BIDS 
-#### For running 1 participant
+#### For Running 1 Participant
 ```
 #!/bin/bash
 
@@ -271,7 +271,7 @@ apptainer run -e --containall \
   -p "$PARTICIPANT_LABEL" \
   -s "$SESSION_LABEL"
 ```
-#### For running the entire project
+#### For Running the Entire Project
 ```
 #!/bin/bash
 # Define the base directory
@@ -307,7 +307,7 @@ done
 
 ### Running BIDS Validator
 **Note**: Before running BIDS validation, the tmp_dcm2bids directory should be removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
-#### For running 1 participant
+#### For Running 1 Participant
 ```
 #!/bin/bash
 
@@ -326,7 +326,7 @@ apptainer run --cleanenv \
   "$INPUT_DIR" \
   --verbose > "$LOG_DIR/$LOG_FILE" 2>&1
 ```
-#### For running the entire project
+#### For Running the Entire Project
 ```
 #!/bin/bash
 input_dir="/path/to/input"
@@ -368,7 +368,7 @@ The contents of the .bidsignore File are as follows:
 ```
 
 ### Running Pydeface 
-#### For running 1 participant 
+#### For Running 1 Participant 
 ```
 #!/bin/bash
 
@@ -388,7 +388,7 @@ singularity run \
   --outfile /output/"$OUTPUT_FILE"
 ```
 
-#### For running the entire project
+#### For Running The Entire Project
 ```
 #!/bin/bash
 
@@ -418,7 +418,7 @@ for subject_dir in "$INPUT_BASE"/sub-*/; do
 done
 ```
 ### Running MRIQC 
-#### For running 1 participant
+#### For Running 1 Participant
 ```
 #!/bin/bash
 
@@ -445,7 +445,7 @@ singularity run \
   -vvv \
   --verbose-reports
 ```
-#### For running the entire project
+#### For Running the Entire Project
 ```
 #!/bin/bash
 
@@ -472,7 +472,7 @@ for participant in $(ls $input_dir | grep 'sub-'); do
 done
 ```
 ### Running fMRIPrep 
-#### For running 1 participant
+#### For Running 1 Participant
 ```
 #!/bin/bash
 
