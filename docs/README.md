@@ -11,8 +11,8 @@ You can run all preprocessing steps (except fMRIPrep) together by executing the 
 
 If you prefer to run each process individually, you can use Bash scripts with Apptainer or Singularity containers. This allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately. For more details, refer to the [Running the Pipeline](#running-the-pipeline) section.
 
-
 Please ensure that the correct configuration is used for each process. Refer to the specific usage guidelines in this document for process-specific details.
+
 The imagepreprocessing documentation is split into the following pages:
 - [Usage](usage.md)
   - An overview of how the pipeline works, how to run it and a description of all of the different command-line flags.
