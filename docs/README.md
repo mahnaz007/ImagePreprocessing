@@ -1,7 +1,7 @@
 # imagepreprocessing: Documentation
 
-This README explains the preprocessing of neuroimaging data, including DICOM to BIDS conversion, BIDS validation, MRIQC, defacing, 
-The following sections explain how to run the pipeline as a whole or execute individual processes.
+This README explains the preprocessing of neuroimaging data, including DICOM to BIDS conversion, BIDS validation, MRIQC, defacing. 
+The following sections explain how to run the pipeline as a whole or individual processes.
 
 ## Option 1: Running the Entire Pipeline Using Nextflow
 
