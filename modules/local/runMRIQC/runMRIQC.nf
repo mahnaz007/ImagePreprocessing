@@ -2,7 +2,7 @@ process runMRIQC {
     container "${params.containerPath_mriqc}"
     cpus 3
     memory '8 GB'
-    errorStrategy 'ignore'  // Continue even if an error occurs
+    errorStrategy 'ignore'  // Continue even if with an error 
     maxRetries 2
 
     tag { "Participant: ${participant}" }
