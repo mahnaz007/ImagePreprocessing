@@ -1,7 +1,7 @@
 process ConvertDicomToBIDS {
     tag { "Participant: ${participantID}, Session: ${session_id}" }
 
-    // Generalized publishDir to use the output path defined in params
+    // publishDir to use the output path defined in params
     publishDir "${params.bidsDir}", mode: 'copy'
 
     input:
