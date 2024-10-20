@@ -52,19 +52,19 @@ workflow {
     // Step 2: Validate BIDS
     validatedBids = bidsFiles | ValidateBIDS
 
-    // Process 3D NIfTI files
+    // Step 3: 3D NIfTI files
     niiFiles = bidsFiles.flatMap { it }.filter { it.name.endsWith(".nii.gz") }
     anatFiles = niiFiles.filter { it.toString().contains("/anat/") && "fslval ${it} dim4".execute().text.trim() == "1" }
     defacedFiles = anatFiles | PyDeface
 
-    // Ensure dataset_description.json is copied to the BIDS directory root
+    // Step 4: Ensure dataset_description.json is copied to the BIDS directory root
     bidsDirChannel = validatedBids.map { file(params.bidsDir) }
     descriptionChannel = Channel.of(file(params.datasetDescription))
     bidsDirChannel
         .combine(descriptionChannel)
         | CopyDatasetDescription
 
-    // Step 4: Run MRIQC on the validated BIDS files 
+    // Step 5: Run MRIQC on the validated BIDS files 
     validatedBids
         .map { bidsFile ->
             def participantID = (bidsFile.name =~ /sub-(\d+)/)[0][1]
