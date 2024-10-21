@@ -1,6 +1,6 @@
 process ValidateBIDS {
     input:
-        path bids_files  // BIDS dataset path as input
+        path bids_files  // Path to the BIDS dataset to be validated
 
     output:
         path bids_files  
@@ -8,11 +8,11 @@ process ValidateBIDS {
     script:
     """
     echo "Validating BIDS dataset at ${bids_files}..."
-    
-    # Run BIDS validator and output validation report in JSON format
+
+    # Run BIDS validator and save the validation report in JSON format
     bids-validator ${bids_files} --json > validation_report.json || true
 
-    # Check if the validation passed or failed by inspecting the issues in the JSON
+    # Check if the validation was successful by checking the 'issues' field in the report
     if grep -q '"issues": {}' validation_report.json; then
         echo "BIDS validation successful."
     else
