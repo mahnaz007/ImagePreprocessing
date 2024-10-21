@@ -3,16 +3,16 @@ process CopyDatasetDescription {
         tuple path(bidsDir), path(datasetDescription)
 
     output:
-        path "${bidsDir}/bids_output"
+        path "${bidsDir}/dataset_description.json"  
 
     script:
     """
-    # Create bids_output directory if it doesn't exist
-    if [ ! -d "${bidsDir}/bids_output" ]; then
-        mkdir -p ${bidsDir}/bids_output
+    # Ensure the bids_output directory exists if it doesn't already exist
+    if [ ! -d "${bidsDir}" ]; then
+        mkdir -p ${bidsDir}
     fi
-
-    # Copy the dataset_description.json into the bids_output directory
-    cp ${datasetDescription} ${bidsDir}/bids_output/dataset_description.json
+    
+    # Copy the dataset_description.json file into the BIDS output folder
+    cp ${datasetDescription} ${bidsDir}/dataset_description.json
     """
 }
