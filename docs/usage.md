@@ -367,11 +367,12 @@ done
 
 Moreover, a .bidsignore file has been created to prevent certain files from being flagged during the BIDS validation process. This file allows you to tell the BIDS validator to ignore specific files or patterns that don't adhere to BIDS standards but are still essential for your project.
 
-#### Temporary Folder and Log Files
+##### Temporary Folder and Log Files
 
-The tmp_dcm2bids logs are crucial for debugging but aren't part of the final BIDS dataset. Hence, they should be ignored using the .bidsignore file to avoid validation errors related to non-compliant files.
+The tmp_dcm2bids logs are one of the files that should be ignored using the .bidsignore file to avoid validation errors related to non-compliant files. These logs are crucial for debugging but aren't part of the final BIDS dataset.
 
-- Error Messages:
+Below are common errors related to the temp log files:
+
 - code: 1 - NOT_INCLUDED: 
 ```
 ./tmp_dcm2bids/log/sub-009002_ses-01_20241016-104413.log
