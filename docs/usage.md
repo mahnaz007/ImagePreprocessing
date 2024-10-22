@@ -366,11 +366,28 @@ done
 -> Necessitates a check whether these are congruent with the acquired data or if the subjects/sessions did not get converted correctly.
 
 Moreover, a .bidsignore file has been created to prevent certain files from being flagged during the BIDS validation process. This file allows you to tell the BIDS validator to ignore specific files or patterns that don't adhere to BIDS standards but are still essential for your project.
+
+**Temporary Folder and Log Files**
+The tmp_dcm2bids logs are crucial for debugging but aren't part of the final BIDS dataset. Hence, they should be ignored using the .bidsignore file to avoid validation errors related to non-compliant files.
+
+- Error Messages:
+- code: 1 - NOT_INCLUDED: 
+```
+./tmp_dcm2bids/log/sub-009002_ses-01_20241016-104413.log
+```
+- code: 64 - SUBJECT_LABEL_IN_FILENAME_DOESNOT_MATCH_DIRECTORY
+- code: 65 - SESSION_LABEL_IN_FILENAME_DOESNOT_MATCH_DIRECTORY
+- code: 67 - NO_VALID_DATA_FOUND_FOR_SUBJECT
+
 The contents of the .bidsignore File are as follows: 
 ```
 *_sbref.bval
 *_sbref.bvec
 *_ADC*
+# Ignore all log files under the tmp_dcm2bids/log/ directory
+tmp_dcm2bids/log/*
+# Ignore all files and subdirectories under the tmp_dcm2bids/ directory
+tmp_dcm2bids/**
 ```
 
 ### Running MRIQC 
