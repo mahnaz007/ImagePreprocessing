@@ -71,7 +71,7 @@ However, if you need to build any of these container images (e.g., if there is a
     ```
     singularity build validator_1.14.13.sif docker://bids/validator:latest
     ```
-### 3. mriqc_24.0.2.sif
+### 3. mriqc_24.1.0.sif
 - Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
 - Docker Hub: [https://hub.docker.com/r/nipreps/mriqc]
 - Version: v24.1.0.dev0+gd5b13cb5.d20240826
