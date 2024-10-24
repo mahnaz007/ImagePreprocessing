@@ -1,9 +1,22 @@
 # Usage
+> This section describes the usage of the preprocessing tools.
 
-For the preprocessing you can run any of the 5 steps individually in a container or
-run the 4 preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline.  
+### Description 
+To perform preprocessing of your data with the five tools you can choos between two options on how to do it. The choice depends on your personal needs and preferences on how you want to perform the preprocess.
 
-### Step 1: Set Up Proxy Identification
+**Option 1:** \
+[Running the individual processing steps](#running/the/individual/processing/steps)
+
+    You can run each of the five processes (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep) separatly, by using the provided Singularity or Apptainer containers and execute them with the provided bash scripts 
+    
+
+
+**Option 2:** \
+[]()
+
+    By running the nextflow pipeline you can perfomre the first four preprocessing steps (BIDSing, BIDS-Validation, Defacing, MRIQC) automatically on your dataset. Since fMRIPrep is currently not included into the pipeline you would need to use the provided bash script to run it manually on your data.
+
+### Set Up Proxy Identification
 
 >❗**Everytime** before running Nextflow, cloning a GitHub repository, or executing any processes such as Pydeface, DCM2BIDS, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. 
 
@@ -16,8 +29,8 @@ echo $https_proxy
 ```
 
 
-## Running the individual processing steps
-> 💡This section describes how to run every processing step indicidually. The recommended order for the preprocessing is the following:
+## 1. Running the individual processing steps
+> 💡This section describes how to run every processing step indicidually by executing the provided bash scripts. The recommended order for the preprocessing is the following:
 1. BIDSing (Convert DICOM to BIDS)
 2. BIDS Validation
 3. Defacing

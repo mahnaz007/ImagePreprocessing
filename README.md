@@ -28,7 +28,7 @@ You need to have the following programs installed:
 
 Make sure these tools are accessible in your environment, with the paths to the necessary containers (e.g., dcm2bids and pydeface) are correctly set up.
 
-### 2. Installation of the required singularity containers
+### 2. Installation of the required Singularity or Apptainer containers
 
 Additionally, ensure the following Singularity .sif container files are correctly installed and accessible in your environment:
 
