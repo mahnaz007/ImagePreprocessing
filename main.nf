@@ -13,7 +13,7 @@ params.datasetDescription = "/path/to/dataset_description.json"
 params.defacedOutputDir = "${params.outputDir}/defaced"
 params.mriqcOutputDir = "${params.outputDir}/mriQC"
 params.workdir = "${baseDir}/path/to/workdir"  
-params.participantList = ['xxxxxx', 'xxxxxx']  // List of participants without "sub-"  (e.g., 001009)
+params.participantList = ['xxxxxx', 'xxxxxx']  // List of participants without "sub-"  (e.g., 001009 or 001010)
 
 // Using include for external process scripts
 include { ConvertDicomToBIDS } from './modules/local/ConvertDicomToBIDS.nf'
