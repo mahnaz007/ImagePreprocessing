@@ -87,7 +87,7 @@ workflow {
         .distinct()  // Avoid reprocessing the same participant
         | runMRIQC
 
-    // Step 5: Run fMRIPrep on BIDS files after MRIQC and defacing, and CopyDatasetDescriptionRoot
+    // Step 6: Run fMRIPrep on BIDS files after MRIQC and defacing, and CopyDatasetDescriptionRoot
     bidsFiles
         .map { bidsFile ->
             def participantID = (bidsFile.name =~ /sub-(\d+)/)[0][1]
