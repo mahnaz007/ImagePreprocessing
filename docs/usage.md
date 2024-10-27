@@ -3,7 +3,7 @@
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
 ## Option 1: Running the Entire Pipeline Using Nextflow
-To run the four preprocessing steps (except fMRIPrep) together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
+To run the five preprocessing steps together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
 
 ## Option 2: Running Each Process Separately Using Bash Scripts
 If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section.
@@ -529,3 +529,33 @@ singularity run --cleanenv \
   --random-seed "$RANDOM_SEED" \
   --skull-strip-fixed-seed
 ```
+
+#### For Running the entire project
+```
+#!/bin/bash
+
+# Define paths
+INPUT_DIR="/path/to/BIDS/input_dir"
+OUTPUT_DIR="/path/to/output_dir"
+SINGULARITY_IMG="/path/to/fmriprep_latest.sif"
+FS_LICENSE="/path/to/freesurfer/license.txt"
+WORK_DIR="/path/to/workdir"
+
+# Get the list of subjects
+subjects=$(ls ${INPUT_DIR} | grep '^sub-')
+
+# Run fmriprep in parallel for each subject
+echo ${subjects} | tr ' ' '\n' | parallel -j 2 \
+  singularity run --cleanenv \
+  --bind ${WORK_DIR}:/work \
+  ${SINGULARITY_IMG} \
+  ${INPUT_DIR} \
+  ${OUTPUT_DIR} \
+  participant \
+  --participant-label {=s/^sub-//=} \
+  --fs-license-file ${FS_LICENSE} \
+```
+  --skip_bids_validation \
+  --omp-nthreads 1 \
+  --random-seed 13 \
+  --skull-strip-fixed-seed
