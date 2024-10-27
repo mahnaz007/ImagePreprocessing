@@ -534,17 +534,17 @@ singularity run --cleanenv \
 #!/bin/bash
 
 # Define paths
-INPUT_DIR="/path/to/BIDS/input_dir"
-OUTPUT_DIR="/path/to/output_dir"
-SINGULARITY_IMG="/path/to/fmriprep_latest.sif"
-FS_LICENSE="/path/to/freesurfer/license.txt"
-WORK_DIR="/path/to/workdir"
+INPUT_DIR="/path/to/BIDS/input_dir"  # BIDS dataset
+OUTPUT_DIR="/path/to/output_dir" 
+WORK_DIR="/path/to/host_workdir"  # Host work directory 
+SINGULARITY_IMG="/path/to/fmriprep_latest.sif"  
+FS_LICENSE="/path/to/freesurfer/license.txt" 
 
-# Get the list of subjects
+# Get the list of subjects 
 subjects=$(ls ${INPUT_DIR} | grep '^sub-')
 
 # Run fmriprep in parallel for each subject
-echo ${subjects} | tr ' ' '\n' | parallel -j 2 \
+echo ${subjects} | tr ' ' '\n' | parallel -j 2 \ # Run with a maximum of 2 parallel for each subject  
   singularity run --cleanenv \
   --bind ${WORK_DIR}:/work \
   ${SINGULARITY_IMG} \
