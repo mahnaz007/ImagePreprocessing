@@ -18,7 +18,7 @@ params.defacedOutputDir = "${params.outputDir}/defaced"  // Defaced output direc
 params.mriqcOutputDir = "${params.outputDir}/mriQC"  // MRIQC output directory
 params.fmriprepOutputDir = "${params.outputDir}/fmriprep"  // fMRIPrep output directory
 params.workdir = "/path/to/workdir"  
-params.participantList = ['001004', '001008']  // List of participants without "sub-"
+params.participantList = ['xxxxxx', 'xxxxxx']  // List of participants without "sub-" (e.g., 001004)
 
 // Include external process scripts
 include { ConvertDicomToBIDS } from './ConvertDicomToBIDS.nf'
