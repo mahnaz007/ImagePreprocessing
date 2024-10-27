@@ -529,7 +529,6 @@ singularity run --cleanenv \
   --random-seed "$RANDOM_SEED" \
   --skull-strip-fixed-seed
 ```
-
 #### For Running the entire project
 ```
 #!/bin/bash
@@ -554,8 +553,8 @@ echo ${subjects} | tr ' ' '\n' | parallel -j 2 \
   participant \
   --participant-label {=s/^sub-//=} \
   --fs-license-file ${FS_LICENSE} \
-```
   --skip_bids_validation \
   --omp-nthreads 1 \
   --random-seed 13 \
   --skull-strip-fixed-seed
+```
