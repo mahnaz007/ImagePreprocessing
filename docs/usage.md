@@ -69,7 +69,7 @@ However, if you need to build any of these container images (e.g., if there is a
 - The BIDS Validator has an official Docker image.
 - Steps to Build:
     ```
-    singularity build validator_1.14.13.sif docker://bids/validator:latest
+    singularity build validator_1.14.13.sif docker://bids/validator:1.14.13
     ```
 ### 3. mriqc_24.1.0.sif
 - Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
@@ -80,7 +80,7 @@ However, if you need to build any of these container images (e.g., if there is a
 - MRIQC provides Docker images that can be converted into Singularity images.
 - Steps to Build:
     ```
-    singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
+    singularity build mriqc_24.1.0.sif docker://nipreps/mriqc:24.1.0
     ```
 ### 4. pydeface_2.0.0.sif
 - Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
@@ -90,7 +90,7 @@ However, if you need to build any of these container images (e.g., if there is a
 - Using a community-maintained image
 - Steps to Build (using a community Docker image):
     ```
-    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:latest
+    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:2.0.0 
     ```
 ### 5. fmriprep_24.0.1.sif
 - Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
@@ -101,7 +101,7 @@ However, if you need to build any of these container images (e.g., if there is a
 - fMRIPrep offers Docker images which is suitable for conversion.
 - Steps to Build:
     ```
-    singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:latest
+    singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:24.0.1
     ```
 
 ## Pipeline Workflow
@@ -537,7 +537,7 @@ singularity run --cleanenv \
 INPUT_DIR="/path/to/BIDS/input_dir"  # BIDS dataset
 OUTPUT_DIR="/path/to/output_dir" 
 WORK_DIR="/path/to/host_workdir"  # Host work directory 
-SINGULARITY_IMG="/path/to/fmriprep_latest.sif"  
+SINGULARITY_IMG="/path/to/fmriprep_24.0.1.sif"  
 FS_LICENSE="/path/to/freesurfer/license.txt" 
 
 # Get the list of subjects 
