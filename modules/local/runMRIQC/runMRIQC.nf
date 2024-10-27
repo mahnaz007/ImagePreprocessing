@@ -31,7 +31,7 @@ process runMRIQC {
     export SINGULARITY_BINDPATH="${params.bidsDir}/bids_output,${params.mriqcOutputDir},${params.workdir}"
 
     # Run MRIQC within the container 
-    apptainer exec --bind ${params.bidsDir}/bids_output:/bidsdir \\  // Bind BIDS directory
+    singularity exec --bind ${params.bidsDir}/bids_output:/bidsdir \\  // Bind BIDS directory
     --bind ${params.mriqcOutputDir}:/outdir \\  // Bind output directory
     --bind ${params.workdir}:/workdir \\  // Bind working directory
     ${params.containerPath_mriqc} \\  // Specify MRIQC container path
