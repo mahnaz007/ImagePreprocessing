@@ -5,11 +5,11 @@ The following sections explain the options for running the pipeline and where to
 
 ## Option 1: Running the Entire Pipeline Using Nextflow
 
-You can run all preprocessing steps (except fMRIPrep) together by executing the Nextflow pipeline. This automates the execution of the entire workflow. For more details, please refer to the [Running the Pipeline Option 1](#running-the-pipeline-option1) section.
+You can run all preprocessing steps (except fMRIPrep) together by executing the Nextflow pipeline. This automates the execution of the entire workflow. For more details, please refer to the [Running the Pipeline Option 1](#usage.md/Option-1:-Running-Full-Pipeline-With-Nextflow) section.
 
 ## Option 2: Running Each Process Separately Using Bash Scripts
 
-If you prefer to run each process individually, you can use Bash scripts with Apptainer or Singularity containers. This allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately. For more details, refer to the [Running the Pipeline Option 2](#running-the-pipeline-option2) section.
+If you prefer to run each process individually, you can use Bash scripts with Apptainer or Singularity containers. This allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately. For more details, refer to the [Running the Pipeline Option 2](#usage.md/Option-2:-Running-Individual-Pipeline-Processes-with-Bash-Scripts) section.
 
 Please ensure that the correct configuration is used for each process. Refer to the specific usage guidelines in the [usage description](usage.md) document for process-specific details. All input and output paths in the example commands need to be adapted.
 
