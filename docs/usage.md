@@ -19,8 +19,9 @@ The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
 - **MRIQC**: Performing quality control checks on the anatomical and functional data.
-- **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
 - **fMRIPrep**: Preprocessing functional MRI data for subsequent analysis.
+- **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
+
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
@@ -82,17 +83,7 @@ However, if you need to build any of these container images (e.g., if there is a
     ```
     singularity build mriqc_24.1.0.sif docker://nipreps/mriqc:24.1.0
     ```
-### 4. pydeface_2.0.0.sif
-- Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
-- Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
-- Version: 2.0.0 
-- Singularity Recipe:
-- Using a community-maintained image
-- Steps to Build (using a community Docker image):
-    ```
-    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:2.0.0 
-    ```
-### 5. fmriprep_24.0.1.sif
+### 4. fmriprep_24.0.1.sif
 - Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
 - Docker Hub: [https://hub.docker.com/r/nipreps/fmriprep]
 - Version: v24.0.1
@@ -104,6 +95,16 @@ However, if you need to build any of these container images (e.g., if there is a
     singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:24.0.1
     ```
 
+### 5. pydeface_2.0.0.sif
+- Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
+- Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
+- Version: 2.0.0 
+- Singularity Recipe:
+- Using a community-maintained image
+- Steps to Build (using a community Docker image):
+    ```
+    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:2.0.0 
+    ```
 ## Pipeline Workflow
 
 ### Step 1: BIDSing (Convert DICOM to BIDS)
@@ -195,7 +196,17 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 - HTML reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
 - SVG figures that generate visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
-### Step 4: Defacing
+### Step 4: fMRIPrep
+
+**Input**:
+    BIDS-structured dataset 
+    
+**Output**:
+- fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
+- HTML reports for quality control metrics.
+- SVG figures that display multiple visualizations, including brain masks and quality control.
+
+### Step 5: Defacing
 The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
 
 **Process**: `PyDeface`
@@ -205,16 +216,6 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
-
-### Step 5: fMRIPrep
-
-**Input**:
-    BIDS-structured dataset 
-    
-**Output**:
-- fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
-- HTML reports for quality control metrics.
-- SVG figures that display multiple visualizations, including brain masks and quality control.
 
 ## Running the Pipeline
 This pipeline, includes five specific processes. You can view the full main.nf script [here in the repository](https://github.com/mahnaz007/ImagePreprocessing/blob/main/main.nf).
@@ -457,57 +458,6 @@ for participant in $(ls $input_dir | grep 'sub-'); do
 done
 ```
 
-### Running Pydeface 
-#### For Running 1 Participant 
-```
-#!/bin/bash
-
-# Define variables for paths to make the script easier to manage
-INPUT_DIR="/path/to/input/anat" # BIDS dataset
-OUTPUT_DIR="/path/to/output"
-SIF_FILE="$IRTG/sif/pydeface_2.0.0.sif"  
-INPUT_FILE="sub-xxxxxx_ses-xx_T1w.nii.gz"
-OUTPUT_FILE="sub-xxxxxx_ses-xx_T1w_defaced.nii.gz"
-
-# Singularity command to run Pydeface
-singularity run \
-  --bind "$INPUT_DIR:/input" \
-  --bind "$OUTPUT_DIR:/output" \
-  "$SIF_FILE" \
-  pydeface /input/"$INPUT_FILE" \
-  --outfile /output/"$OUTPUT_FILE"
-```
-
-#### For Running The Entire Project
-```
-#!/bin/bash
-
-INPUT_BASE="/path/to/input/anat" # BIDS dataset
-OUTPUT_BASE="/path/to/output"
-CONTAINER="$IRTG/sif/pydeface_2.0.0.sif"  
-
-# Loop through subjects and sessions to run Pydeface
-for subject_dir in "$INPUT_BASE"/sub-*/; do
-    for session_dir in "$subject_dir"/ses-*/; do
-        anat_dir="${session_dir}anat"
-        if [[ -d "$anat_dir" ]]; then
-            for nifti_file in "$anat_dir"/*.nii.gz; do
-                output_dir="${OUTPUT_BASE}/$(basename "$subject_dir")/$(basename "$session_dir")/anat"
-                mkdir -p "$output_dir"
-                
-                # Run pydeface with Singularity
-                singularity run \
-                    --bind "$session_dir":/input \
-                    --bind "$output_dir":/output \
-                    "$CONTAINER" \
-                    pydeface "/input/anat/$(basename "$nifti_file")" \
-                    --outfile "/output/$(basename "$nifti_file" .nii.gz)_defaced.nii.gz"
-            done
-        fi
-    done
-done
-```
-
 ### Running fMRIPrep 
 Before running fMRIPrep, make sure to update your dataset:
 - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
@@ -567,4 +517,55 @@ echo ${subjects} | tr ' ' '\n' | parallel -j 2 \ # Run with a maximum of 2 paral
   --omp-nthreads 1 \
   --random-seed 13 \
   --skull-strip-fixed-seed
+```
+
+### Running Pydeface 
+#### For Running 1 Participant 
+```
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+INPUT_DIR="/path/to/input/anat" # BIDS dataset
+OUTPUT_DIR="/path/to/output"
+SIF_FILE="$IRTG/sif/pydeface_2.0.0.sif"  
+INPUT_FILE="sub-xxxxxx_ses-xx_T1w.nii.gz"
+OUTPUT_FILE="sub-xxxxxx_ses-xx_T1w_defaced.nii.gz"
+
+# Singularity command to run Pydeface
+singularity run \
+  --bind "$INPUT_DIR:/input" \
+  --bind "$OUTPUT_DIR:/output" \
+  "$SIF_FILE" \
+  pydeface /input/"$INPUT_FILE" \
+  --outfile /output/"$OUTPUT_FILE"
+```
+
+#### For Running The Entire Project
+```
+#!/bin/bash
+
+INPUT_BASE="/path/to/input/anat" # BIDS dataset
+OUTPUT_BASE="/path/to/output"
+CONTAINER="$IRTG/sif/pydeface_2.0.0.sif"  
+
+# Loop through subjects and sessions to run Pydeface
+for subject_dir in "$INPUT_BASE"/sub-*/; do
+    for session_dir in "$subject_dir"/ses-*/; do
+        anat_dir="${session_dir}anat"
+        if [[ -d "$anat_dir" ]]; then
+            for nifti_file in "$anat_dir"/*.nii.gz; do
+                output_dir="${OUTPUT_BASE}/$(basename "$subject_dir")/$(basename "$session_dir")/anat"
+                mkdir -p "$output_dir"
+                
+                # Run pydeface with Singularity
+                singularity run \
+                    --bind "$session_dir":/input \
+                    --bind "$output_dir":/output \
+                    "$CONTAINER" \
+                    pydeface "/input/anat/$(basename "$nifti_file")" \
+                    --outfile "/output/$(basename "$nifti_file" .nii.gz)_defaced.nii.gz"
+            done
+        fi
+    done
+done
 ```
