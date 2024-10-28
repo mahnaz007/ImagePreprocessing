@@ -194,6 +194,59 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 - HTML reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
 - SVG figures that generate visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
+**Execution**
+You can run the tool for one participant or an entiere project.
+
+To run it for one participant you will run the container from the terminal with the following command:
+```
+singularity run <path/to/the/container/file.sif> /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
+	--participant-label <lable> \
+	--nprocs <number> \
+	--omp-nthreads <number> \
+	--mem_gb <number> \
+	--no-sub \
+	-vvv \
+	--verbose-reports
+```
+Example command:
+```
+singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
+	--participant-label 001004 \
+	--nprocs 4 \
+	--omp-nthreads 4 \
+	--mem_gb 8 \
+	--no-sub \
+	-vvv \
+	--verbose-reports
+```
+To run an entire project you need to use the following bash script. You need to adjust the `input_dir`, `output_dir`, `work_dir`, and `singularity_image`.
+
+```
+#!/bin/bash
+
+input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/01"
+output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
+# Path to your MRIQC work directory
+work_dir="/home/mzaz021/BIDSProject/work"
+singularity_image="/home/mzaz021/mriqc_24.0.2.sif"
+
+# Loop through each participant folder starting with 'sub-'
+for participant in $(ls $input_dir | grep 'sub-'); do
+	echo "Running MRIQC on $participant"
+	singularity run --bind $work_dir:$work_dir $singularity_image \
+    	$input_dir $output_dir participant \
+    	--participant_label ${participant#sub-} \
+    	--nprocs 4 \
+    	--omp-nthreads 4 \
+    	--mem_gb 8 \
+    	--no-sub \
+    	-vvv \
+    	--verbose-reports \
+    	--work-dir $work_dir
+	echo "Finished processing $participant"
+done
+```
+
 ### Step 4: Defacing
 The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
 
