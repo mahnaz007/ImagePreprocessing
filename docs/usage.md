@@ -2,7 +2,16 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
+
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
+
+## Option 1: Running the Entire Pipeline Using Nextflow
+To run the five preprocessing steps together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
+
+## Option 2: Running Each Process Separately Using Bash Scripts
+If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section.
+
+**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI Preprocessing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20Preprocessing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
 
 ## Introduction
 **IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of DICOM data to the BIDS format, validation of the dataset, MRIQC for quality control, defacing, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
@@ -12,8 +21,9 @@ The pipeline consists of five main steps:
 - **BIDsing**: Converting raw neuroimaging data (e.g., DICOM) into BIDS format.
 - **BIDS Validation**: Validating the converted BIDS dataset to ensure compliance with the BIDS standard.
 - **MRIQC**: Performing quality control checks on the anatomical and functional data.
-- **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
 - **fMRIPrep**: Preprocessing functional MRI data for subsequent analysis.
+- **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
+
 
 **Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI data processing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20data%20Processing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
 
@@ -33,9 +43,9 @@ Before running this pipeline, ensure you have the following installed:
 - [Apptainer](https://apptainer.org/) and [Singularity](https://sylabs.io/)
 - [BIDS-validator](https://github.com/bids-standard/bids-validator) (for validating BIDS datasets)
 - [dcm2bids](https://github.com/UNFmontreal/Dcm2Bids) (for converting DICOM files to BIDS format)
-- [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
 - [fMRIPrep](https://fmriprep.org/en/stable/) (for preprocessing functional MRI data)
+- [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 
 **Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html).
 
@@ -75,9 +85,10 @@ However, if you need to build any of these container images (e.g., if there is a
 - The BIDS Validator has an official Docker image.
 - Steps to Build:
     ```
-    singularity build validator_1.14.13.sif docker://bids/validator:latest
+    singularity build validator_1.14.13.sif docker://bids/validator:1.14.13
     ```
-#### 3. mriqc_24.0.2.sif
+    
+### 3. mriqc_24.1.0.sif
 - Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
 - Docker Hub: [https://hub.docker.com/r/nipreps/mriqc]
 - Version: v24.1.0.dev0+gd5b13cb5.d20240826
@@ -86,19 +97,10 @@ However, if you need to build any of these container images (e.g., if there is a
 - MRIQC provides Docker images that can be converted into Singularity images.
 - Steps to Build:
     ```
-    singularity build mriqc-latest.sif docker://nipreps/mriqc:latest
+    singularity build mriqc_24.1.0.sif docker://nipreps/mriqc:24.1.0
     ```
-#### 4. pydeface_2.0.0.sif
-- Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
-- Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
-- Version: 2.0.0 
-- Singularity Recipe:
-- Using a community-maintained image
-- Steps to Build (using a community Docker image):
-    ```
-    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:latest
-    ```
-#### 5. fmriprep_24.0.1.sif
+    
+### 4. fmriprep_24.0.1.sif
 - Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
 - Docker Hub: [https://hub.docker.com/r/nipreps/fmriprep]
 - Version: v24.0.1
@@ -107,9 +109,19 @@ However, if you need to build any of these container images (e.g., if there is a
 - fMRIPrep offers Docker images which is suitable for conversion.
 - Steps to Build:
     ```
-    singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:latest
+    singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:24.0.1
     ```
-
+    
+### 5. pydeface_2.0.0.sif
+- Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
+- Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
+- Version: 2.0.0 
+- Singularity Recipe:
+- Using a community-maintained image
+- Steps to Build (using a community Docker image):
+    ```
+    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:2.0.0 
+    ```
 ## Pipeline Workflow
 
 ### Step 1: BIDSing (Convert DICOM to BIDS)
@@ -141,6 +153,15 @@ If the same subject has multiple sessions (e.g., different MRI scans at differen
 **Note**: Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). 
 
 ### Example of BIDS-compliant Output Structure:
+
+This pipeline creates a BIDS-compliant output, organized by four main imaging modalities: anatomical, functional, field maps, and diffusion.
+- anat (T1w, T2w): Anatomical modality provides High-resolution anatomical images. T1w captures gray/white matter boundaries, T2w captures cerebrospinal fluid and lesions.
+
+- func: Functional MRI shows brain activity by detecting changes in blood oxygen levels, which is useful for mapping brain function during specific tasks and resting states
+
+- fmap: Field maps correct distortions in fMRI and diffusion data due to magnetic field variations.
+
+- dwi: Diffusion-weighted imaging shows water diffusion in tissues, highlighting white matter pathways.
 ```
 output/
 ├── sub-001001
@@ -196,19 +217,7 @@ MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the 
 - HTML reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
 - SVG figures that generate visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
-
-### Step 4: Defacing
-The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder. The defaced data needs to be added to the BIDsed dataset before moved to longterm storage/non-local usage.
-
-**Process**: `PyDeface`
-
-**Input**:
-- NIfTI files (from the `anat` folder)
-
-**Output**:
-- Defaced NIfTI files (`defaced_*.nii.gz`)
-
-### Step 5: fMRIPrep
+### Step 4: fMRIPrep
 
 fMRIPrep is a robust, automated preprocessing tool for functional magnetic resonance imaging (fMRI) data that corrects for head motion, aligns functional images to anatomical scans, and normalizes data to standard spaces, ensuring compatibility and reproducibility across studies.
 
@@ -225,6 +234,17 @@ fMRIPrep is a robust, automated preprocessing tool for functional magnetic reson
 - HTML reports for quality control metrics.
 - SVG figures that display multiple visualizations, including brain masks and quality control.
 
+### Step 5: Defacing
+The fifth preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
+
+**Process**: `PyDeface`
+
+**Input**:
+- NIfTI files (from the `anat` folder)
+
+**Output**:
+- Defaced NIfTI files (`defaced_*.nii.gz`)
+
 ## Running the Pipeline
 
 ### General Instructions
@@ -232,6 +252,11 @@ fMRIPrep is a robust, automated preprocessing tool for functional magnetic reson
 #### First time usage
 
 These steps need to be completed before the pipeline or its modules are used for the first time.
+
+## Running the Pipeline
+This pipeline, includes five specific processes. You can view the full main.nf script [here in the repository](https://github.com/mahnaz007/ImagePreprocessing/blob/main/main.nf).
+The individual processes for each step in the pipeline are modularized under the [modules/local](https://github.com/mahnaz007/ImagePreprocessing/tree/main/modules/local) directory.
+#### General Instructions
 
 ##### Step 1: Set Up Proxy Identification
 
@@ -349,7 +374,7 @@ done
 ```
 
 ### Running BIDS Validator
-**Note**: Before running BIDS validation, the tmp_dcm2bids directory should be removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
+**Note**: Before running BIDS validation, the tmp_dcm2bids directory should be either ignored by adding it to a .bidsignore file or removed manually to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
 #### For Running 1 Participant
 ```
 #!/bin/bash
@@ -406,9 +431,9 @@ Moreover, a .bidsignore file has been created to prevent certain files from bein
 
 ##### Temporary Folder and Log Files
 
-The tmp_dcm2bids logs are one of the files that should be ignored using the .bidsignore file to avoid validation errors related to non-compliant files. These logs are crucial for debugging but aren't part of the final BIDS dataset.
+The tmp_dcm2bids logs are one of the files that should be removed or ignored using the .bidsignore file to avoid validation errors related to non-compliant files. These logs are crucial for debugging but aren't part of the final BIDS dataset.
 
-Below are common errors related to the temp log files:
+Below are common errors related to the tmp log files:
 
 - code: 1 - NOT_INCLUDED: 
 ```
@@ -484,6 +509,67 @@ for participant in $(ls $input_dir | grep 'sub-'); do
 done
 ```
 
+### Running fMRIPrep 
+Before running fMRIPrep, make sure to update your dataset:
+- If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
+- After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
+- If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensure the dataset complies with the BIDS standard.
+#### For Running 1 Participant
+```
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+SIF_FILE="$IRTG/sif/fmriprep_24.0.1.sif"  
+INPUT_DIR="/path/to/input" #BIDS dataset
+OUTPUT_DIR="/path/to/output"
+PARTICIPANT_LABEL="xxxxxx"  # Update participant label 
+FS_LICENSE_FILE="/path/to/freesurfer/license.txt"
+OMP_THREADS=1
+RANDOM_SEED=13
+
+# Singularity command to run fMRIPrep
+singularity run --cleanenv \
+  "$SIF_FILE" \
+  "$INPUT_DIR" \
+  "$OUTPUT_DIR" \
+  participant \
+  --participant-label "$PARTICIPANT_LABEL" \
+  --fs-license-file "$FS_LICENSE_FILE" \
+  --skip_bids_validation \
+  --omp-nthreads "$OMP_THREADS" \
+  --random-seed "$RANDOM_SEED" \
+  --skull-strip-fixed-seed
+```
+#### For Running the entire project
+```
+#!/bin/bash
+
+# Define paths
+INPUT_DIR="/path/to/BIDS/input_dir"  # BIDS dataset
+OUTPUT_DIR="/path/to/output_dir" 
+WORK_DIR="/path/to/host_workdir"  # Host work directory 
+SINGULARITY_IMG="/path/to/fmriprep_24.0.1.sif"  
+FS_LICENSE="/path/to/freesurfer/license.txt" 
+
+# Get the list of subjects 
+subjects=$(ls ${INPUT_DIR} | grep '^sub-')
+
+# Run fmriprep in parallel for each subject
+echo ${subjects} | tr ' ' '\n' | parallel -j 2 \ # Run with a maximum of 2 parallel for each subject  
+  singularity run --cleanenv \
+  --bind ${WORK_DIR}:/work \
+  ${SINGULARITY_IMG} \
+  ${INPUT_DIR} \
+  ${OUTPUT_DIR} \
+  participant \
+  --participant-label {=s/^sub-//=} \
+  --fs-license-file ${FS_LICENSE} \
+  --skip_bids_validation \
+  --omp-nthreads 1 \
+  --random-seed 13 \
+  --skull-strip-fixed-seed
+```
+
 ### Running Pydeface 
 #### For Running 1 Participant 
 ```
@@ -533,36 +619,4 @@ for subject_dir in "$INPUT_BASE"/sub-*/; do
         fi
     done
 done
-```
-
-### Running fMRIPrep 
-Before running fMRIPrep, make sure to update your dataset:
-- If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
-- After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
-- If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensure the dataset complies with the BIDS standard.
-#### For Running 1 Participant
-```
-#!/bin/bash
-
-# Define variables for paths to make the script easier to manage
-SIF_FILE="$IRTG/sif/fmriprep_24.0.1.sif"  
-INPUT_DIR="/path/to/input" #BIDS dataset
-OUTPUT_DIR="/path/to/output"
-PARTICIPANT_LABEL="xxxxxx"  # Update participant label 
-FS_LICENSE_FILE="/path/to/freesurfer/license.txt"
-OMP_THREADS=1
-RANDOM_SEED=13
-
-# Singularity command to run fMRIPrep
-singularity run --cleanenv \
-  "$SIF_FILE" \
-  "$INPUT_DIR" \
-  "$OUTPUT_DIR" \
-  participant \
-  --participant-label "$PARTICIPANT_LABEL" \
-  --fs-license-file "$FS_LICENSE_FILE" \
-  --skip_bids_validation \
-  --omp-nthreads "$OMP_THREADS" \
-  --random-seed "$RANDOM_SEED" \
-  --skull-strip-fixed-seed
 ```

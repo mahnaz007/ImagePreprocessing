@@ -1,23 +1,22 @@
 process ValidateBIDS {
     input:
-        path bids_files  // Path to the BIDS dataset to be validated
+    val trigger  // Ensure this process runs only after ConvertDicomToBIDS completes
 
     output:
-        path bids_files  
+    path "validation_log.txt", emit: logs
+
+    errorStrategy 'ignore'
 
     script:
     """
-    echo "Validating BIDS dataset at ${bids_files}..."
+    mkdir -p ${params.bidsValidatorLogs}
+    echo "Running BIDS validation..."
 
-    # Run BIDS validator and save the validation report in JSON format
-    bids-validator ${bids_files} --json > validation_report.json || true
+    singularity run --cleanenv \
+        ${params.singularity_image} \
+        ${params.bidsDir} \
+        --verbose 2>&1 | tee ${params.bidsValidatorLogs}/validation_log.txt // Saves the output to the validation log file
 
-    # Check if the validation was successful by checking the 'issues' field in the report
-    if grep -q '"issues": {}' validation_report.json; then
-        echo "BIDS validation successful."
-    else
-        echo "BIDS validation failed. Check the validation_report.json for details."
-        cat validation_report.json
-    fi
+    echo "Validation log saved at ${params.bidsValidatorLogs}/validation_log.txt" // Final message after validation completes
     """
 }
