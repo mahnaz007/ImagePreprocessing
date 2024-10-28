@@ -313,6 +313,11 @@ done
 
 ### Step 5: fMRIPrep
 
+> 💡Before running fMRIPrep, make sure to update your dataset:
+> - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
+> - After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
+> - If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensures the dataset complies with the BIDS standard.
+
 **Input**:
     BIDS-structured dataset 
     
@@ -320,6 +325,29 @@ done
 - fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
 - HTML reports for quality control metrics.
 - SVG figures that display multiple visualizations, including brain masks and quality control.
+
+**Execution**
+You can run the tool for one participant or an entiere project.
+
+To run it for one participant you will run the container from the terminal with the following command:
+
+```
+singularity run --cleanenv \
+/home/mzaz021/fmriprep_latest.sif \
+/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier \
+/home/mzaz021/BIDSProject/fmriPreprocessing/09 \  
+participant \
+--participant-label <label> \
+--fs-license-file <path/to/license.txt> \
+--skip_bids_validation \
+--omp-nthreads <number> \
+--random-seed <number> \ 
+--skull-strip-fixed-seed
+```
+Example command:
+```
+singularity run --cleanenv /home/mzaz021/fmriprep_latest.sif     /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier     /home/mzaz021/BIDSProject/fmriPreprocessing/09     participant     --participant-label 009004     --fs-license-file /home/mzaz021/freesurfer/license.txt     --skip_bids_validation     --omp-nthreads 1     --random-seed 13     --skull-strip-fixed-seed
+```
 
 ## Running the Pipeline
 
