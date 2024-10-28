@@ -323,7 +323,7 @@ done
 ```
 
 ### Running BIDS Validator
-**Note**: Before running BIDS validation, the tmp_dcm2bids directory should be ignored using .bidsignore or manually removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
+**Note**: Before running BIDS validation, the tmp_dcm2bids directory should be either ignored by adding it to a .bidsignore file or removed manually to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
 #### For Running 1 Participant
 ```
 #!/bin/bash
