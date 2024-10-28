@@ -185,6 +185,8 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 
 ### Step 3: MRIQC
 
+MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the quality of MRI data by calculating standardized quality metrics for structural and functional MRI scans. It helps identify data issues like artifacts or noise, enabling researchers to assess and filter out low-quality scans before analysis, thereby improving the reliability of MRI studies.
+
 **Process**:
 
 **Input**:
@@ -248,7 +250,7 @@ done
 ```
 
 ### Step 4: Defacing
-The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
+The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder. The defaced data needs to be added to the BIDsed dataset before moved to longterm storage/non-local usage.
 
 **Process**: `PyDeface`
 
@@ -312,6 +314,8 @@ done
 ```
 
 ### Step 5: fMRIPrep
+
+fMRIPrep is a robust, automated preprocessing tool for functional magnetic resonance imaging (fMRI) data that corrects for head motion, aligns functional images to anatomical scans, and normalizes data to standard spaces, ensuring compatibility and reproducibility across studies.
 
 > 💡Before running fMRIPrep, make sure to update your dataset:
 > - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
