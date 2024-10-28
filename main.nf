@@ -21,13 +21,13 @@ params.workdir = "/path/to/workdir"
 params.participantList = ['xxxxxx', 'xxxxxx']  // List of participants without "sub-" (e.g., 001004)
 
 // Include external process scripts
-include { ConvertDicomToBIDS } from './ConvertDicomToBIDS.nf'
-include { ValidateBIDS } from './ValidateBIDS.nf'
-include { PyDeface } from './PyDeface.nf'
-include { CopyDatasetDescription } from './CopyDatasetDescription.nf'
-include { CopyDatasetDescriptionRoot } from './CopyDatasetDescriptionRoot.nf'
-include { runMRIQC } from './runMRIQC.nf'
-include { runFmriprep } from './runFmriprep.nf'
+include { ConvertDicomToBIDS } from './modules/local/ConvertDicomToBIDS.nf'
+include { ValidateBIDS } from './modules/local/ValidateBIDS.nf'
+include { PyDeface } from './modules/local/PyDeface.nf'
+include { CopyDatasetDescription } from './modules/local/CopyDatasetDescription.nf'
+include { CopyDatasetDescriptionRoot } from './modules/local/CopyDatasetDescriptionRoot.nf'
+include { runMRIQC } from './modules/local/runMRIQC.nf'
+include { runFmriprep } from './modules/local/runFmriprep.nf'
 
 // Workflow
 workflow {
