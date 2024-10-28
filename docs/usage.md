@@ -208,7 +208,8 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 - SVG figures that display multiple visualizations, including brain masks and quality control.
 
 ## Running the Pipeline
-
+This pipeline, includes five integrated processes. You can view the full main.nf script [here in the repository](https://github.com/mahnaz007/ImagePreprocessing/blob/main/main.nf).
+The individual processes for each step in the pipeline are modularized in the repository under the [modules/local](https://github.com/mahnaz007/ImagePreprocessing/tree/main/modules/local) directory.
 #### General Instructions
 
 ##### Step 1: Set Up Proxy Identification
