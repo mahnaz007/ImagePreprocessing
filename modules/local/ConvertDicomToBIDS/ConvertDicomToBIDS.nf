@@ -1,4 +1,5 @@
 process ConvertDicomToBIDS {
+    // Tag process using participant ID and session
     tag { "Participant: ${participantID}, Session: ${session_id}" }
     publishDir "${params.bidsDir}", mode: 'copy'
    
