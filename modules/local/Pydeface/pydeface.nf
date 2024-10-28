@@ -22,6 +22,6 @@ process PyDeface {
     # Run PyDeface within the Singularity container
     apptainer run --bind "${input_dir}:/input" \\  
     "${singularity_img}" \\  // Specify the container image to use
-    pydeface /input/"${input_file}" --outfile "${output_file}"  // Run PyDeface on input file and save to output file
+    pydeface /input/"${input_file}" --outfile "${output_file}"  # Run PyDeface on input file and save to output file
     '''
 }
