@@ -323,7 +323,7 @@ done
 ```
 
 ### Running BIDS Validator
-**Note**: Before running BIDS validation, the tmp_dcm2bids directory should be removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
+**Note**: Before running BIDS validation, the tmp_dcm2bids directory should be ignored using .bidsignore or manually removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
 #### For Running 1 Participant
 ```
 #!/bin/bash
@@ -380,9 +380,9 @@ Moreover, a .bidsignore file has been created to prevent certain files from bein
 
 ##### Temporary Folder and Log Files
 
-The tmp_dcm2bids logs are one of the files that should be ignored using the .bidsignore file to avoid validation errors related to non-compliant files. These logs are crucial for debugging but aren't part of the final BIDS dataset.
+The tmp_dcm2bids logs are one of the files that should be removed or ignored using the .bidsignore file to avoid validation errors related to non-compliant files. These logs are crucial for debugging but aren't part of the final BIDS dataset.
 
-Below are common errors related to the temp log files:
+Below are common errors related to the tmp log files:
 
 - code: 1 - NOT_INCLUDED: 
 ```
