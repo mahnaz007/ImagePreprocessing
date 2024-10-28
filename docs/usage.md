@@ -196,58 +196,6 @@ MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the 
 - HTML reports (mriqc_reports/ directory) containing quality metrics and visualizations for each subject and session.
 - SVG figures that generate visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
-**Execution**
-You can run the tool for one participant or an entiere project.
-
-To run it for one participant you will run the container from the terminal with the following command:
-```
-singularity run <path/to/the/container/file.sif> /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
-	--participant-label <lable> \
-	--nprocs <number> \
-	--omp-nthreads <number> \
-	--mem_gb <number> \
-	--no-sub \
-	-vvv \
-	--verbose-reports
-```
-Example command:
-```
-singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
-	--participant-label 001004 \
-	--nprocs 4 \
-	--omp-nthreads 4 \
-	--mem_gb 8 \
-	--no-sub \
-	-vvv \
-	--verbose-reports
-```
-To run an entire project you need to use the following bash script. You need to adjust the `input_dir`, `output_dir`, `work_dir`, and `singularity_image`.
-
-```
-#!/bin/bash
-
-input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/01"
-output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
-# Path to your MRIQC work directory
-work_dir="/home/mzaz021/BIDSProject/work"
-singularity_image="/home/mzaz021/mriqc_24.0.2.sif"
-
-# Loop through each participant folder starting with 'sub-'
-for participant in $(ls $input_dir | grep 'sub-'); do
-	echo "Running MRIQC on $participant"
-	singularity run --bind $work_dir:$work_dir $singularity_image \
-    	$input_dir $output_dir participant \
-    	--participant_label ${participant#sub-} \
-    	--nprocs 4 \
-    	--omp-nthreads 4 \
-    	--mem_gb 8 \
-    	--no-sub \
-    	-vvv \
-    	--verbose-reports \
-    	--work-dir $work_dir
-	echo "Finished processing $participant"
-done
-```
 
 ### Step 4: Defacing
 The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder. The defaced data needs to be added to the BIDsed dataset before moved to longterm storage/non-local usage.
@@ -259,59 +207,6 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
-
-**Execution**
-You can run the tool for one participant or an entiere project.
-
-To run it for one participant you will run the container from the terminal with the following command:
-```
-singularity run \
---bind <path/to/input/dir>:/input \
---bind <path/to/output/dir>:/output \
-</path/to/container/file.sif> \
-pydeface /input/path/to/.nii.gz \
---outfile /output/file_defaced.nii.gz
-```
-Example command:
-```
-singularity run \
---bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input \
---bind /home/mzaz021/BIDSProject/newPydeface:/output \
-/home/mzaz021/pydeface_latest.sif \
-pydeface /input/sub-009002_ses-01_T1w.nii.gz \
---outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
-```
-
-To run an entire project you need to use the following bash script. You need to adjust the `INPUT_BASE`, `OUTPUT_BASE`, and `CONTAINER`.
-
-```
-#!/bin/bash
-
-INPUT_BASE="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
-OUTPUT_BASE="/home/mzaz021/BIDSProject/newPydeface"
-CONTAINER="/home/mzaz021/pydeface_latest.sif"
-
-# Loop through subjects and sessions to run Pydeface
-for subject_dir in "$INPUT_BASE"/sub-*/; do
-    for session_dir in "$subject_dir"/ses-*/; do
-        anat_dir="${session_dir}anat"
-        if [[ -d "$anat_dir" ]]; then
-            for nifti_file in "$anat_dir"/*.nii.gz; do
-                output_dir="${OUTPUT_BASE}/$(basename "$subject_dir")/$(basename "$session_dir")/anat"
-                mkdir -p "$output_dir"
-                
-                # Run pydeface with Singularity
-                singularity run \
-                    --bind "$session_dir":/input \
-                    --bind "$output_dir":/output \
-                    "$CONTAINER" \
-                    pydeface "/input/anat/$(basename "$nifti_file")" \
-                    --outfile "/output/$(basename "$nifti_file" .nii.gz)_defaced.nii.gz"
-            done
-        fi
-    done
-done
-```
 
 ### Step 5: fMRIPrep
 
@@ -329,29 +224,6 @@ fMRIPrep is a robust, automated preprocessing tool for functional magnetic reson
 - fMRIPrep outputs (fmriprep_outputs/ directory) containing preprocessed functional and anatomical data.
 - HTML reports for quality control metrics.
 - SVG figures that display multiple visualizations, including brain masks and quality control.
-
-**Execution**
-You can run the tool for one participant or an entiere project.
-
-To run it for one participant you will run the container from the terminal with the following command:
-
-```
-singularity run --cleanenv \
-/home/mzaz021/fmriprep_latest.sif \
-/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier \
-/home/mzaz021/BIDSProject/fmriPreprocessing/09 \  
-participant \
---participant-label <label> \
---fs-license-file <path/to/license.txt> \
---skip_bids_validation \
---omp-nthreads <number> \
---random-seed <number> \ 
---skull-strip-fixed-seed
-```
-Example command:
-```
-singularity run --cleanenv /home/mzaz021/fmriprep_latest.sif     /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier     /home/mzaz021/BIDSProject/fmriPreprocessing/09     participant     --participant-label 009004     --fs-license-file /home/mzaz021/freesurfer/license.txt     --skip_bids_validation     --omp-nthreads 1     --random-seed 13     --skull-strip-fixed-seed
-```
 
 ## Running the Pipeline
 
