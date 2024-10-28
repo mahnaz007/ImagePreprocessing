@@ -47,6 +47,8 @@ nextflow run IP18042024/imagepreprocessing \
    --outdir <OUTDIR>
 ```
 
+For more details on how to use the pipeline and its single modules, refer to the [README](docs/README.md) and the [usage description](docs/usage.md) in the /docs folder.
+
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
 > see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).

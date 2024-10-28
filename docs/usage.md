@@ -2,6 +2,9 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
+
+# Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
+
 ## Option 1: Running the Entire Pipeline Using Nextflow
 To run the five preprocessing steps together by executing the nextflow pipeline. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
 
@@ -11,7 +14,6 @@ If you want to run each process individually, you can use bash scripts with Appt
 **Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI Preprocessing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20Preprocessing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
 
 ## Introduction
-# Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
 **IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of DICOM data to the BIDS format, validation of the dataset, MRIQC for quality control, defacing, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
 This pipeline converts raw DICOM neuroimaging data into the BIDS format, performs validation, applies quality control and defacing, and preprocesses functional MRI data. The output is fully preprocessed, anonymized MRI data ready for analysis.
@@ -23,14 +25,27 @@ The pipeline consists of five main steps:
 - **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
 
 
+**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI data processing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20data%20Processing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
+
+This file covers the sections: 
+- **Prerequisites** needed to run the pipeline 
+- **Pipeline Workflow** describing the single steps of the pipeline, as well as its input and output structure
+- **Running the Pipeline** detailing concrete instructions and example code to run the pipeline and its single modules
+
+### Usage Option 1: Running the Entire Pipeline Using Nextflow
+Execute the nextflow pipeline to run the four preprocessing steps (except fMRIPrep) together. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
+
+### Usage Option 2: Running Each Process Separately Using Bash Scripts
+If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the [Running the Pipeline Option 2](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
+
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
 - [Apptainer](https://apptainer.org/) and [Singularity](https://sylabs.io/)
 - [BIDS-validator](https://github.com/bids-standard/bids-validator) (for validating BIDS datasets)
 - [dcm2bids](https://github.com/UNFmontreal/Dcm2Bids) (for converting DICOM files to BIDS format)
-- [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 - [MRIQC](https://github.com/poldracklab/mriqc) (for quality control of MRI data)
 - [fMRIPrep](https://fmriprep.org/en/stable/) (for preprocessing functional MRI data)
+- [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL) (for NIfTI file handling)
 
 **Note**: fMRIPrep requires the FreeSurfer license. You can download the FreeSurfer license [here](https://surfer.nmr.mgh.harvard.edu/registration.html).
 
@@ -62,7 +77,7 @@ However, if you need to build any of these container images (e.g., if there is a
     ```
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
     ```
-### 2. validator_1.14.13.sif
+#### 2. validator_1.14.13.sif
 - Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
 - Docker Hub: [https://hub.docker.com/r/bids/validator]
 - Version: 1.14.13
@@ -72,6 +87,7 @@ However, if you need to build any of these container images (e.g., if there is a
     ```
     singularity build validator_1.14.13.sif docker://bids/validator:1.14.13
     ```
+    
 ### 3. mriqc_24.1.0.sif
 - Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
 - Docker Hub: [https://hub.docker.com/r/nipreps/mriqc]
@@ -83,6 +99,7 @@ However, if you need to build any of these container images (e.g., if there is a
     ```
     singularity build mriqc_24.1.0.sif docker://nipreps/mriqc:24.1.0
     ```
+    
 ### 4. fmriprep_24.0.1.sif
 - Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
 - Docker Hub: [https://hub.docker.com/r/nipreps/fmriprep]
@@ -94,7 +111,7 @@ However, if you need to build any of these container images (e.g., if there is a
     ```
     singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:24.0.1
     ```
-
+    
 ### 5. pydeface_2.0.0.sif
 - Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
 - Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
@@ -189,6 +206,10 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 
 ### Step 3: MRIQC
 
+MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the quality of MRI data by calculating standardized quality metrics for structural and functional MRI scans. It helps identify data issues like artifacts or noise, enabling researchers to assess and filter out low-quality scans before analysis, thereby improving the reliability of MRI studies.
+
+**Process**:
+
 **Input**:
     BIDS-structured dataset 
     
@@ -197,6 +218,13 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 - SVG figures that generate visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
 ### Step 4: fMRIPrep
+
+fMRIPrep is a robust, automated preprocessing tool for functional magnetic resonance imaging (fMRI) data that corrects for head motion, aligns functional images to anatomical scans, and normalizes data to standard spaces, ensuring compatibility and reproducibility across studies.
+
+> 💡Before running fMRIPrep, make sure to update your dataset:
+> - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
+> - After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
+> - If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensures the dataset complies with the BIDS standard.
 
 **Input**:
     BIDS-structured dataset 
@@ -207,7 +235,7 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 - SVG figures that display multiple visualizations, including brain masks and quality control.
 
 ### Step 5: Defacing
-The third preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
+The fifth preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
 
 **Process**: `PyDeface`
 
@@ -216,6 +244,14 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
+
+## Running the Pipeline
+
+### General Instructions
+
+#### First time usage
+
+These steps need to be completed before the pipeline or its modules are used for the first time.
 
 ## Running the Pipeline
 This pipeline, includes five specific processes. You can view the full main.nf script [here in the repository](https://github.com/mahnaz007/ImagePreprocessing/blob/main/main.nf).
@@ -239,8 +275,22 @@ git clone https://github.com/repo-name.git
 cd repo-name
 ```
 
+#### Every usage
+
+This step needs to be completed every time a new session or terminal is started before the pipeline or its processes are used.
+
+##### Step 1: Set Up Proxy Identification
+
+Before running Nextflow and executing any process separately, such as Pydeface, dcm2bids, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+
+```bash
+nic
+proxy
+echo $https_proxy
+```
+
 ### Option 1: Running Full Pipeline With Nextflow
- 
+
 To preprocess the four processes at once as discussed in the [Usage](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-1-running-the-entire-pipeline-using-nextflow) section, the typical command for running the pipeline is, if you are on the main branch:
 ```bash
 nextflow run main.nf
@@ -261,7 +311,8 @@ nextflow run main.nf -profile singularity -resume
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
 ### Option 2: Running Individual Pipeline Processes with Bash Scripts 
-For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line bash scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
+
+For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line bash scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task. The example codes are bash commands and can be used directly in a terminal or used, saved and accessed as bash scripts. Make sure to adapt all paths before running the commands.
 
 ### Running Dcm2Bids 
 #### For Running 1 Participant
