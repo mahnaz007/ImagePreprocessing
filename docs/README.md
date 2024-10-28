@@ -5,7 +5,7 @@ The following sections explain how to run the pipeline as a whole or individual 
 
 ## Option 1: Running the Entire Pipeline Using Nextflow
 
-You can run all preprocessing steps (except fMRIPrep) together by executing the Nextflow pipeline. This automates the execution of the entire workflow. For more details, please refer to the [Running the Pipeline](#running-the-pipeline) section.
+You can run all preprocessing steps (except fMRIPrep) together by executing the Nextflow pipeline. This automates the execution of the entire workflow. For more details, please refer to the [Running the Pipeline](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
 
 ## Option 2: Running Each Process Separately Using Bash Scripts
 
