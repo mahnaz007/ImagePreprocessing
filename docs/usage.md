@@ -277,7 +277,7 @@ nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
 ### Option 2: Running Individual Pipeline Processes with Bash Scripts 
 
-For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line bash scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
+For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line bash scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task. The example codes are bash commands and can be used directly in a terminal or used, saved and accessed as bash scripts. Make sure to adapt all paths before running the commands.
 
 ### Running Dcm2Bids 
 #### For Running 1 Participant
