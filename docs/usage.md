@@ -4,12 +4,6 @@
 
 # Preprocessing Pipeline for Neuroimaging Data (BIDSing, BIDS-Validation, Defacing, MRIQC, and fMRIPrep)
 
-## Usage Option 1: Running the Entire Pipeline Using Nextflow
-Execute the nextflow pipeline to run the four preprocessing steps (except fMRIPrep) together. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
-
-## Usage Option 2: Running Each Process Separately Using Bash Scripts
-If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the [Running the Pipeline Option 2](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
-
 ## Introduction
 **IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of DICOM data to the BIDS format, validation of the dataset, MRIQC for quality control, defacing, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
@@ -27,6 +21,12 @@ This file covers the sections:
 - **Prerequisites** needed to run the pipeline 
 - **Pipeline Workflow** describing the single steps of the pipeline, as well as its input and output structure
 - **Running the Pipeline** detailing concrete instructions and example code to run the pipeline and its single modules
+
+### Usage Option 1: Running the Entire Pipeline Using Nextflow
+Execute the nextflow pipeline to run the four preprocessing steps (except fMRIPrep) together. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
+
+### Usage Option 2: Running Each Process Separately Using Bash Scripts
+If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the [Running the Pipeline Option 2](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
@@ -185,6 +185,8 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 
 ### Step 3: MRIQC
 
+**Process**:
+
 **Input**:
     BIDS-structured dataset 
     
@@ -215,7 +217,11 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 
 ## Running the Pipeline
 
-#### General Instructions
+### General Instructions
+
+#### First time usage
+
+These steps need to be completed before the pipeline or its modules are used for the first time.
 
 ##### Step 1: Set Up Proxy Identification
 
@@ -232,6 +238,20 @@ Install [Nextflow](https://www.nextflow.io/docs/stable/install.html)
 ```
 git clone https://github.com/repo-name.git
 cd repo-name
+```
+
+#### Every usage
+
+This step needs to be completed every time a new session or terminal is started before the pipeline or its processes are used.
+
+##### Step 1: Set Up Proxy Identification
+
+Before running Nextflow and executing any process separately, such as Pydeface, dcm2bids, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+
+```bash
+nic
+proxy
+echo $https_proxy
 ```
 
 ### Option 1: Running Full Pipeline With Nextflow
