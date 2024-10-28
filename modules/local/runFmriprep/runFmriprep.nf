@@ -1,5 +1,4 @@
 process runFmriprep {
-     time = '12h' //set time unlimited to process
     input:
     val participantID
 
