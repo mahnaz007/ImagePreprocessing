@@ -229,7 +229,7 @@ cd repo-name
 ```
 
 ### Option 1: Running Full Pipeline With Nextflow
- 
+:label: running-the-pipeline-option1
 To preprocess the four processes at once as discussed in the [Usage](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-1-running-the-entire-pipeline-using-nextflow) section, the typical command for running the pipeline is, if you are on the main branch:
 ```bash
 nextflow run main.nf
@@ -250,6 +250,7 @@ nextflow run main.nf -profile singularity -resume
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
 ### Option 2: Running Individual Pipeline Processes with Bash Scripts 
+:label: running-the-pipeline-option2
 For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line bash scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task.
 
 ### Running Dcm2Bids 
