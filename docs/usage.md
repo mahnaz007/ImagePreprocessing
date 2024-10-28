@@ -136,7 +136,7 @@ If the same subject has multiple sessions (e.g., different MRI scans at differen
 
 ### Example of BIDS-compliant Output Structure:
 
-The pipeline processes different imaging modalities, such as anatomical, functional, and diffusion properties of the brain:
+This pipeline creates a BIDS-compliant output, organized by four main imaging modalities: anatomical, functional, field maps, and diffusion.
 - anat (T1w, T2w): Anatomical modality provides High-resolution anatomical images. T1w captures gray/white matter boundaries, T2w captures cerebrospinal fluid and lesions.
 
 - func: Functional MRI shows brain activity by detecting changes in blood oxygen levels, which is useful for mapping brain function during specific tasks and resting states
