@@ -205,6 +205,59 @@ The third preprocessing step involves defacing the anatomical NIfTI files to rem
 **Output**:
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
+**Execution**
+You can run the tool for one participant or an entiere project.
+
+To run it for one participant you will run the container from the terminal with the following command:
+```
+singularity run \
+--bind <path/to/input/dir>:/input \
+--bind <path/to/output/dir>:/output \
+</path/to/container/file.sif> \
+pydeface /input/path/to/.nii.gz \
+--outfile /output/file_defaced.nii.gz
+```
+Example command:
+```
+singularity run \
+--bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input \
+--bind /home/mzaz021/BIDSProject/newPydeface:/output \
+/home/mzaz021/pydeface_latest.sif \
+pydeface /input/sub-009002_ses-01_T1w.nii.gz \
+--outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
+```
+
+To run an entire project you need to use the following bash script. You need to adjust the `INPUT_BASE`, `OUTPUT_BASE`, and `CONTAINER`.
+
+```
+#!/bin/bash
+
+INPUT_BASE="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
+OUTPUT_BASE="/home/mzaz021/BIDSProject/newPydeface"
+CONTAINER="/home/mzaz021/pydeface_latest.sif"
+
+# Loop through subjects and sessions to run Pydeface
+for subject_dir in "$INPUT_BASE"/sub-*/; do
+    for session_dir in "$subject_dir"/ses-*/; do
+        anat_dir="${session_dir}anat"
+        if [[ -d "$anat_dir" ]]; then
+            for nifti_file in "$anat_dir"/*.nii.gz; do
+                output_dir="${OUTPUT_BASE}/$(basename "$subject_dir")/$(basename "$session_dir")/anat"
+                mkdir -p "$output_dir"
+                
+                # Run pydeface with Singularity
+                singularity run \
+                    --bind "$session_dir":/input \
+                    --bind "$output_dir":/output \
+                    "$CONTAINER" \
+                    pydeface "/input/anat/$(basename "$nifti_file")" \
+                    --outfile "/output/$(basename "$nifti_file" .nii.gz)_defaced.nii.gz"
+            done
+        fi
+    done
+done
+```
+
 ### Step 5: fMRIPrep
 
 **Input**:
