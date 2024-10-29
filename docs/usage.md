@@ -291,7 +291,7 @@ echo $https_proxy
 
 ### Option 1: Running Full Pipeline With Nextflow
 
-To preprocess the four processes at once as discussed in the [Usage](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-1-running-the-entire-pipeline-using-nextflow) section, the typical command for running the pipeline is, if you are on the main branch:
+To preprocess the fifth processes at once as discussed in the [Usage](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-1-running-the-entire-pipeline-using-nextflow) section, the typical command for running the pipeline is, if you are on the main branch:
 ```bash
 nextflow run main.nf
 ```
