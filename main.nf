@@ -3,9 +3,9 @@ nextflow.enable.dsl=2
 
 // Define paths and parameters
 params.inputDir = "/path/to/sourcecode"  
-params.bidsDir = "/path/to/output/bids_output"  // BIDS output 
+params.bidsDir = "/path/to/output/bids_output"  // BIDS output directory
 params.inputDirValidationLog= "/path/to/output/bids_output" // Path for BIDS validator logs; without setting this path, the validator cannot correctly detect BIDS output files.
-params.outputDir = "/path/to/output"  
+params.outputDir = "/path/to/output"  // Main output directory
 params.configFile = "/path/to/config.json"  
 params.containerPath_dcm2bids = "/path/to/dcm2bids_3.2.0.sif" 
 params.singularity_image = "/path/to/1.14.13.sif"  
