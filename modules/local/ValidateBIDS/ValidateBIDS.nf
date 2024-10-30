@@ -14,7 +14,7 @@ process ValidateBIDS {
 
     singularity run --cleanenv \
         ${params.singularity_image} \
-        ${params.bidsDir} \
+        ${params.inputDirValidationLog} \
         --verbose 2>&1 | tee ${params.bidsValidatorLogs}/validation_log.txt // Saves the output to the validation log file
 
     echo "Validation log saved at ${params.bidsValidatorLogs}/validation_log.txt" // Final message after validation completes
