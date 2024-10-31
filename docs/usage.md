@@ -147,7 +147,6 @@ If the same subject has multiple sessions (e.g., different MRI scans at differen
 **Note**: Files that do not explicitly indicate session information (e.g., IRTG01_001002_b20080101) will be considered as belonging to session 01 (ses-01). 
 
 ### Example of BIDS-compliant Output Structure:
-
 This pipeline creates a BIDS-compliant output, organized by four main imaging modalities: anatomical, functional, field maps, and diffusion.
 - anat (T1w, T2w): Anatomical modality provides High-resolution anatomical images. T1w captures gray/white matter boundaries, T2w captures cerebrospinal fluid and lesions.
 
@@ -199,7 +198,6 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 - Log indicating success or any issues found during validation
 
 ### Step 3: MRIQC
-
 MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the quality of MRI data by calculating standardized quality metrics for structural and functional MRI scans. It helps identify data issues like artifacts or noise, enabling researchers to assess and filter out low-quality scans before analysis, thereby improving the reliability of MRI studies.
 
 **Process**: `runMRIQC`
@@ -212,7 +210,6 @@ MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the 
 - SVG figures that generate visualizations such as histograms, noise maps, and segmentation plots in SVG format.
 
 ### Step 4: fMRIPrep
-
 fMRIPrep is a robust, automated preprocessing tool for functional magnetic resonance imaging (fMRI) data that corrects for head motion, aligns functional images to anatomical scans, and normalizes data to standard spaces, ensuring compatibility and reproducibility across studies.
 
 > 💡Before running fMRIPrep, make sure to update your dataset:
@@ -247,11 +244,11 @@ The five preprocessing step involves defacing the anatomical NIfTI files to remo
 This pipeline includes five specific processes. You can view the full main.nf script [here in the repository](https://github.com/mahnaz007/ImagePreprocessing/blob/main/main.nf).
 The individual processes for each step in the pipeline are modularized under the [modules/local](https://github.com/mahnaz007/ImagePreprocessing/tree/main/modules/local) directory.
 
-#### First time usage
+#### First-time usage
 These steps need to be completed before the pipeline or its modules are used for the first time.
 
 ##### Step 1: Set Up Proxy Identification
-Before running Nextflow and executing any process separately, such as Pydeface, dcm2bids, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow and executing Pydeface, fMRIPrep, and MRIQC processes separately, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
@@ -267,12 +264,10 @@ cd repo-name
 ```
 
 #### Every usage
-
 This step needs to be completed every time a new session or terminal is started before the pipeline or its processes are used.
 
 ##### Step 1: Set Up Proxy Identification
-
-Before running Nextflow and executing any process separately, such as Pydeface, dcm2bids, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow and executing Pydeface, fMRIPrep, and MRIQC processes separately, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
@@ -281,7 +276,6 @@ echo $https_proxy
 ```
 
 ### Option 1: Running Full Pipeline With Nextflow
-
 To preprocess the fifth processes at once as discussed in the [Usage](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-1-running-the-entire-pipeline-using-nextflow) section, the typical command for running the pipeline is, if you are on the main branch:
 ```bash
 nextflow run main.nf
@@ -302,7 +296,6 @@ nextflow run main.nf -profile singularity -resume
 nextflow run main.nf -profile singularity -c /path/to/custom.config
 ```
 ### Option 2: Running Individual Pipeline Processes with Bash Scripts 
-
 For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line bash scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task. The example codes are bash commands and can be used directly in a terminal or used, saved and accessed as bash scripts. Make sure to adapt all paths before running the commands.
 
 ### Running Dcm2Bids 
