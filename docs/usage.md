@@ -25,10 +25,10 @@ This file covers the sections:
 - **Running the Pipeline** detailing concrete instructions and example code to run the pipeline and its single modules
 
 ### Usage Option 1: Running the Entire Pipeline Using Nextflow
-Execute the nextflow pipeline to run the five processes together. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-1-running-full-pipeline-with-nextflow) section.
+Execute the nextflow pipeline to run the five processes together. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline)  section.
 
 ### Usage Option 2: Running Each Process Separately Using Bash Scripts
-If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the [Running the Pipeline Option 2](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-2-running-individual-pipeline-processes-with-bash-scripts) section.
+If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the [Running the Pipeline Option 2](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
 
 **Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI Preprocessing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20Preprocessing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
 
