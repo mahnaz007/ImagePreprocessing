@@ -244,18 +244,13 @@ The five preprocessing step involves defacing the anatomical NIfTI files to remo
 ## Running the Pipeline
 
 ### General Instructions
+This pipeline includes five specific processes. You can view the full main.nf script [here in the repository](https://github.com/mahnaz007/ImagePreprocessing/blob/main/main.nf).
+The individual processes for each step in the pipeline are modularized under the [modules/local](https://github.com/mahnaz007/ImagePreprocessing/tree/main/modules/local) directory.
 
 #### First time usage
-
 These steps need to be completed before the pipeline or its modules are used for the first time.
 
-## Running the Pipeline
-This pipeline, includes five specific processes. You can view the full main.nf script [here in the repository](https://github.com/mahnaz007/ImagePreprocessing/blob/main/main.nf).
-The individual processes for each step in the pipeline are modularized under the [modules/local](https://github.com/mahnaz007/ImagePreprocessing/tree/main/modules/local) directory.
-#### General Instructions
-
 ##### Step 1: Set Up Proxy Identification
-
 Before running Nextflow and executing any process separately, such as Pydeface, dcm2bids, or MRIQC, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
