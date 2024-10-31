@@ -11,8 +11,6 @@ To run the five preprocessing steps together by executing the nextflow pipeline.
 ## Option 2: Running Each Process Separately Using Bash Scripts
 If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the **Running the Pipeline** section.
 
-**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI Preprocessing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20Preprocessing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
-
 ## Introduction
 **IP18042024/imagepreprocessing** is a bioinformatics pipeline that automates the preprocessing of neuroimaging data, including conversion of DICOM data to the BIDS format, validation of the dataset, MRIQC for quality control, defacing, and fMRIPrep for functional MRI preprocessing. It is designed for users working with neuroimaging data who need an efficient and standardized way to manage preprocessing steps before applying further analysis.
 
@@ -25,7 +23,7 @@ The pipeline consists of five main steps:
 - **Defacing**: Applying defacing to NIfTI files in the anatomical data by removing facial features.
 
 
-**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI data processing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20data%20Processing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
+
 
 This file covers the sections: 
 - **Prerequisites** needed to run the pipeline 
@@ -33,10 +31,12 @@ This file covers the sections:
 - **Running the Pipeline** detailing concrete instructions and example code to run the pipeline and its single modules
 
 ### Usage Option 1: Running the Entire Pipeline Using Nextflow
-Execute the nextflow pipeline to run the four preprocessing steps (except fMRIPrep) together. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
+Execute the nextflow pipeline to run the five processes together. This approach automates the execution of the entire pipeline for selected participant. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
 
 ### Usage Option 2: Running Each Process Separately Using Bash Scripts
 If you want to run each process individually, you can use bash scripts with Apptainer or Singularity containers. This approach allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately, without the need for Nextflow automation. For more details, please refer to the [Running the Pipeline Option 2](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#running-the-pipeline) section.
+
+**Note**: For a visual understanding of how the processes in this pipeline are connected, you can refer to the [IRTG MRI Preprocessing](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/IRTG%20MRI%20Preprocessing.jpg) on GitHub. This image provides a general overview of the entire workflow, helping to clarify how the different steps interact with each other.
 
 ## Prerequisites
 Before running this pipeline, ensure you have the following installed:
