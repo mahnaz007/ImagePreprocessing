@@ -82,7 +82,7 @@ However, if you need to build any of these container images (e.g., if there is a
     singularity build validator_1.14.13.sif docker://bids/validator:1.14.13
     ```
     
-### 3. mriqc_24.1.0.sif
+#### 3. mriqc_24.1.0.sif
 - Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
 - Docker Hub: [https://hub.docker.com/r/nipreps/mriqc]
 - Version: v24.1.0.dev0+gd5b13cb5.d20240826
@@ -94,7 +94,7 @@ However, if you need to build any of these container images (e.g., if there is a
     singularity build mriqc_24.1.0.sif docker://nipreps/mriqc:24.1.0
     ```
     
-### 4. fmriprep_24.0.1.sif
+#### 4. fmriprep_24.0.1.sif
 - Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
 - Docker Hub: [https://hub.docker.com/r/nipreps/fmriprep]
 - Version: v24.0.1
@@ -106,7 +106,7 @@ However, if you need to build any of these container images (e.g., if there is a
     singularity build fmriprep_24.0.1.sif docker://nipreps/fmriprep:24.0.1
     ```
     
-### 5. pydeface_2.0.0.sif
+#### 5. pydeface_2.0.0.sif
 - Source Code: PyDeface GitHub Repository [https://github.com/poldracklab/pydeface]
 - Docker Hub: [https://hub.docker.com/r/poldracklab/pydeface]
 - Version: 2.0.0 
@@ -202,7 +202,7 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 
 MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the quality of MRI data by calculating standardized quality metrics for structural and functional MRI scans. It helps identify data issues like artifacts or noise, enabling researchers to assess and filter out low-quality scans before analysis, thereby improving the reliability of MRI studies.
 
-**Process**:
+**Process**: `runMRIQC`
 
 **Input**:
     BIDS-structured dataset 
@@ -220,6 +220,8 @@ fMRIPrep is a robust, automated preprocessing tool for functional magnetic reson
 > - After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
 > - If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensures the dataset complies with the BIDS standard.
 
+**Process**: `runFmriprep`
+
 **Input**:
     BIDS-structured dataset 
     
@@ -229,7 +231,7 @@ fMRIPrep is a robust, automated preprocessing tool for functional magnetic reson
 - SVG figures that display multiple visualizations, including brain masks and quality control.
 
 ### Step 5: Defacing
-The fifth preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
+The five preprocessing step involves defacing the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
 
 **Process**: `PyDeface`
 
