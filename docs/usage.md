@@ -324,7 +324,7 @@ for folder in "$sourceDir"/*/; do
         session_label="ses-$(printf '%02d' "$ses")"
 
         # Only process if subject matches the filter
-        if [ "$subject" == "$subjectFilter" ]; then
+        if [ "$subject" == "$xxxxxx" ]; then
             echo "Processing participant: sub-${subject}, session: $session_label"
 
             # Call dcm2bids using Apptainer
