@@ -248,7 +248,7 @@ The individual processes for each step in the pipeline are modularized under the
 These steps need to be completed before the pipeline or its modules are used for the first time.
 
 ##### Step 1: Set Up Proxy Identification
-Before running Nextflow and executing Pydeface, fMRIPrep, and MRIQC processes separately, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow and executing Pydeface and MRIQC processes separately, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
@@ -267,7 +267,7 @@ cd repo-name
 This step needs to be completed every time a new session or terminal is started before the pipeline or its processes are used.
 
 ##### Step 1: Set Up Proxy Identification
-Before running Nextflow and executing Pydeface, fMRIPrep, and MRIQC processes separately, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
+Before running Nextflow and executing Pydeface and MRIQC processes separately, ensure that you have set the proxy variables that allow Singularity and Git to access the internet through your proxy. Typically, the required commands look like this:
 
 ```bash
 nic
