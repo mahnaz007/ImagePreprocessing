@@ -42,7 +42,7 @@ workflow {
 
             if (match) {
                 def participantID = match[0][1]
-                def session_id = match[0][2] ? match[0][2].replace('_S', 'ses-') : "ses-01"
+                def session_id = match[0][2] ? "ses-" + match[0][2].replace('_S', '').padLeft(2, '0') : "ses-01" //Eensures it has two digits and adds a leading zero if necessary.
 
                 if (params.participantList.contains(participantID)) {
                     println "Processing participant: $participantID, session: $session_id"
