@@ -41,8 +41,8 @@ workflow {
             def match = (folderName =~ /IRTG\d+_(\d+)(_S\d+)?_b\d+/) // Extract participant and session info
 
             if (match) {
-                def participantID = match[0][1]
-                def session_id = match[0][2] ? "ses-" + match[0][2].replace('_S', '').padLeft(2, '0') : "ses-01" //Eensures it has two digits and adds a leading zero if necessary.
+                def participantID = match[0][1] // Extract the participant ID from the folder name 
+                def session_id = match[0][2] ? "ses-" + match[0][2].replace('_S', '').padLeft(2, '0') : "ses-01" // Format session ID, remove '_S' and add leading zero if necessary; otherwise, default to "ses-01"
 
                 if (params.participantList.contains(participantID)) {
                     println "Processing participant: $participantID, session: $session_id"
