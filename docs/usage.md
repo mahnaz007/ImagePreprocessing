@@ -304,7 +304,7 @@ For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQ
 #!/bin/bash
 
 # Define the base directories
-sourceDir="/home/to/sourceDir"
+sourceDir="/home/to/input"
 configFile="/home/to/config.json"
 outputDir="/home/to/output"
 container="/home/to/dcm2bids_3.2.0.sif"
@@ -347,7 +347,7 @@ done
 #!/bin/bash
 # Define the base directory
 
-sourceDir="/home/to/sourceDir"
+sourceDir="/home/to/input"
 configFile="/home/to/config.json"
 outputDir="/home/to/output"
 container="/home/to/dcm2bids_3.2.0.sif"
