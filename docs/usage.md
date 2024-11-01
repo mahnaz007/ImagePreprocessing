@@ -304,7 +304,6 @@ For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQ
 #!/bin/bash
 
 # Define the base directories
-bidsdir="/home/to/BIDSDir"
 sourceDir="/home/to/sourceDir"
 configFile="/home/to/config.json"
 outputDir="/home/to/output"
@@ -342,24 +341,26 @@ for folder in "$sourceDir"/*/; do
         echo "$folder not found."
     fi
 done
-
 ```
 #### For Running the Entire Project
 ```
 #!/bin/bash
 # Define the base directory
-bidsdir="/path/to/output"
-sourceDir="/path/to/input/IRTG01"
 
-# Loop through all subdirectories in the source directory
+sourceDir="/home/to/sourceDir"
+configFile="/home/to/config.json"
+outputDir="/home/to/output"
+container="/home/to/dcm2bids_3.2.0.sif"
+
+# Loop over all subdirectories in the source directory
 for folder in "$sourceDir"/*/; do
     if [ -d "$folder" ]; then
         # Extract subject and session from the folder name
         subject=$(basename "$folder" | cut -d '_' -f 2)
         sesStr=$(basename "$folder" | cut -d '_' -f 3)
         ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
-
-        # Set session to 01 if not specified
+        
+        # Default session to 01 if empty
         [ -z "$ses" ] && ses="01"
         session_label="ses-$(printf '%02d' "$ses")"
         echo "Processing participant: sub-${subject}, session: $session_label"
@@ -368,9 +369,9 @@ for folder in "$sourceDir"/*/; do
         apptainer run \
             -e --containall \
             -B "$folder:/dicoms:ro" \
-            -B /path/to/input/config.json:/config.json:ro \
-            -B /path/to/output/dcm2bids:/bids \
-            "$IRTG/sif/dcm2bids_3.2.0.sif" --auto_extract_entities \
+            -B "$configFile:/config.json:ro" \
+            -B "$outputDir:/bids" \
+            "$container" \
             -d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
     else
         echo "$folder not found."
