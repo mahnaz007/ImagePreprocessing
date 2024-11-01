@@ -303,25 +303,46 @@ For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQ
 ```
 #!/bin/bash
 
-# Define variables for paths to make the script easier to manage
-DICOM_DIR="/path/to/input/dicom/directory/IRTGxx"
-CONFIG_FILE="/path/to/config/file/config.json"
-OUTPUT_DIR="/path/to/output/directory"
-SIF_FILE="$IRTG/sif/dcm2bids_3.2.0.sif"  
-PARTICIPANT_LABEL="xxxxxx"  # Update as needed 
-SESSION_LABEL="xx"  # Update as needed 
+# Define the base directories
+bidsdir="/home/to/BIDSDir"
+sourceDir="/home/to/sourceDir"
+configFile="/home/to/config.json"
+outputDir="/home/to/output"
+container="/home/to/dcm2bids_3.2.0.sif"
+subjectFilter="xxxxxx"  # Default subject filter like "002002"
 
-# Apptainer (or Singularity) command to run the dcm2bids process
-apptainer run -e --containall \
-  -B "$DICOM_DIR:/dicoms:ro" \
-  -B "$CONFIG_FILE:/config.json:ro" \
-  -B "$OUTPUT_DIR:/bids" \
-  "$SIF_FILE" \
-  -o /bids \
-  -d /dicoms \
-  -c /config.json \
-  -p "$PARTICIPANT_LABEL" \
-  -s "$SESSION_LABEL"
+# Loop over all subdirectories in the source directory
+for folder in "$sourceDir"/*/; do
+    if [ -d "$folder" ]; then
+        # Extract subject and session from the folder name
+        subject=$(basename "$folder" | cut -d '_' -f 2)
+        sesStr=$(basename "$folder" | cut -d '_' -f 3)
+        ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
+
+        # Default session to 01 if empty
+        [ -z "$ses" ] && ses="01"
+        session_label="ses-$(printf '%02d' "$ses")"
+
+        # Only process if subject matches the filter
+        if [ "$subject" == "$subjectFilter" ]; then
+            echo "Processing participant: sub-${subject}, session: $session_label"
+
+            # Call dcm2bids using Apptainer
+            apptainer run \
+                -e --containall \
+                -B "$folder:/dicoms:ro" \
+                -B "$configFile:/config.json:ro" \
+                -B "$outputDir:/bids" \
+                "$container" \
+                -d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
+        else
+            echo "Skipping participant: sub-${subject}"
+        fi
+    else
+        echo "$folder not found."
+    fi
+done
+
 ```
 #### For Running the Entire Project
 ```
