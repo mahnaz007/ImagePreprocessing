@@ -1,7 +1,6 @@
 process runFmriprep {
     time '48h'       // Set the maximum run time to 48 hours
-    cpus 8           // Number of CPUs 
-    memory '32 GB'   // Amount of memory 
+
     input:
     val participantID
 
