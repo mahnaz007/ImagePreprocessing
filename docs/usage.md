@@ -302,38 +302,38 @@ For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQ
 #### For Running 1 Participant
 ```
 #!/bin/bash
-
-# Define the base directories
-sourceDir="/home/to/input"
-configFile="/home/to/config.json"
-outputDir="/home/to/output"
-container="/home/to/dcm2bids_3.2.0.sif"
-subjectFilter="xxxxxx"  # Default subject filter like "002002"
+# Define the base directory, IRTG number, and specific participant
+irtg="IRTGxx"  # set the IRTG project (e.g., IRTG02)
+participant="xxxxxx"  # set the participant number you want to run (e.g., 002002)
+sourceDir="/home/to/input/${irtg}"
+outputDir= "/home/to/output" 
 
 # Loop over all subdirectories in the source directory
-for folder in "$sourceDir"/*/; do
+for folder in "$sourceDir"/*; do
     if [ -d "$folder" ]; then
         # Extract subject and session from the folder name
         subject=$(basename "$folder" | cut -d '_' -f 2)
-        sesStr=$(basename "$folder" | cut -d '_' -f 3)
-        ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
+        
+        # Check if the folder is for the specified participant
+        if [ "$subject" == "$participant" ]; then
+            sesStr=$(basename "$folder" | cut -d '_' -f 3)
+            ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
 
-        # Default session to 01 if empty
-        [ -z "$ses" ] && ses="01"
-        session_label="ses-$(printf '%02d' "$ses")"
+            # Default session to 01 if empty
+            [ -z "$ses" ] && ses="01"
+            session_label="ses-$(printf '%02d' "$ses")"
 
-        # Only process if subject matches the filter
-        if [ "$subject" == "$xxxxxx" ]; then
             echo "Processing participant: sub-${subject}, session: $session_label"
 
-            # Call dcm2bids using Apptainer
+            # Call dcm2bids using Apptainer, without BIDS validation
+            # The --force_dcm2bids option overwrites existing  temporary files 
             apptainer run \
                 -e --containall \
                 -B "$folder:/dicoms:ro" \
-                -B "$configFile:/config.json:ro" \
+                -B /home/to/config.json:/config.json:ro \
                 -B "$outputDir:/bids" \
-                "$container" \
-                -d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
+                /home/to/dcm2bids_3.2.0.sif \
+                -d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids --force_dcm2bids
         else
             echo "Skipping participant: sub-${subject}"
         fi
