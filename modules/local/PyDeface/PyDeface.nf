@@ -1,9 +1,6 @@
 process PyDeface {
-    // Tag to identify process by the input file name
-    tag { niiFile.name }
-    
-    // Copy results to the defaced output directory
-    publishDir "${params.defacedOutputDir}", mode: 'copy'
+    tag { niiFile.name } // Tags for easy identification of input/output files.
+    publishDir "${params.defacedOutputDir}", mode: 'copy' // Saves defaced files to a directory.
 
     input:
     path niiFile
@@ -11,17 +8,11 @@ process PyDeface {
     output:
     path "defaced_${niiFile.simpleName}.nii.gz", emit: defaced_nii
 
-    shell:
-    '''
-    # Set input and output filenames
-    input_file="!{niiFile.getName()}"   // Original file name
-    output_file="defaced_!{niiFile.simpleName}.nii.gz"  
-    input_dir="$(dirname '!{niiFile}')"  // Directory of the input file
-    singularity_img="!{params.containerPath_pydeface}"  
-
-    # Run PyDeface within the Singularity container
-    apptainer run --bind "${input_dir}:/input" \\  
-    "${singularity_img}" \\  // Specify the container image to use
-    pydeface /input/"${input_file}" --outfile "${output_file}"  // Run PyDeface on input file and save to output file
-    '''
+    // Uses the pydeface container to remove facial features from anatomical images.
+    script:
+    """
+    singularity run --bind ${niiFile.parent}:/input \
+        ${params.containerPath_pydeface} \
+        pydeface /input/${niiFile.name} --outfile /input/defaced_${niiFile.simpleName}.nii.gz
+    """
 }
