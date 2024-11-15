@@ -384,7 +384,7 @@
             }
         },
         {
-            "datatype": "func",
+            "datatype": "fmap",
             "suffix": "bold",
             "custom_entities": "task-all_dir-PA",
             "criteria": {
@@ -435,7 +435,7 @@
             }
         },
         {
-            "datatype": "func",
+            "datatype": "fmap",
             "suffix": "bold",
             "custom_entities": "task-rest_dir-PA",
             "criteria": {
@@ -459,7 +459,7 @@
             }
         },
         {
-            "datatype": "func",
+            "datatype": "fmap",
             "suffix": "bold",
             "custom_entities": "task-MIST_dir-PA",
             "criteria": {
