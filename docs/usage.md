@@ -114,7 +114,7 @@ However, if you need to build any of these container images (e.g., if there is a
 - Using a community-maintained image
 - Steps to Build (using a community Docker image):
     ```
-    singularity build pydeface_2.0.0.sif docker://neuroinformatics/pydeface:2.0.0 
+    singularity build pydeface_2.0.0.sif docker://poldracklab/pydeface:2.0.0 
     ```
 ## Pipeline Workflow
 
