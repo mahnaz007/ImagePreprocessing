@@ -83,10 +83,10 @@ However, if you need to build any of these container images (e.g., if there is a
     singularity build validator_1.14.13.sif docker://bids/validator:1.14.13
     ```
     
-#### 3. mriqc_24.1.0.sif
+#### 3. mriqc_24.0.2.sif
 - Source Code: MRIQC GitHub Repository [https://github.com/nipreps/mriqc]
 - Docker Hub: [https://hub.docker.com/r/nipreps/mriqc]
-- Version: v24.1.0.dev0+gd5b13cb5.d20240826
+- Version: 24.0.2
 - Latest Version: Check the GitHub releases for the most recent version.
 - Singularity Recipe:
 - MRIQC provides Docker images that can be converted into Singularity images.
@@ -98,7 +98,7 @@ However, if you need to build any of these container images (e.g., if there is a
 #### 4. fmriprep_24.0.1.sif
 - Source Code: fMRIPrep GitHub Repository [https://github.com/nipreps/fmriprep]
 - Docker Hub: [https://hub.docker.com/r/nipreps/fmriprep]
-- Version: v24.0.1
+- Version: 24.0.1
 - Latest Version: Refer to the GitHub repository for updates.
 - Singularity Recipe:
 - fMRIPrep offers Docker images which is suitable for conversion.
