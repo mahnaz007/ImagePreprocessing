@@ -26,7 +26,6 @@ include { ConvertDicomToBIDS } from './modules/local/ConvertDicomToBIDS.nf'
 include { ValidateBIDS } from './modules/local/ValidateBIDS.nf'
 include { PyDeface } from './modules/local/PyDeface.nf'
 include { CopyDatasetDescription } from './modules/local/CopyDatasetDescription.nf'
-include { CopyDatasetDescriptionRoot } from './modules/local/CopyDatasetDescriptionRoot.nf'
 include { runMRIQC } from './modules/local/runMRIQC.nf'
 include { runFmriprep } from './modules/local/runFmriprep.nf'
 
