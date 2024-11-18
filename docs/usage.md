@@ -48,7 +48,7 @@ Make sure these tools are accessible in your environment, with the paths to the 
 Additionally, ensure the following Singularity .sif container files are correctly installed and accessible in your environment:
 
     dcm2bids 3.2.0 – Required for DICOM to BIDS conversion.
-    MRIQC v24.1.0.dev0+gd5b13cb5.d20240826 – Required for running MRIQC for quality control.
+    MRIQC v24.0.2 – Required for running MRIQC for quality control.
     fMRIPrep v24.0.1 – Required for fMRI preprocessing.
     pydeface 2.0.0 – Used for defacing anatomical data.
     bids-validator 1.14.13 – Used for validating BIDS datasets.
@@ -91,7 +91,7 @@ However, if you need to build any of these container images (e.g., if there is a
 - MRIQC provides Docker images that can be converted into Singularity images.
 - Steps to Build:
     ```
-    singularity build mriqc_24.1.0.sif docker://nipreps/mriqc:24.1.0
+    singularity build mriqc_24.0.2.sif docker://nipreps/mriqc:24.0.2
     ```
     
 #### 4. fmriprep_24.0.1.sif
