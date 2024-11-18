@@ -66,19 +66,14 @@ workflow {
     anatFiles = niiFiles.filter { it.toString().contains("/anat/") && "fslval ${it} dim4".execute().text.trim() == "1" } // Filter anatomical files
     defacedFiles = anatFiles | PyDeface // Run PyDeface on anatomical files
 
-    // Step 5: Copy dataset_description.json to BIDS root and bids_output subdirectory
-    bidsDirChannel = bidsFiles.map { file(params.bidsDir) } // Map BIDS directory channel
-    descriptionChannel = Channel.of(file(params.datasetDescription)) // Create a channel for dataset description
+    // Step 5: Copy dataset_description.json to both BIDS root and bids_output subdirectory
+    bidsDirChannel = bidsFiles.map { file(params.bidsDir) }
+    descriptionChannel = Channel.of(file(params.datasetDescription))
 
-    // Copy to bids_output directory
+    // Combine channels and copy dataset_description.json
     bidsDirChannel
         .combine(descriptionChannel)
         | CopyDatasetDescription
-
-    // Copy to BIDS root directory
-    bidsDirChannel
-        .combine(descriptionChannel)
-        | CopyDatasetDescriptionRoot
 
     // Step 6: Run MRIQC
     // Extract participant IDs and ensure MRIQC runs only once per participant
