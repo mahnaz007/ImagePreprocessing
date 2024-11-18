@@ -69,7 +69,8 @@ However, if you need to build any of these container images (e.g., if there is a
 - Create a Singularity image using the Docker image available on Docker Hub.
 - Steps to Build:
     ```
-    singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
+export VERSION=3.2.0
+apptainer pull dcm2bids.sif docker://unfmontreal/dcm2bids:${VERSION}
     ```
 #### 2. validator_1.14.13.sif
 - Source Code: BIDS Validator GitHub Repository[https://github.com/bids-standard/bids-validator]
