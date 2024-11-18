@@ -6,7 +6,7 @@ process CopyDatasetDescription {
     tuple path(bidsDir), path(datasetDescription)
 
     output:
-    path "${bidsDir}/bids_output/dataset_description.json" //
+    path "${bidsDir}/bids_output/dataset_description.json" 
     path "${bidsDir}/dataset_description.json"
 
     script:
