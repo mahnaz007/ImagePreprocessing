@@ -27,7 +27,7 @@ You can run each of the five processes (BIDSing, BIDS-Validation, Defacing, MRIQ
 
 
 **Option 2: Nextflow pipeline** \
-[]()
+
 
 By running the nextflow pipeline you can perfomre the first four preprocessing steps (BIDSing, BIDS-Validation, Defacing, MRIQC) automatically on your dataset. Since fMRIPrep is currently not included into the pipeline you would need to use the provided bash script to run it manually on your data.
 
