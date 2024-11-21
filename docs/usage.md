@@ -45,7 +45,7 @@ By running the nextflow pipeline you can perfomre the first four preprocessing s
 This tool converts raw neuroimaging data - DICOM files - into the standardized BIDS format using the `dcm2bids` tool.
 This ensures that the dataset is structured in a way that is widely accepted and compatible with various neuroimaging analysis tools.
 
-**Process**: DCM2BIDS
+**Process**: `DCM2BIDS`
 
 **Input**:
 - DICOM files (e.g.,  01_AAHead_Scout_r1, 05_gre_field_mapping_MIST, etc.) - data from an MRI scan.
@@ -107,38 +107,66 @@ output/
 **Execution**
 
 You can run the tool for one participant or an entiere project.
-To run it for one participant you will run the container from the terminal with the following command:
+To run it for one participant you will run the container from the terminal with the following bash script:
 
 `TODO: review`
 ```
 appteiner run \
--e --containall \
--B <path/to/dicom/files> \
--B <path/to/confi.json> \
--B <path/to/BIDSProject> \
-<path/to/container/file> \
---auto_extract_entities \
--o <output/path> \
--d <dicoms/path> \
--c <confi.json> \
--p <?> \
--s <session_number>
+    -e --containall \
+    -B <path/to/dicom/files> \
+    -B <path/to/confi.json> \
+    -B <path/to/BIDSProject> \
+    <path/to/container/file> \
+    --auto_extract_entities \
+    -o <output/path> \
+    -d <dicoms/path> \
+    -c <confi.json> \
+    -p <?> \
+    -s <session_number>
 ```
 
 Example command:
 ```
-apptainer run \
--e --containall \
--B /home/mzaz021/BIDSProject/sourcecode/IRTG01/IRTG01_001001_S1_b20060101/:/dicoms:ro \
--B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro \
--B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids \
-/home/mzaz021/dcm2bids_3.2.0.sif \
---auto_extract_entities \
--o /bids \
--d /dicoms \
--c /config.json \
--p 001001 \
--s 01
+#!/bin/bash
+# Define the base directory, IRTG number, and specific participant
+irtg="IRTGxx"  # set the IRTG project (e.g., IRTG02)
+participant="xxxxxx"  # set the participant number you want to run (e.g., 002002)
+sourceDir="/home/to/input/${irtg}"
+outputDir= "/home/to/output" 
+
+# Loop over all subdirectories in the source directory
+for folder in "$sourceDir"/*; do
+    if [ -d "$folder" ]; then
+        # Extract subject and session from the folder name
+        subject=$(basename "$folder" | cut -d '_' -f 2)
+        
+        # Check if the folder is for the specified participant
+        if [ "$subject" == "$participant" ]; then
+            sesStr=$(basename "$folder" | cut -d '_' -f 3)
+            ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
+
+            # Default session to 01 if empty
+            [ -z "$ses" ] && ses="01"
+            session_label="ses-$(printf '%02d' "$ses")"
+
+            echo "Processing participant: sub-${subject}, session: $session_label"
+
+            # Call dcm2bids using Apptainer, without BIDS validation
+            # The --force_dcm2bids option overwrites existing  temporary files 
+            apptainer run \
+                -e --containall \
+                -B "$folder:/dicoms:ro" \
+                -B /home/to/config.json:/config.json:ro \
+                -B "$outputDir:/bids" \
+                /home/to/dcm2bids_3.2.0.sif \
+                -d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids --force_dcm2bids
+        else
+            echo "Skipping participant: sub-${subject}"
+        fi
+    else
+        echo "$folder not found."
+    fi
+done
 
 ```
 To run an entire project you need to use the following bash script. You need to adjust the `bidsdir` and `sourceDir` as well as the parameters in the `apptainer run`command.
@@ -147,39 +175,44 @@ To run an entire project you need to use the following bash script. You need to 
 ```
 #!/bin/bash
 # Define the base directory
-bidsdir="</path/to/BIDSProject>"
-sourceDir="<path/to/sourcecode/IRTG01>"
 
-# Loop through all subdirectories in the source directory
+sourceDir="/home/to/input"
+configFile="/home/to/config.json"
+outputDir="/home/to/output"
+container="/home/to/dcm2bids_3.2.0.sif"
+
+# Loop over all subdirectories in the source directory
 for folder in "$sourceDir"/*/; do
-	if [ -d "$folder" ]; then
-    	# Extract subject and session from the folder name
-    	subject=$(basename "$folder" | cut -d '_' -f 2)
-    	sesStr=$(basename "$folder" | cut -d '_' -f 3)
-    	ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
-   	 
-    	# Set session to 01 if not specified
-    	[ -z "$ses" ] && ses="01"
-    	session_label="ses-$(printf '%02d' "$ses")"
-    	echo "Processing participant: sub-${subject}, session: $session_label"
+    if [ -d "$folder" ]; then
+        # Extract subject and session from the folder name
+        subject=$(basename "$folder" | cut -d '_' -f 2)
+        sesStr=$(basename "$folder" | cut -d '_' -f 3)
+        ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
+        
+        # Default session to 01 if empty
+        [ -z "$ses" ] && ses="01"
+        session_label="ses-$(printf '%02d' "$ses")"
+        echo "Processing participant: sub-${subject}, session: $session_label"
 
-    	# Call dcm2bids using Apptainer, without BIDS validation
-    	apptainer run \
-        	-e --containall \
-        	-B "$folder:/dicoms:ro" \
-        	-B /home/mzaz021/BIDSProject/code/configPHASEDIFF_B0identifier.json:/config.json:ro \
-        	-B /home/mzaz021/BIDSProject/dcm2bidsSin:/bids \
-        	/home/mzaz021/dcm2bids_3.2.0.sif --auto_extract_entities \
-        	-d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
-	else
-    	echo "$folder not found."
-	fi
+        # Call dcm2bids using Apptainer, without BIDS validation
+        apptainer run \
+            -e --containall \
+            -B "$folder:/dicoms:ro" \
+            -B "$configFile:/config.json:ro" \
+            -B "$outputDir:/bids" \
+            "$container" \
+            -d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
+    else
+        echo "$folder not found."
+    fi
 done
 ```
 
 
 ### 2. BIDS Validation
 This tool checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
+
+> ❗Before running BIDS validation, the tmp_dcm2bids directory should be either ignored by adding it to a .bidsignore file or removed manually to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
 
 **Process**: `ValidateBIDS`
 
@@ -195,22 +228,25 @@ You can run the tool for one participant or an entiere project.
 Before the BIDS validation can be run, the tmp_dcm2bids directory should be removed to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
 
 
-To run it for one participant you will run the container from the terminal with the following command:
+To run it for one participant you will run the container from the terminal with the following bash script:
  
  ```
-singularity run --cleanenv \
-  <path/to/container/file.sif> \
-  <path/to/output/dir> \
-  --verbose > <path/to/output/dir/validation_log.txt> 2>&1
-#Creates a log in the output directory
-```
-Example command:
-```
-singularity run --cleanenv \
-  /home/mzaz021/validator_latest.sif \
-  /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier/sub-009002/ \
-  --verbose > /home/mzaz021/BIDSProject/bidsValidatorLogs/validation_log.txt 2>&1
-#Creates a log in the output directory
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+VALIDATOR_SIF="$IRTG/sif/validator_1.14.13.sif"  
+INPUT_DIR="/path/to/input/sub-xxxxxx/"
+LOG_DIR="/path/to/output"
+LOG_FILE="validation_log.txt"
+
+# Make sure the log directory exists
+mkdir -p "$LOG_DIR"
+
+# Singularity (or Apptainer) command to run the BIDS Validator
+apptainer run --cleanenv \
+  "$VALIDATOR_SIF" \
+  "$INPUT_DIR" \
+  --verbose > "$LOG_DIR/$LOG_FILE" 2>&1
 ```
 
 
@@ -219,17 +255,17 @@ To run an entire project you need to use the following bash script. You need to 
 `TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
 ```
 #!/bin/bash
-input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier"
-output_dir="/home/mzaz021/BIDSProject/bidsValidatorLogs"
+input_dir="/path/to/input"
+output_dir="/path/to/output"
 
-# Loop through all participant folders (assuming they are named 'sub-XXXXXX')
+# Loop through all participant folders ('sub-XXXXXX')
 for participant in "$input_dir"/sub-*; do
     participant_id=$(basename "$participant")
     echo "Running BIDS validation for $participant_id..."
 
     # Run bids-validator for each participant and save the log in bidsValidatorLogs
     singularity run --cleanenv \
-        /home/mzaz021/validator_latest.sif \
+        "$IRTG/sif/validator_1.14.13.sif" \
         "$participant" \
         --verbose > "$output_dir/${participant_id}_validation_log.txt" 2>&1
 
@@ -237,9 +273,9 @@ for participant in "$input_dir"/sub-*; do
 done
 ```
 
-`TODO: add common errors and warnings`
+
 **Common Errors and Warnings**
-Note that all errors need to be resolved, while warnings do not, though they should be considered.
+> 💡 In general all errors need to be resolved, while warnings do not, though they should be considered.
 
 Common Errors:
 - code: 54 - BOLD_NOT_4D
@@ -251,6 +287,34 @@ Common Warnings:
 - code: 39 - INCONSISTENT_PARAMETERS
 - code: 97 - MISSING_SESSION
 -> Necessitates a check whether these warnings are congruent with the acquired data or if the subjects/sessions did not get converted correctly.
+
+Moreover, a .bidsignore file has been created to prevent certain files from being flagged during the BIDS validation process. This file allows you to tell the BIDS validator to ignore specific files or patterns that don't adhere to BIDS standards but are still essential for your project.
+
+**Temporary Folder and Log Files**
+
+The tmp_dcm2bids logs are one of the files that should be removed or ignored using the .bidsignore file to avoid validation errors related to non-compliant files. These logs are crucial for debugging but aren't part of the final BIDS dataset.
+Below are common errors related to the tmp log files:
+
+
+- code: 1 - NOT_INCLUDED:
+```
+./tmp_dcm2bids/log/sub-009002_ses-01_20241016-104413.log
+```
+- code: 64 - SUBJECT_LABEL_IN_FILENAME_DOESNOT_MATCH_DIRECTORY
+- code: 65 - SESSION_LABEL_IN_FILENAME_DOESNOT_MATCH_DIRECTORY
+- code: 67 - NO_VALID_DATA_FOUND_FOR_SUBJECT
+
+The contents of the .bidsignore File are as follows:
+```
+*_sbref.bval
+*_sbref.bvec
+*_ADC*
+# Ignore all log files under the tmp_dcm2bids/log/ directory
+tmp_dcm2bids/log/*
+# Ignore all files and subdirectories under the tmp_dcm2bids/ directory
+tmp_dcm2bids/**
+```
+
 
 ### 3. Defacing
 This tool performs defacing on the anatomical NIfTI files to remove participants' facial features. This step utilizes Pydeface to process the files stored in the anat folder.
@@ -264,36 +328,38 @@ This tool performs defacing on the anatomical NIfTI files to remove participants
 - Defaced NIfTI files (`defaced_*.nii.gz`)
 
 **Execution**
+
 You can run the tool for one participant or an entiere project.
 
-To run it for one participant you will run the container from the terminal with the following command:
+To run it for one participant use the following bash script:
+
 ```
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+INPUT_DIR="/path/to/input/anat" # BIDS dataset
+OUTPUT_DIR="/path/to/output"
+SIF_FILE="$IRTG/sif/pydeface_2.0.0.sif"  
+INPUT_FILE="sub-xxxxxx_ses-xx_T1w.nii.gz"
+OUTPUT_FILE="sub-xxxxxx_ses-xx_T1w_defaced.nii.gz"
+
+# Singularity command to run Pydeface
 singularity run \
---bind <path/to/input/dir>:/input \
---bind <path/to/output/dir>:/output \
-</path/to/container/file.sif> \
-pydeface /input/path/to/.nii.gz \
---outfile /output/file_defaced.nii.gz
-```
-Example command:
-```
-singularity run \
---bind /home/mzaz021/BIDSProject/preprocessingOutputDir/09/sub-009002/ses-01/anat:/input \
---bind /home/mzaz021/BIDSProject/newPydeface:/output \
-/home/mzaz021/pydeface_latest.sif \
-pydeface /input/sub-009002_ses-01_T1w.nii.gz \
---outfile /output/sub-009002_ses-01_T1w_defaced.nii.gz
+  --bind "$INPUT_DIR:/input" \
+  --bind "$OUTPUT_DIR:/output" \
+  "$SIF_FILE" \
+  pydeface /input/"$INPUT_FILE" \
+  --outfile /output/"$OUTPUT_FILE"
 ```
 
 To run an entire project you need to use the following bash script. You need to adjust the `INPUT_BASE`, `OUTPUT_BASE`, and `CONTAINER`.
 
-`TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
 ```
 #!/bin/bash
 
-INPUT_BASE="/home/mzaz021/BIDSProject/preprocessingOutputDir/09"
-OUTPUT_BASE="/home/mzaz021/BIDSProject/newPydeface"
-CONTAINER="/home/mzaz021/pydeface_latest.sif"
+INPUT_BASE="/path/to/input/anat" # BIDS dataset
+OUTPUT_BASE="/path/to/output"
+CONTAINER="$IRTG/sif/pydeface_2.0.0.sif"  
 
 # Loop through subjects and sessions to run Pydeface
 for subject_dir in "$INPUT_BASE"/sub-*/; do
@@ -329,54 +395,60 @@ done
 **Execution**
 You can run the tool for one participant or an entiere project.
 
-To run it for one participant you will run the container from the terminal with the following command:
-```
-singularity run <path/to/the/container/file.sif> /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
-	--participant-label <lable> \
-	--nprocs <number> \
-	--omp-nthreads <number> \
-	--mem_gb <number> \
-	--no-sub \
-	-vvv \
-	--verbose-reports
-```
-Example command:
-```
-singularity run /home/mzaz021/mriqc_24.0.2.sif /home/mzaz021/BIDSProject/preprocessingOutputDir/01 /home/mzaz021/BIDSProject/new_mriqcOutput participant \
-	--participant-label 001004 \
-	--nprocs 4 \
-	--omp-nthreads 4 \
-	--mem_gb 8 \
-	--no-sub \
-	-vvv \
-	--verbose-reports
-```
-To run an entire project you need to use the following bash script. You need to adjust the `input_dir`, `output_dir`, `work_dir`, and `singularity_image`.
+To run it for one participant use the following bash script:
 
-`TODO: explain to store it in a .sh file and proved the command to execute the file in the terminal ?`
 ```
 #!/bin/bash
 
-input_dir="/home/mzaz021/BIDSProject/preprocessingOutputDir/01"
-output_dir="/home/mzaz021/BIDSProject/new_mriqcOutput"
+# Define variables for paths to make the script easier to manage
+SIF_FILE="$IRTG/sif/mriqc_24.0.2.sif"  
+INPUT_DIR="/path/to/input" #BIDS dataset 
+OUTPUT_DIR="/path/to/output"
+PARTICIPANT_LABEL="xxxxxx"  # Update as needed 
+NPROCS=4
+OMP_THREADS=4
+MEM_GB=8
+
+# Singularity command to run MRIQC
+singularity run \
+  "$SIF_FILE" \
+  "$INPUT_DIR" \
+  "$OUTPUT_DIR" \
+  participant \
+  --participant-label "$PARTICIPANT_LABEL" \
+  --nprocs "$NPROCS" \
+  --omp-nthreads "$OMP_THREADS" \
+  --mem_gb "$MEM_GB" \
+  --no-sub \
+  -vvv \
+  --verbose-reports
+```
+To run an entire project you need to use the following bash script. You need to adjust the `input_dir`, `output_dir`, `work_dir`, and `singularity_image`.
+
+
+```
+#!/bin/bash
+
+input_dir="/path/to/input" #BIDS dataset
+output_dir="/path/to/output"
 # Path to your MRIQC work directory
-work_dir="/home/mzaz021/BIDSProject/work"
-singularity_image="/home/mzaz021/mriqc_24.0.2.sif"
+work_dir="/path/to/work/directory"
+singularity_image="$IRTG/sif/mriqc_24.0.2.sif"  
 
 # Loop through each participant folder starting with 'sub-'
 for participant in $(ls $input_dir | grep 'sub-'); do
-	echo "Running MRIQC on $participant"
-	singularity run --bind $work_dir:$work_dir $singularity_image \
-    	$input_dir $output_dir participant \
-    	--participant_label ${participant#sub-} \
-    	--nprocs 4 \
-    	--omp-nthreads 4 \
-    	--mem_gb 8 \
-    	--no-sub \
-    	-vvv \
-    	--verbose-reports \
-    	--work-dir $work_dir
-	echo "Finished processing $participant"
+    echo "Running MRIQC on $participant"
+    singularity run --bind $work_dir:$work_dir $singularity_image \
+        $input_dir $output_dir participant \
+        --participant_label ${participant#sub-} \
+        --nprocs 4 \
+        --omp-nthreads 4 \
+        --mem_gb 8 \
+        --no-sub \
+        -vvv \
+        --verbose-reports \
+        --work-dir $work_dir
+    echo "Finished processing $participant"
 done
 ```
 
@@ -397,29 +469,64 @@ done
 **Execution**
 You can run the tool for one participant or an entiere project.
 
-To run it for one participant you will run the container from the terminal with the following command:
+To run it for one participant use the following bash script:
 
-`TODO: adjsute the code to a general command`:
 ```
+#!/bin/bash
+
+# Define variables for paths to make the script easier to manage
+SIF_FILE="$IRTG/sif/fmriprep_24.0.1.sif"  
+INPUT_DIR="/path/to/input" #BIDS dataset
+OUTPUT_DIR="/path/to/output"
+PARTICIPANT_LABEL="xxxxxx"  # Update participant label 
+FS_LICENSE_FILE="/path/to/freesurfer/license.txt"
+OMP_THREADS=1
+RANDOM_SEED=13
+
+# Singularity command to run fMRIPrep
 singularity run --cleanenv \
-/home/mzaz021/fmriprep_latest.sif \
-/home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier \
-/home/mzaz021/BIDSProject/fmriPreprocessing/09 \  
-participant \
---participant-label <label> \
---fs-license-file <path/to/license.txt> \
---skip_bids_validation \
---omp-nthreads <number> \
---random-seed <number> \ 
---skull-strip-fixed-seed
+  "$SIF_FILE" \
+  "$INPUT_DIR" \
+  "$OUTPUT_DIR" \
+  participant \
+  --participant-label "$PARTICIPANT_LABEL" \
+  --fs-license-file "$FS_LICENSE_FILE" \
+  --skip_bids_validation \
+  --omp-nthreads "$OMP_THREADS" \
+  --random-seed "$RANDOM_SEED" \
+  --skull-strip-fixed-seed
 ```
-Example command:
+To run an entire project, use the following bash script:
 ```
-singularity run --cleanenv /home/mzaz021/fmriprep_latest.sif     /home/mzaz021/BIDSProject/preprocessingOutputDir/09B0identifier     /home/mzaz021/BIDSProject/fmriPreprocessing/09     participant     --participant-label 009004     --fs-license-file /home/mzaz021/freesurfer/license.txt     --skip_bids_validation     --omp-nthreads 1     --random-seed 13     --skull-strip-fixed-seed
+#!/bin/bash
+
+# Define paths
+INPUT_DIR="/path/to/BIDS/input_dir"  # BIDS dataset
+OUTPUT_DIR="/path/to/output_dir" 
+WORK_DIR="/path/to/host_workdir"  # Host work directory 
+SINGULARITY_IMG="/path/to/fmriprep_24.0.1.sif"  
+FS_LICENSE="/path/to/freesurfer/license.txt" 
+
+# Get the list of subjects 
+subjects=$(ls ${INPUT_DIR} | grep '^sub-')
+
+# Run fmriprep in parallel for each subject
+echo ${subjects} | tr ' ' '\n' | parallel -j 2 \ # Run with a maximum of 2 parallel for each subject  
+  singularity run --cleanenv \
+  --bind ${WORK_DIR}:/work \
+  ${SINGULARITY_IMG} \
+  ${INPUT_DIR} \
+  ${OUTPUT_DIR} \
+  participant \
+  --participant-label {=s/^sub-//=} \
+  --fs-license-file ${FS_LICENSE} \
+  --skip_bids_validation \
+  --omp-nthreads 1 \
+  --random-seed 13 \
+  --skull-strip-fixed-seed
 ```
-
-
-
+<br/><br/>
+<br/><br/>
 
 
 ## Nextflow pipeline
