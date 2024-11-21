@@ -37,7 +37,16 @@ Additionally, ensure the following Singularity .sif container files are correctl
     fmriprep_latest.sif – Required for fMRI preprocessing.
     pydeface_latest.sif – Used for defacing anatomical data.
     bids_validator_latest.sif – Used for validating BIDS datasets.
-    
+
+**Note**: In this project, all Singularity Image Format (SIF) files, required for running different processes are stored in a specific directory. This ensures everyone can easily access the necessary files.
+Location of these files is in the following path:
+  ```
+/nic/sw/IRTG
+  ```
+
+#### Building container images for neuroimaging tool
+> 💡If you need to build any of these container images (e.g., if there is an update), you can follow these steps to build them using Singularity or Apptainer.
+
 **dcm2bids_3.2.0.sif**
 
     Source Code: Dcm2Bids GitHub Repository[https://github.com/UNFmontreal/Dcm2Bids]
@@ -45,7 +54,9 @@ Additionally, ensure the following Singularity .sif container files are correctl
     Singularity Recipe: 
     Create a Singularity image using the Docker image available on Docker Hub.
     Steps to Build:  
+    ```
     singularity build dcm2bids_3.2.0.sif docker://cbedetti/dcm2bids:3.2.0
+    ```
 
 **bids_validator_latest.sif**
 
