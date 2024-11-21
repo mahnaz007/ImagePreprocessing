@@ -1,17 +1,4 @@
-# imagepreprocessing: Documentation
-
-This README explains the preprocessing of neuroimaging data, including DICOM to BIDS conversion, BIDS validation, MRIQC, defacing. 
-The following sections explain the options for running the pipeline and where to find information on how to run it as a whole or individual processes.
-
-## Option 1: Running the Entire Pipeline Using Nextflow
-
-You can run all preprocessing steps together by executing the Nextflow pipeline. This automates the execution of the entire workflow. For more details, please refer to the [Running the Pipeline Option 1](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-1:-running-full-pipeline-with-nextflow) section.
-
-## Option 2: Running Each Process Separately Using Bash Scripts
-
-If you prefer to run each process individually, you can use Bash scripts with Apptainer or Singularity containers. This allows you to manage the execution of each pipeline step (e.g., dcm2Bids, Pydeface, MRIQC) separately. For more details, refer to the [Running the Pipeline Option 2](https://github.com/mahnaz007/ImagePreprocessing/blob/main/docs/usage.md#option-2:-running-individual-pipeline-processes-with-bash-scripts) section.
-
-Please ensure that the correct configuration is used for each process. Refer to the specific usage guidelines in the [usage.md](usage.md) document for process-specific details. All input and output paths in the example commands need to be adapted.
+# Imagepreprocessing: Documentation
 
 The imagepreprocessing documentation is split into the following pages:
 - [Usage](usage.md)
