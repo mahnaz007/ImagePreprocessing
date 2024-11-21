@@ -1,7 +1,0 @@
-INFO    | --- dcm2bids start ---
-INFO    | Running the following command: /opt/conda/bin/dcm2bids -d 01_localizer_20_Kanal -p 01 -c /Users/mahi021/Psychatry-department-data/Rawdata_MRscanner/aOC01/T0/dcm2bids_config.json -o bids_output
-INFO    | OS version: Linux-6.1.75-060175-generic-x86_64-with-glibc2.35
-INFO    | Python version: 3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 20:50:58) [GCC 12.3.0]
-INFO    | dcm2bids version: 3.1.1
-ERROR   | dcm2niix is not in your PATH or not installed.
-ERROR   | https://github.com/rordenlab/dcm2niix to troubleshoot.
