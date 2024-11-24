@@ -1,0 +1,2 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	12/1c84cd	2228355	ConvertDicomToBIDS (Participant: 001011, Session: ses-01)	ABORTED	-	2024-11-23 22:57:35.486	-	-	-	-	-	-	-

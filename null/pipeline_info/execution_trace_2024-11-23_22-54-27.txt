@@ -1,0 +1,8 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	c9/1552c8	2219205	ConvertDicomToBIDS (Participant: 001011, Session: ses-01)	COMPLETED	0	2024-11-23 22:54:31.554	2m 16s	2m 16s	51.0%	1.2 GB	5.3 GB	3.8 GB	1.6 GB
+2	b9/4d3c1b	2224456	CopyDatasetDescription (Copy dataset_description.json)	COMPLETED	0	2024-11-23 22:56:47.708	92ms	29ms	50.8%	3.6 MB	223.3 MB	99.8 KB	206 B
+6	41/a14335	2224657	PyDeface (sub-001011_ses-01_T2w.nii.gz)	FAILED	1	2024-11-23 22:56:47.781	1.8s	1.7s	-	-	-	-	-
+5	64/39a0b9	2224686	PyDeface (sub-001011_ses-01_T1w.nii.gz)	FAILED	1	2024-11-23 22:56:47.787	1.8s	1.8s	-	-	-	-	-
+4	e3/b5a882	2224573	runMRIQC (Participant: 001011)	FAILED	1	2024-11-23 22:56:47.745	1.9s	1.9s	-	-	-	-	-
+7	83/a7459e	2224819	ValidateBIDS	FAILED	1	2024-11-23 22:56:47.815	2.4s	2.3s	-	-	-	-	-
+3	d2/b06700	2224624	runFmriprep (Participant: 001011)	ABORTED	-	2024-11-23 22:56:47.757	-	-	-	-	-	-	-

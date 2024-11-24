@@ -1,0 +1,8 @@
+2024-11-23 13:18:50	-	cranky_bartik	-	83319439688c8340409416f592bd0bba	7f41f0b0-8b63-4d33-bf6a-7af4a7c37172	nextflow run main.nf
+2024-11-23 15:58:07	12m 25s	clever_archimedes	ERR	89f82fe314da40d8623f407395ee4ce6	fdce81b4-5e7c-400f-819c-e2a6534a0c86	nextflow run main.nf
+2024-11-23 17:02:14	-	adoring_marconi	-	f1dfa3be87eec08f3b6346e13b1a0867	b7c520d1-fcf1-4d52-b82a-96d586397ead	nextflow run main.nf
+2024-11-23 18:04:45	-	loving_joliot	-	4f03df1d7d270221a808dd81d8da36d3	5822a85a-5a47-412c-a05c-1ade6b82ae01	nextflow run main.nf
+2024-11-23 19:46:43	-	jovial_brattain	-	f1dfa3be87eec08f3b6346e13b1a0867	4d18ee3e-26ac-46aa-aa51-f8e541dbe1da	nextflow run main.nf
+2024-11-23 22:54:29	-	hopeful_bhabha	-	4f03df1d7d270221a808dd81d8da36d3	2d81cb6c-4bae-4ca3-a078-ab691958311e	nextflow run main.nf
+2024-11-23 22:57:34	-	tender_legentil	-	4f03df1d7d270221a808dd81d8da36d3	34b6e8cc-58fb-4b7e-9b61-5e37a667ed99	nextflow run main.nf
+2024-11-23 22:58:04	5h 6m 34s	voluminous_bhabha	OK	4f03df1d7d270221a808dd81d8da36d3	83a63467-f154-4cea-bb48-db90341bd0d6	nextflow run main.nf
