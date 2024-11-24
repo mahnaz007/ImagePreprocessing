@@ -18,7 +18,7 @@ params.defacedOutputDir = "${params.outputDir}/defaced"
 params.mriqcOutputDir = "${params.outputDir}/mriQC"
 params.fmriprepOutputDir = "${params.outputDir}/fmriprep"
 params.workdir = '/home/mzaz021/BIDSProject/work'
-params.participantList = ['001009']  // List of participants (without "sub-")
+params.participantList = ['001011']  // List of participants (without "sub-")
 
 process ConvertDicomToBIDS {
     tag { "Participant: ${participantID}, Session: ${session_id}" }
