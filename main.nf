@@ -123,11 +123,7 @@ process runMRIQC {
    
     input:
     val participant
-   
-    output:
-    path "reports/*.html", emit: 'reports'
-    path "metrics/*.json", emit: 'metrics'
-    path "figures/*", emit: 'figures'
+
    
     script:
     """
