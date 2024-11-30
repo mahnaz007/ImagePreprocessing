@@ -10,11 +10,6 @@ process runMRIQC {
     input:
     val participant // Input participant ID
 
-    output:
-    path "reports/*.html", emit: 'reports' // Collects HTML reports
-    path "metrics/*.json", emit: 'metrics' // Collects JSON metrics
-    path "figures/*", emit: 'figures' // Collects visual outputs
-
     // Runs MRIQC on the BIDS dataset for the specified participant
     script:
     """
