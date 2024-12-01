@@ -1,0 +1,6 @@
+task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
+1	3f/3f23f4	1197792	ConvertDicomToBIDS (Participant: 001010, Session: ses-01)	COMPLETED	0	2024-11-23 15:58:08.499	43.6s	43.5s	61.2%	639.1 MB	4.6 GB	1.4 GB	546.4 MB
+3	ec/4e93dd	1200417	CopyDatasetDescription (Copy dataset_description.json)	COMPLETED	0	2024-11-23 15:58:52.137	125ms	74ms	12.5%	3.3 MB	223.3 MB	99.8 KB	206 B
+5	a3/159919	1200694	ValidateBIDS	FAILED	1	2024-11-23 15:58:52.324	687ms	648ms	-	-	-	-	-
+2	0d/053792	1200661	runFmriprep (Participant: 001010)	FAILED	1	2024-11-23 15:58:52.271	34.8s	34.7s	-	-	-	-	-
+4	86/35646b	1200517	runMRIQC (Participant: 001010)	FAILED	0	2024-11-23 15:58:52.164	11m 39s	11m 39s	220.5%	14.6 GB	28.1 GB	9.7 GB	3.9 GB

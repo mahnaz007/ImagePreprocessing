@@ -1,0 +1,160 @@
+Nov-23 22:54:24.556 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf
+Nov-23 22:54:24.665 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 23.10.1
+Nov-23 22:54:24.754 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/mzaz021/.nextflow/plugins; core-plugins: nf-amazon@2.1.4,nf-azure@1.3.3,nf-cloudcache@0.3.0,nf-codecommit@0.1.5,nf-console@1.0.6,nf-ga4gh@1.1.0,nf-google@1.8.3,nf-tower@1.6.3,nf-wave@1.0.1
+Nov-23 22:54:24.762 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Nov-23 22:54:24.763 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Nov-23 22:54:24.765 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Nov-23 22:54:24.774 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Nov-23 22:54:24.787 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/mzaz021/ImagePreprocessing/nextflow.config
+Nov-23 22:54:24.789 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/mzaz021/ImagePreprocessing/nextflow.config
+Nov-23 22:54:25.466 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-23 22:54:27.159 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declararion
+Nov-23 22:54:27.350 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [hopeful_bhabha] DSL2 - revision: 4f03df1d7d
+Nov-23 22:54:27.350 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-validation@1.1.3]
+Nov-23 22:54:27.350 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Nov-23 22:54:27.350 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-validation@1.1.3]
+Nov-23 22:54:27.350 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-validation version: 1.1.3
+Nov-23 22:54:27.434 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-validation@1.1.3' resolved
+Nov-23 22:54:27.434 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-validation@1.1.3'
+Nov-23 22:54:28.168 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-validation@1.1.3
+Nov-23 22:54:28.383 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/mzaz021/.nextflow/secrets/store.json
+Nov-23 22:54:28.385 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@5d94a2dc] - activable => nextflow.secret.LocalSecretsProvider@5d94a2dc
+Nov-23 22:54:29.005 [main] DEBUG nextflow.Session - Session UUID: 2d81cb6c-4bae-4ca3-a078-ab691958311e
+Nov-23 22:54:29.006 [main] DEBUG nextflow.Session - Run name: hopeful_bhabha
+Nov-23 22:54:29.006 [main] DEBUG nextflow.Session - Executor pool size: 16
+Nov-23 22:54:29.012 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Nov-23 22:54:29.035 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 23.10.1 build 5891
+  Created: 12-01-2024 22:01 UTC (23:01 CEST)
+  System: Linux 6.11.6-200.fc40.x86_64
+  Runtime: Groovy 3.0.19 on OpenJDK 64-Bit Server VM 21.0.5+11
+  Encoding: UTF-8 (UTF-8)
+  Process: 2219027@rigel.nic.rad.med.uni-tuebingen.de [10.171.11.169]
+  CPUs: 16 - Mem: 62.7 GB (19.5 GB) - Swap: 18 GB (17.3 GB) - Virtual threads ON
+Nov-23 22:54:29.058 [main] DEBUG nextflow.Session - Work-dir: /home/mzaz021/ImagePreprocessing/work [nfs]
+Nov-23 22:54:29.059 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /home/mzaz021/ImagePreprocessing/bin
+Nov-23 22:54:29.067 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Nov-23 22:54:29.102 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Nov-23 22:54:29.139 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Nov-23 22:54:29.256 [main] DEBUG nextflow.util.CustomPoolFactory - Creating virtual thread pool
+Nov-23 22:54:30.181 [main] DEBUG nextflow.Session - Session start
+Nov-23 22:54:30.184 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /home/mzaz021/ImagePreprocessing/null/pipeline_info/execution_trace_2024-11-23_22-54-27.txt
+Nov-23 22:54:30.581 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Nov-23 22:54:30.900 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 22:54:30.900 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 22:54:30.904 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Nov-23 22:54:30.908 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=16; memory=62.7 GB; capacity=16; pollInterval=100ms; dumpInterval=5m
+Nov-23 22:54:30.992 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Nov-23 22:54:31.042 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 22:54:31.042 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 22:54:31.048 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 22:54:31.048 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 22:54:31.066 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 22:54:31.066 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 22:54:31.076 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 22:54:31.076 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 22:54:31.080 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 22:54:31.080 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 22:54:31.083 [main] DEBUG nextflow.Session - Config process names validation disabled as requested
+Nov-23 22:54:31.084 [main] DEBUG nextflow.Session - Igniting dataflow network (8)
+Nov-23 22:54:31.087 [PathVisitor-1] DEBUG nextflow.file.PathVisitor - files for syntax: glob; folder: /home/mzaz021/BIDSProject/sourcecode/IRTG01/; pattern: *; options: [type:dir]
+Nov-23 22:54:31.087 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ConvertDicomToBIDS
+Nov-23 22:54:31.088 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ValidateBIDS
+Nov-23 22:54:31.088 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > PyDeface
+Nov-23 22:54:31.089 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > CopyDatasetDescription
+Nov-23 22:54:31.089 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > runMRIQC
+Nov-23 22:54:31.089 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > runFmriprep
+Nov-23 22:54:31.089 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_082b216c031b4757: /home/mzaz021/ImagePreprocessing/main.nf
+Nov-23 22:54:31.089 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Nov-23 22:54:31.089 [main] DEBUG nextflow.Session - Session await
+Nov-23 22:54:31.093 [Actor Thread 23] INFO  nextflow.script.BaseScript - Processing participant: 001011, session: ses-01
+Nov-23 22:54:31.552 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 22:54:31.554 [Task submitter] INFO  nextflow.Session - [c9/1552c8] Submitted process > ConvertDicomToBIDS (Participant: 001011, Session: ses-01)
+Nov-23 22:56:47.610 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: ConvertDicomToBIDS (Participant: 001011, Session: ses-01); status: COMPLETED; exit: 0; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/c9/1552c8547fbf11699d97de0175f835]
+Nov-23 22:56:47.682 [Actor Thread 45] DEBUG nextflow.util.CacheHelper - Unable to get file attributes file: /home/mzaz021/BIDSProject/combined4Description/bids_output -- Cause: java.nio.file.NoSuchFileException: /home/mzaz021/BIDSProject/combined4Description/bids_output
+Nov-23 22:56:47.708 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 22:56:47.708 [Task submitter] INFO  nextflow.Session - [b9/4d3c1b] Submitted process > CopyDatasetDescription (Copy dataset_description.json)
+Nov-23 22:56:47.744 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 22:56:47.745 [Task submitter] INFO  nextflow.Session - [e3/b5a882] Submitted process > runMRIQC (Participant: 001011)
+Nov-23 22:56:47.757 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 22:56:47.757 [Task submitter] INFO  nextflow.Session - [d2/b06700] Submitted process > runFmriprep (Participant: 001011)
+Nov-23 22:56:47.781 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 22:56:47.781 [Task submitter] INFO  nextflow.Session - [41/a14335] Submitted process > PyDeface (sub-001011_ses-01_T2w.nii.gz)
+Nov-23 22:56:47.787 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 22:56:47.787 [Task submitter] INFO  nextflow.Session - [64/39a0b9] Submitted process > PyDeface (sub-001011_ses-01_T1w.nii.gz)
+Nov-23 22:56:47.800 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: CopyDatasetDescription (Copy dataset_description.json); status: COMPLETED; exit: 0; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/b9/4d3c1bd7f91ebbee1443f2aa090262]
+Nov-23 22:56:47.810 [Task monitor] WARN  nextflow.processor.PublishDir - Process `CopyDatasetDescription` publishDir path contains a variable with a null value
+Nov-23 22:56:47.815 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 22:56:47.815 [Task submitter] INFO  nextflow.Session - [83/a7459e] Submitted process > ValidateBIDS
+Nov-23 22:56:49.546 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 6; name: PyDeface (sub-001011_ses-01_T2w.nii.gz); status: COMPLETED; exit: 1; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/41/a14335fada9a8522431eeb077af390]
+Nov-23 22:56:49.548 [Task monitor] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=PyDeface (sub-001011_ses-01_T2w.nii.gz); work-dir=/home/mzaz021/ImagePreprocessing/work/41/a14335fada9a8522431eeb077af390
+  error [nextflow.exception.ProcessFailedException]: Process `PyDeface (sub-001011_ses-01_T2w.nii.gz)` terminated with an error exit status (1)
+Nov-23 22:56:49.583 [Task monitor] ERROR nextflow.processor.TaskProcessor - Error executing process > 'PyDeface (sub-001011_ses-01_T2w.nii.gz)'
+
+Caused by:
+  Process `PyDeface (sub-001011_ses-01_T2w.nii.gz)` terminated with an error exit status (1)
+
+Command executed:
+
+  input_file="sub-001011_ses-01_T2w.nii.gz"
+  output_file="defaced_sub-001011_ses-01_T2w.nii.gz"
+  input_dir="$(dirname 'sub-001011_ses-01_T2w.nii.gz')"
+  singularity_img="/home/mzaz021/pydeface_latest.sif"
+  
+  apptainer run --bind "${input_dir}:/input" \
+  "${singularity_img}" \
+  pydeface /input/"${input_file}" --outfile "${output_file}"
+
+Command exit status:
+  1
+
+Command output:
+  Some packages in this Docker container are non-free
+  If you are considering commercial use of this container, please consult the relevant license:
+  https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Licence
+
+Command error:
+  Some packages in this Docker container are non-free
+  If you are considering commercial use of this container, please consult the relevant license:
+  https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Licence
+  Traceback (most recent call last):
+    File "/opt/conda/envs/neuro/bin/pydeface", line 6, in <module>
+      from pkg_resources import load_entry_point
+    File "/home/mzaz021/lib/python3.12/site-packages/pkg_resources/__init__.py", line 74
+      sys.path.extend(((vendor_path := os.path.join(os.path.dirname(os.path.dirname(__file__)), 'setuptools', '_vendor')) not in sys.path) * [vendor_path])  # fmt: skip
+                                    ^
+  SyntaxError: invalid syntax
+
+Work dir:
+  /home/mzaz021/ImagePreprocessing/work/41/a14335fada9a8522431eeb077af390
+
+Tip: view the complete command output by changing to the process work dir and entering the command `cat .command.out`
+Nov-23 22:56:49.586 [Task monitor] INFO  nextflow.Session - Execution cancelled -- Finishing pending tasks before exit
+Nov-23 22:56:49.589 [main] DEBUG nextflow.Session - Session await > all processes finished
+Nov-23 22:56:49.590 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 5; name: PyDeface (sub-001011_ses-01_T1w.nii.gz); status: COMPLETED; exit: 1; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/64/39a0b97ed981ddad1ad525aac13db8]
+Nov-23 22:56:49.590 [Task monitor] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=PyDeface (sub-001011_ses-01_T1w.nii.gz); work-dir=/home/mzaz021/ImagePreprocessing/work/64/39a0b97ed981ddad1ad525aac13db8
+  error [nextflow.exception.ProcessFailedException]: Process `PyDeface (sub-001011_ses-01_T1w.nii.gz)` terminated with an error exit status (1)
+Nov-23 22:56:49.635 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 4; name: runMRIQC (Participant: 001011); status: COMPLETED; exit: 1; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/e3/b5a88246e10b97ea58431c2bd98f55]
+Nov-23 22:56:49.635 [Task monitor] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=runMRIQC (Participant: 001011); work-dir=/home/mzaz021/ImagePreprocessing/work/e3/b5a88246e10b97ea58431c2bd98f55
+  error [nextflow.exception.ProcessFailedException]: Process `runMRIQC (Participant: 001011)` terminated with an error exit status (1)
+Nov-23 22:56:49.636 [Task monitor] INFO  nextflow.processor.TaskProcessor - [e3/b5a882] NOTE: Process `runMRIQC (Participant: 001011)` terminated with an error exit status (1) -- Error is ignored
+Nov-23 22:56:50.244 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 7; name: ValidateBIDS; status: COMPLETED; exit: 1; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/83/a7459eb488e36ae48046a5afcec73d]
+Nov-23 22:56:50.244 [Task monitor] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=ValidateBIDS; work-dir=/home/mzaz021/ImagePreprocessing/work/83/a7459eb488e36ae48046a5afcec73d
+  error [nextflow.exception.ProcessFailedException]: Process `ValidateBIDS` terminated with an error exit status (1)
+Nov-23 22:56:50.245 [Task monitor] INFO  nextflow.processor.TaskProcessor - [83/a7459e] NOTE: Process `ValidateBIDS` terminated with an error exit status (1) -- Error is ignored
+Nov-23 22:57:14.635 [SIGINT handler] DEBUG nextflow.Session - Session aborted -- Cause: SIGINT
+Nov-23 22:57:14.643 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Nov-23 22:57:14.644 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+Nov-23 22:57:14.648 [main] WARN  n.processor.TaskPollingMonitor - Killing running tasks (1)
+Nov-23 22:57:14.653 [main] DEBUG n.executor.local.LocalTaskHandler - Unable to kill runFmriprep (Participant: 001011) -- command: kill -TERM 2224624; exit: 1 
+ bash: line 1: kill: (2224624) - No such process
+
+Nov-23 22:57:14.655 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=2; failedCount=4; ignoredCount=2; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=1; succeedDuration=2m 16s; failedDuration=13.3s; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=5; peakCpus=8; peakMemory=32 GB; ]
+Nov-23 22:57:14.655 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
+Nov-23 22:57:14.656 [main] DEBUG nextflow.trace.ReportObserver - Workflow completed -- rendering execution report
+Nov-23 22:57:14.992 [SIGINT handler] INFO  nextflow.Session - Adieu

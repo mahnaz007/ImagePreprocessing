@@ -1,0 +1,75 @@
+<!--
+  ~ Copyright 2013-2023, Seqera Labs
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<html>
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+<pre class="mermaid" style="text-align: center;">
+flowchart TB
+    subgraph " "
+    v0["Channel.fromPath"]
+    v14["Channel.of"]
+    end
+    v3([ConvertDicomToBIDS])
+    v6([ValidateBIDS])
+    subgraph " "
+    v7[" "]
+    v12[" "]
+    v17[" "]
+    v18[" "]
+    v22[" "]
+    v23[" "]
+    v24[" "]
+    end
+    v11([PyDeface])
+    v16([CopyDatasetDescription])
+    v21([runMRIQC])
+    v27([runFmriprep])
+    v1(( ))
+    v4(( ))
+    v8(( ))
+    v13(( ))
+    v19(( ))
+    v25(( ))
+    v0 --> v1
+    v1 --> v3
+    v3 --> v4
+    v3 --> v8
+    v3 --> v13
+    v3 --> v19
+    v3 --> v25
+    v4 --> v6
+    v6 --> v7
+    v8 --> v11
+    v11 --> v12
+    v14 --> v13
+    v13 --> v16
+    v16 --> v18
+    v16 --> v17
+    v19 --> v21
+    v21 --> v24
+    v21 --> v23
+    v21 --> v22
+    v25 --> v27
+
+</pre>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
+</body>
+</html>
