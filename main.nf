@@ -48,8 +48,7 @@ process ConvertDicomToBIDS {
 
 process ValidateBIDS {
     input:
-    val trigger  // ورودی برای تضمین اجرا پس از اتمام ConvertDicomToBIDS
-
+    val trigger  
     output:
     path "validation_log.txt", emit: logs
 
@@ -58,14 +57,14 @@ process ValidateBIDS {
     script:
     """
     mkdir -p ${params.bidsValidatorLogs}
-    echo "در حال اجرای اعتبارسنجی BIDS..."
+    echo " BIDS..."
 
     singularity run --cleanenv \
         ${params.singularity_image} \
         ${params.bidsDir} \
         --verbose 2>&1 | tee ${params.bidsValidatorLogs}/validation_log.txt
 
-    echo "گزارش اعتبارسنجی در مسیر ${params.bidsValidatorLogs}/validation_log.txt ذخیره شد"
+    echo "${params.bidsValidatorLogs}/validation_log.txt "
     """
 }
 
