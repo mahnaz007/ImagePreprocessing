@@ -1,4 +1,4 @@
-# imagepreprocessing: Usage hallo 
+# imagepreprocessing: Usage  
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
@@ -197,7 +197,8 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 
 **Output**:
 - Log indicating success or any issues found during validation
-
+**Note**:
+If you prefer a quick, web-based approach, you can also use the online BIDS validator available at [https://bids-standard.github.io/legacy-validator/]. This tool provides a convenient way to check your dataset without setting up the containerized version locally.
 ### Step 3: MRIQC
 MRIQC (Magnetic Resonance Imaging Quality Control) is a tool that evaluates the quality of MRI data by calculating standardized quality metrics for structural and functional MRI scans. It helps identify data issues like artifacts or noise, enabling researchers to assess and filter out low-quality scans before analysis, thereby improving the reliability of MRI studies.
 
