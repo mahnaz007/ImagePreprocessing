@@ -197,6 +197,7 @@ Errors need to be addressed, while warnings should be noted; typical errors incl
 
 **Output**:
 - Log indicating success or any issues found during validation
+  
 **Note**:
 If you prefer a quick, web-based approach, you can also use the online BIDS validator available at [https://bids-standard.github.io/legacy-validator/]. This tool provides a convenient way to check your dataset without setting up the containerized version locally.
 ### Step 3: MRIQC
