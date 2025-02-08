@@ -527,27 +527,85 @@ Before running fMRIPrep, make sure to update your dataset:
 ```
 #!/bin/bash
 
-# Define variables for paths to make the script easier to manage
-SIF_FILE="$IRTG/sif/fmriprep_24.0.1.sif"  
-INPUT_DIR="/path/to/input" #BIDS dataset
+# Define variables
+PARTICIPANT_LABEL="xxxxxx"
+INPUT_DIR="/path/to/input"
 OUTPUT_DIR="/path/to/output"
-PARTICIPANT_LABEL="xxxxxx"  # Update participant label 
-FS_LICENSE_FILE="/path/to/freesurfer/license.txt"
+WORK_DIR="/path/to/work"
+FS_LICENSE_FILE="/path/to/license.txt"
+SIF_FILE="/path/to/fmriprep_24.0.1.sif"
 OMP_THREADS=1
 RANDOM_SEED=13
 
-# Singularity command to run fMRIPrep
-singularity run --cleanenv \
-  "$SIF_FILE" \
-  "$INPUT_DIR" \
-  "$OUTPUT_DIR" \
-  participant \
-  --participant-label "$PARTICIPANT_LABEL" \
-  --fs-license-file "$FS_LICENSE_FILE" \
-  --skip_bids_validation \
-  --omp-nthreads "$OMP_THREADS" \
-  --random-seed "$RANDOM_SEED" \
-  --skull-strip-fixed-seed
+# Use a writable directory for TemplateFlow cache (e.g., in the home directory)
+TEMPLATEFLOW_DIR="/path/to/input/templateflow"
+mkdir -p "$TEMPLATEFLOW_DIR"
+
+# List of sessions for processing
+SESSIONS=("ses-01" "ses-02")
+
+for SESSION in "${SESSIONS[@]}"; do
+    echo "Processing session: $SESSION"
+
+    # Create a temporary directory for the session
+    TEMP_BIDS_DIR=$(mktemp -d -t bids_tmp_${PARTICIPANT_LABEL}_${SESSION}_XXXXXX)
+    echo "Temporary BIDS directory created: $TEMP_BIDS_DIR"
+
+    # Copy dataset_description.json to the root of the temporary folder
+    cp -v "$INPUT_DIR/dataset_description.json" "$TEMP_BIDS_DIR/"
+
+    if [ ! -f "$TEMP_BIDS_DIR/dataset_description.json" ]; then
+        echo "Error: dataset_description.json not found in the temporary folder."
+        exit 1
+    fi
+
+    # Create subject directory
+    mkdir -p "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}"
+
+    # Copy session data 
+    cp -av "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/$SESSION" "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/"
+
+    # Copy anat data (if exists)
+    if [ -d "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/anat" ]; then
+        cp -av "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/anat" "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/"
+    fi
+
+    if [ ! -d "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/$SESSION" ]; then
+        echo "Error: session folder $SESSION not found in the temporary directory."
+        exit 1
+    fi
+
+    if [ ! -d "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/$SESSION/func" ]; then
+        echo "Error: func directory not found for $SESSION in the temporary directory."
+        exit 1
+    fi
+
+    echo "Contents of the temporary BIDS directory:"
+    ls -lR "$TEMP_BIDS_DIR"
+
+    # Run fMRIPrep with environment variables to bypass SSL certificate issues
+    SINGULARITYENV_CURL_CA_BUNDLE=/dev/null \
+    SINGULARITYENV_SSL_CERT_FILE=/dev/null \
+    singularity run --cleanenv \
+      --bind "$WORK_DIR":/work \
+      --bind "$TEMPLATEFLOW_DIR":/templateflow \
+      --env APPTAINERENV_TEMPLATEFLOW_HOME=/templateflow \
+      --env APPTAINERENV_http_proxy="$http_proxy" \
+      --env APPTAINERENV_https_proxy="$https_proxy" \
+      "$SIF_FILE" \
+      "$TEMP_BIDS_DIR" \
+      "$OUTPUT_DIR" \
+      participant \
+      --participant-label "$PARTICIPANT_LABEL" \
+      --fs-license-file "$FS_LICENSE_FILE" \
+      --skip_bids_validation \
+      --omp-nthreads "$OMP_THREADS" \
+      --random-seed "$RANDOM_SEED" \
+      --skull-strip-fixed-seed
+
+    echo "Deleting temporary directory: $TEMP_BIDS_DIR"
+    rm -rf "$TEMP_BIDS_DIR"
+done
 ```
 #### For Running the entire project
 ```
