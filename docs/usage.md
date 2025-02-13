@@ -517,73 +517,82 @@ for participant in $(ls $input_dir | grep 'sub-'); do
     echo "Finished processing $participant"
 done
 ```
-
 ### Running fMRIPrep 
 Before running fMRIPrep, make sure to update your dataset:
 - If any non-4D BOLD images exist, remove them to avoid errors during preprocessing.
 - After removing the non-4D BOLD images, you must update the corresponding fmap files. Ensure that the IntendedFor field in the fmap metadata points to the correct BOLD files.
 - If, after removing non-4D BOLD files, only one run remains, rename the file to remove the run-01 suffix to ensure the dataset complies with the BIDS standard.
 #### For Running 1 Participant
+fMRIPrep is designed to process one session at a time. When you have multiple sessions for the same participant, fMRIPrep may encounter issues all at once. By creating a temporary folder for each session, we isolate that session's data in a clean, single-session dataset.
 ```
 #!/bin/bash
 
-# Define variables
-PARTICIPANT_LABEL="xxxxxx"
-INPUT_DIR="/path/to/input"
-OUTPUT_DIR="/path/to/output"
-WORK_DIR="/path/to/work"
-FS_LICENSE_FILE="/path/to/license.txt"
-SIF_FILE="/path/to/fmriprep_24.0.1.sif"
-OMP_THREADS=1
-RANDOM_SEED=13
+# Define participant and file path variables
+PARTICIPANT_LABEL="xxxxxx"                        # The label/ID for the participant
+INPUT_DIR="/path/to/input"                       
+OUTPUT_DIR="/path/to/output"                      
+WORK_DIR="/path/to/work"                         
+FS_LICENSE_FILE="/path/to/license.txt"            
+SIF_FILE="/path/to/fmriprep_24.0.1.sif"            
 
-# Use a writable directory for TemplateFlow cache (e.g., in the home directory)
+
+# Define a writable directory for TemplateFlow cache.
 TEMPLATEFLOW_DIR="/path/to/input/templateflow"
-mkdir -p "$TEMPLATEFLOW_DIR"
+mkdir -p "$TEMPLATEFLOW_DIR"                      # Create the TemplateFlow directory if it doesn't exist
 
-# List of sessions for processing
-SESSIONS=("ses-01" "ses-02")
+# List sessions to process
+SESSIONS=("ses-01" "ses-02")                      # Array of session labels
 
+# Loop over each session to process them individually
 for SESSION in "${SESSIONS[@]}"; do
-    echo "Processing session: $SESSION"
+    echo "Processing session: $SESSION"         
 
-    # Create a temporary directory for the session
+    # Create a temporary directory to the current session. This ensures that fMRIPrep sees only one session.
     TEMP_BIDS_DIR=$(mktemp -d -t bids_tmp_${PARTICIPANT_LABEL}_${SESSION}_XXXXXX)
     echo "Temporary BIDS directory created: $TEMP_BIDS_DIR"
 
-    # Copy dataset_description.json to the root of the temporary folder
+    # Copy the dataset description file to the root of the temporary BIDS folder.
     cp -v "$INPUT_DIR/dataset_description.json" "$TEMP_BIDS_DIR/"
 
+    # Verify if the dataset_description.json file was successfully copied.
     if [ ! -f "$TEMP_BIDS_DIR/dataset_description.json" ]; then
         echo "Error: dataset_description.json not found in the temporary folder."
         exit 1
     fi
 
-    # Create subject directory
+    # Create a subdirectory for the participant in the temporary BIDS folder.
     mkdir -p "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}"
 
-    # Copy session data 
+    # Copy the session-specific data from the input directory to the temporary folder.
     cp -av "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/$SESSION" "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/"
 
-    # Copy anat data (if exists)
+    # If anatomical data exists for the participant, copy it as well.
     if [ -d "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/anat" ]; then
         cp -av "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/anat" "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/"
     fi
 
+    # If functional data exists as a separate folder, copy it too.
+    if [ -d "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/func" ]; then
+        cp -av "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/func" "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/"
+    fi
+
+    # Check if the session folder was correctly copied into the temporary directory.
     if [ ! -d "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/$SESSION" ]; then
         echo "Error: session folder $SESSION not found in the temporary directory."
         exit 1
     fi
 
+    # Verify if the functional directory exists within the session folder.
     if [ ! -d "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/$SESSION/func" ]; then
         echo "Error: func directory not found for $SESSION in the temporary directory."
         exit 1
     fi
 
+    # List the contents of the temporary BIDS folder for debugging purposes.
     echo "Contents of the temporary BIDS directory:"
     ls -lR "$TEMP_BIDS_DIR"
 
-    # Run fMRIPrep with environment variables to bypass SSL certificate issues
+    # Run fMRIPrep using Singularity with environment variables set to bypass SSL certificate issues.
     SINGULARITYENV_CURL_CA_BUNDLE=/dev/null \
     SINGULARITYENV_SSL_CERT_FILE=/dev/null \
     singularity run --cleanenv \
@@ -593,16 +602,17 @@ for SESSION in "${SESSIONS[@]}"; do
       --env APPTAINERENV_http_proxy="$http_proxy" \
       --env APPTAINERENV_https_proxy="$https_proxy" \
       "$SIF_FILE" \
-      "$TEMP_BIDS_DIR" \
-      "$OUTPUT_DIR" \
-      participant \
+      "$TEMP_BIDS_DIR" \                      # The temporary BIDS input folder
+      "$OUTPUT_DIR" \                         # Output directory for fMRIPrep results
+      participant \                           # Indicates participant-level processing
       --participant-label "$PARTICIPANT_LABEL" \
       --fs-license-file "$FS_LICENSE_FILE" \
-      --skip_bids_validation \
+      --skip_bids_validation \                # Skip BIDS validation if already confirmed valid
       --omp-nthreads "$OMP_THREADS" \
       --random-seed "$RANDOM_SEED" \
       --skull-strip-fixed-seed
 
+    # After processing, delete the temporary BIDS directory to free up space.
     echo "Deleting temporary directory: $TEMP_BIDS_DIR"
     rm -rf "$TEMP_BIDS_DIR"
 done
@@ -611,30 +621,97 @@ done
 ```
 #!/bin/bash
 
-# Define paths
-INPUT_DIR="/path/to/BIDS/input_dir"  # BIDS dataset
-OUTPUT_DIR="/path/to/output_dir" 
-WORK_DIR="/path/to/host_workdir"  # Host work directory 
-SINGULARITY_IMG="/path/to/fmriprep_24.0.1.sif"  
-FS_LICENSE="/path/to/freesurfer/license.txt" 
+# Set directories and files
+INPUT_DIR="/path/to/input" 
+OUTPUT_DIR="/path/to/output"
+WORK_DIR="/path/to/work"
+FS_LICENSE_FILE="/path/to/license.txt"
+SIF_FILE="/path/to/fmriprep_24.0.1.sif"
 
-# Get the list of subjects 
-subjects=$(ls ${INPUT_DIR} | grep '^sub-')
+# Use a writable directory for the TemplateFlow cache
+TEMPLATEFLOW_DIR="/path/to/input/templateflow"
+mkdir -p "$TEMPLATEFLOW_DIR"
 
-# Run fmriprep in parallel for each subject
-echo ${subjects} | tr ' ' '\n' | parallel -j 2 \ # Run with a maximum of 2 parallel for each subject  
-  singularity run --cleanenv \
-  --bind ${WORK_DIR}:/work \
-  ${SINGULARITY_IMG} \
-  ${INPUT_DIR} \
-  ${OUTPUT_DIR} \
-  participant \
-  --participant-label {=s/^sub-//=} \
-  --fs-license-file ${FS_LICENSE} \
-  --skip_bids_validation \
-  --omp-nthreads 1 \
-  --random-seed 13 \
-  --skull-strip-fixed-seed
+# List sessions to process
+SESSIONS=("ses-01" "ses-02")
+
+# Loop over each subject directory found in the BIDS root
+for subject_dir in "$BIDS_ROOT"/sub-*; do
+  # Check if it is a directory
+  if [ -d "$subject_dir" ]; then
+    # Extract the subject ID (removing the "sub-" prefix)
+    SUBJECT_ID=$(basename "$subject_dir" | sed 's/sub-//')
+    echo "Processing subject: $SUBJECT_ID"
+
+    # Loop over sessions for the current subject
+    for SESSION in "${SESSIONS[@]}"; do
+      echo "Processing session: $SESSION"
+
+      # Create a temporary BIDS directory for the session
+      TEMP_BIDS_DIR=$(mktemp -d -t bids_tmp_${SUBJECT_ID}_${SESSION}_XXXXXX)
+      echo "Temporary BIDS directory created: $TEMP_BIDS_DIR"
+
+      # Copy dataset_description.json to the temporary BIDS directory
+      cp -v "$BIDS_ROOT/dataset_description.json" "$TEMP_BIDS_DIR/"
+
+      if [ ! -f "$TEMP_BIDS_DIR/dataset_description.json" ]; then
+          echo "Error: dataset_description.json not found in the temporary folder."
+          exit 1
+      fi
+
+      # Create subject directory in the temporary folder
+      mkdir -p "$TEMP_BIDS_DIR/sub-${SUBJECT_ID}"
+
+      # Copy session data 
+      cp -av "$BIDS_ROOT/sub-${SUBJECT_ID}/$SESSION" "$TEMP_BIDS_DIR/sub-${SUBJECT_ID}/"
+
+      # Copy anat data 
+      if [ -d "$BIDS_ROOT/sub-${SUBJECT_ID}/anat" ]; then
+          cp -av "$BIDS_ROOT/sub-${SUBJECT_ID}/anat" "$TEMP_BIDS_DIR/sub-${SUBJECT_ID}/"
+      fi
+
+      #Copy func data
+      if [ -d "$BIDS_ROOT/sub-${SUBJECT_ID}/func" ]; then
+        cp -av "$BIDS_ROOT/sub-${SUBJECT_ID}/func" "$TEMP_BIDS_DIR/sub-${SUBJECT_ID}/"
+      fi
+      if [ ! -d "$TEMP_BIDS_DIR/sub-${SUBJECT_ID}/$SESSION" ]; then
+          echo "Error: session folder $SESSION not found in the temporary directory."
+          exit 1
+      fi
+      # Copy functional data if available
+      if [ ! -d "$TEMP_BIDS_DIR/sub-${SUBJECT_ID}/$SESSION/func" ]; then
+          echo "Error: func directory not found for $SESSION in the temporary directory."
+          exit 1
+      fi
+
+      echo "Contents of the temporary BIDS directory:"
+      ls -lR "$TEMP_BIDS_DIR"
+
+      # Run fMRIPrep using Singularity with environment variables to bypass SSL issues
+      SINGULARITYENV_CURL_CA_BUNDLE=/dev/null \
+      SINGULARITYENV_SSL_CERT_FILE=/dev/null \
+      singularity run --cleanenv \
+        --bind "$WORK_DIR":/work \
+        --bind "$TEMPLATEFLOW_DIR":/templateflow \
+        --env APPTAINERENV_TEMPLATEFLOW_HOME=/templateflow \
+        --env APPTAINERENV_http_proxy="$http_proxy" \
+        --env APPTAINERENV_https_proxy="$https_proxy" \
+        "$FMRIPREP_IMAGE" \
+        "$TEMP_BIDS_DIR" \
+        "$OUTPUT_DIR" \
+        participant \
+        --participant-label "$SUBJECT_ID" \
+        --fs-license-file "$FS_LICENSE" \
+        --skip_bids_validation \
+        --omp-nthreads 1 \
+        --random-seed 13 \
+        --skull-strip-fixed-seed
+
+      echo "Deleting temporary directory: $TEMP_BIDS_DIR"
+      rm -rf "$TEMP_BIDS_DIR"
+    done
+  fi
+done
 ```
 
 ### Running Pydeface 
