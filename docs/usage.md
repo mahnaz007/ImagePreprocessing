@@ -528,7 +528,7 @@ fMRIPrep is designed to process one session at a time. When you have multiple se
 #!/bin/bash
 
 # Define participant and file path variables
-PARTICIPANT_LABEL="xxxxxx"                        # The label/ID for the participant
+PARTICIPANT_LABEL="xxxxxx"                       
 INPUT_DIR="/path/to/input"                       
 OUTPUT_DIR="/path/to/output"                      
 WORK_DIR="/path/to/work"                         
