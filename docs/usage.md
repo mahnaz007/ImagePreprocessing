@@ -541,7 +541,7 @@ TEMPLATEFLOW_DIR="/path/to/input/templateflow"
 mkdir -p "$TEMPLATEFLOW_DIR"                      # Create the TemplateFlow directory if it doesn't exist
 
 # List sessions to process
-SESSIONS=("ses-01" "ses-02")                      # Array of session labels
+SESSIONS=("ses-01" "ses-02")                     
 
 # Loop over each session to process them individually
 for SESSION in "${SESSIONS[@]}"; do
@@ -554,7 +554,7 @@ for SESSION in "${SESSIONS[@]}"; do
     # Copy the dataset description file to the root of the temporary BIDS folder.
     cp -v "$INPUT_DIR/dataset_description.json" "$TEMP_BIDS_DIR/"
 
-    # Verify if the dataset_description.json file was successfully copied.
+    # Verify if the dataset_description.json file was copied successfully.
     if [ ! -f "$TEMP_BIDS_DIR/dataset_description.json" ]; then
         echo "Error: dataset_description.json not found in the temporary folder."
         exit 1
@@ -566,7 +566,7 @@ for SESSION in "${SESSIONS[@]}"; do
     # Copy the session-specific data from the input directory to the temporary folder.
     cp -av "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/$SESSION" "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/"
 
-    # If anatomical data exists for the participant, copy it as well.
+    # If anatomical data exists for the participant, copy it too.
     if [ -d "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/anat" ]; then
         cp -av "$INPUT_DIR/sub-${PARTICIPANT_LABEL}/anat" "$TEMP_BIDS_DIR/sub-${PARTICIPANT_LABEL}/"
     fi
@@ -592,7 +592,7 @@ for SESSION in "${SESSIONS[@]}"; do
     echo "Contents of the temporary BIDS directory:"
     ls -lR "$TEMP_BIDS_DIR"
 
-    # Run fMRIPrep using Singularity with environment variables set to bypass SSL certificate issues.
+    # Run fMRIPrep using Singularity to bypass SSL certificate issues.
     SINGULARITYENV_CURL_CA_BUNDLE=/dev/null \
     SINGULARITYENV_SSL_CERT_FILE=/dev/null \
     singularity run --cleanenv \
@@ -602,17 +602,17 @@ for SESSION in "${SESSIONS[@]}"; do
       --env APPTAINERENV_http_proxy="$http_proxy" \
       --env APPTAINERENV_https_proxy="$https_proxy" \
       "$SIF_FILE" \
-      "$TEMP_BIDS_DIR" \                      # The temporary BIDS input folder
-      "$OUTPUT_DIR" \                         # Output directory for fMRIPrep results
-      participant \                           # Indicates participant-level processing
+      "$TEMP_BIDS_DIR" \                     
+      "$OUTPUT_DIR" \                         
+      participant \                          
       --participant-label "$PARTICIPANT_LABEL" \
       --fs-license-file "$FS_LICENSE_FILE" \
-      --skip_bids_validation \                # Skip BIDS validation if already confirmed valid
+      --skip_bids_validation \               
       --omp-nthreads "$OMP_THREADS" \
       --random-seed "$RANDOM_SEED" \
       --skull-strip-fixed-seed
 
-    # After processing, delete the temporary BIDS directory to free up space.
+    # After processing, delete the temporary BIDS directory.
     echo "Deleting temporary directory: $TEMP_BIDS_DIR"
     rm -rf "$TEMP_BIDS_DIR"
 done
