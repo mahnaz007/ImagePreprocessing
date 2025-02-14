@@ -1,0 +1,198 @@
+Nov-23 13:18:48.647 [main] DEBUG nextflow.cli.Launcher - Setting HTTP proxy: ProxyConfig[protocol=http; host=proxy.med.uni-tuebingen.de; port=88; username=psazimm1; password=Gam****]
+Nov-23 13:18:48.668 [main] DEBUG nextflow.cli.Launcher - Setting HTTP proxy authenticator
+Nov-23 13:18:48.669 [main] DEBUG nextflow.cli.Launcher - Setting HTTPS proxy: ProxyConfig[protocol=https; host=proxy.med.uni-tuebingen.de; port=88; username=psazimm1; password=Gam****]
+Nov-23 13:18:48.669 [main] DEBUG nextflow.cli.Launcher - Setting HTTPS proxy authenticator
+Nov-23 13:18:48.669 [main] DEBUG nextflow.cli.Launcher - Setting http proxy: ProxyConfig[protocol=http; host=proxy.med.uni-tuebingen.de; port=88; username=psazimm1; password=Gam****]
+Nov-23 13:18:48.669 [main] DEBUG nextflow.cli.Launcher - Setting http proxy authenticator
+Nov-23 13:18:48.669 [main] DEBUG nextflow.cli.Launcher - Setting https proxy: ProxyConfig[protocol=https; host=proxy.med.uni-tuebingen.de; port=88; username=psazimm1; password=Gam****]
+Nov-23 13:18:48.669 [main] DEBUG nextflow.cli.Launcher - Setting https proxy authenticator
+Nov-23 13:18:48.669 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf
+Nov-23 13:18:48.734 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 23.10.1
+Nov-23 13:18:48.751 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/mzaz021/.nextflow/plugins; core-plugins: nf-amazon@2.1.4,nf-azure@1.3.3,nf-cloudcache@0.3.0,nf-codecommit@0.1.5,nf-console@1.0.6,nf-ga4gh@1.1.0,nf-google@1.8.3,nf-tower@1.6.3,nf-wave@1.0.1
+Nov-23 13:18:48.778 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Nov-23 13:18:48.779 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Nov-23 13:18:48.781 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Nov-23 13:18:48.789 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Nov-23 13:18:48.804 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/mzaz021/ImagePreprocessing/nextflow.config
+Nov-23 13:18:48.805 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/mzaz021/ImagePreprocessing/nextflow.config
+Nov-23 13:18:48.824 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-23 13:18:49.657 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declararion
+Nov-23 13:18:49.669 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [cranky_bartik] DSL2 - revision: 8331943968
+Nov-23 13:18:49.670 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-validation@1.1.3]
+Nov-23 13:18:49.670 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Nov-23 13:18:49.670 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-validation@1.1.3]
+Nov-23 13:18:49.670 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-validation version: 1.1.3
+Nov-23 13:18:50.032 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-validation@1.1.3' resolved
+Nov-23 13:18:50.032 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-validation@1.1.3'
+Nov-23 13:18:50.053 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-validation@1.1.3
+Nov-23 13:18:50.084 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/mzaz021/.nextflow/secrets/store.json
+Nov-23 13:18:50.087 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@5b47731f] - activable => nextflow.secret.LocalSecretsProvider@5b47731f
+Nov-23 13:18:50.140 [main] DEBUG nextflow.Session - Session UUID: 7f41f0b0-8b63-4d33-bf6a-7af4a7c37172
+Nov-23 13:18:50.141 [main] DEBUG nextflow.Session - Run name: cranky_bartik
+Nov-23 13:18:50.141 [main] DEBUG nextflow.Session - Executor pool size: 16
+Nov-23 13:18:50.146 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Nov-23 13:18:50.163 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 23.10.1 build 5891
+  Created: 12-01-2024 22:01 UTC (23:01 CEST)
+  System: Linux 6.11.6-200.fc40.x86_64
+  Runtime: Groovy 3.0.19 on OpenJDK 64-Bit Server VM 21.0.5+11
+  Encoding: UTF-8 (UTF-8)
+  Process: 798397@rigel.nic.rad.med.uni-tuebingen.de [10.171.11.169]
+  CPUs: 16 - Mem: 62.7 GB (1.2 GB) - Swap: 18 GB (17.4 GB) - Virtual threads ON
+Nov-23 13:18:50.185 [main] DEBUG nextflow.Session - Work-dir: /home/mzaz021/ImagePreprocessing/work [nfs]
+Nov-23 13:18:50.186 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /home/mzaz021/ImagePreprocessing/bin
+Nov-23 13:18:50.193 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Nov-23 13:18:50.201 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Nov-23 13:18:50.236 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Nov-23 13:18:50.241 [main] DEBUG nextflow.util.CustomPoolFactory - Creating virtual thread pool
+Nov-23 13:18:50.298 [main] DEBUG nextflow.Session - Session start
+Nov-23 13:18:50.300 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /home/mzaz021/ImagePreprocessing/null/pipeline_info/execution_trace_2024-11-23_13-18-49.txt
+Nov-23 13:18:50.959 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Nov-23 13:18:51.078 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 13:18:51.078 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 13:18:51.082 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Nov-23 13:18:51.088 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=16; memory=62.7 GB; capacity=16; pollInterval=100ms; dumpInterval=5m
+Nov-23 13:18:51.090 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Nov-23 13:18:51.155 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 13:18:51.155 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 13:18:51.161 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 13:18:51.161 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 13:18:51.179 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 13:18:51.179 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 13:18:51.189 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 13:18:51.189 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 13:18:51.193 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-23 13:18:51.193 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-23 13:18:51.196 [main] DEBUG nextflow.Session - Config process names validation disabled as requested
+Nov-23 13:18:51.197 [main] DEBUG nextflow.Session - Igniting dataflow network (8)
+Nov-23 13:18:51.201 [PathVisitor-1] DEBUG nextflow.file.PathVisitor - files for syntax: glob; folder: /home/mzaz021/BIDSProject/sourcecode/IRTG01/; pattern: *; options: [type:dir]
+Nov-23 13:18:51.202 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ConvertDicomToBIDS
+Nov-23 13:18:51.203 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ValidateBIDS
+Nov-23 13:18:51.203 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > PyDeface
+Nov-23 13:18:51.204 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > CopyDatasetDescription
+Nov-23 13:18:51.204 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > runMRIQC
+Nov-23 13:18:51.204 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > runFmriprep
+Nov-23 13:18:51.205 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_e587f84b9e7dc7de: /home/mzaz021/ImagePreprocessing/main.nf
+Nov-23 13:18:51.205 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Nov-23 13:18:51.205 [main] DEBUG nextflow.Session - Session await
+Nov-23 13:18:51.211 [Actor Thread 23] INFO  nextflow.script.BaseScript - Processing participant: 001003, session: ses-01
+Nov-23 13:18:51.328 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 13:18:51.330 [Task submitter] INFO  nextflow.Session - [74/0a08cd] Submitted process > ConvertDicomToBIDS (Participant: 001003, Session: ses-01)
+Nov-23 13:20:14.360 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: ConvertDicomToBIDS (Participant: 001003, Session: ses-01); status: COMPLETED; exit: 0; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/74/0a08cd0d6f7235ab4272bde188a229]
+Nov-23 13:20:14.426 [Actor Thread 43] DEBUG nextflow.util.CacheHelper - Unable to get file attributes file: /home/mzaz021/BIDSProject/combined4Description/bids_output -- Cause: java.nio.file.NoSuchFileException: /home/mzaz021/BIDSProject/combined4Description/bids_output
+Nov-23 13:20:14.435 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 13:20:14.436 [Task submitter] INFO  nextflow.Session - [be/0d5d6b] Submitted process > CopyDatasetDescription (Copy dataset_description.json)
+Nov-23 13:20:14.634 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 13:20:14.635 [Task submitter] INFO  nextflow.Session - [4d/3f767a] Submitted process > runMRIQC (Participant: 001003)
+Nov-23 13:20:14.676 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 13:20:14.676 [Task submitter] INFO  nextflow.Session - [66/d1f935] Submitted process > runFmriprep (Participant: 001003)
+Nov-23 13:20:14.727 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 13:20:14.728 [Task submitter] INFO  nextflow.Session - [4f/657ce6] Submitted process > ValidateBIDS
+Nov-23 13:20:14.797 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: CopyDatasetDescription (Copy dataset_description.json); status: COMPLETED; exit: 0; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/be/0d5d6b953ff3d627336fca70c50d91]
+Nov-23 13:20:14.804 [Task monitor] WARN  nextflow.processor.PublishDir - Process `CopyDatasetDescription` publishDir path contains a variable with a null value
+Nov-23 13:20:16.257 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 13:20:16.258 [Task submitter] INFO  nextflow.Session - [99/b6f54e] Submitted process > PyDeface (sub-001003_ses-01_T2w.nii.gz)
+Nov-23 13:20:16.261 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-23 13:20:16.262 [Task submitter] INFO  nextflow.Session - [23/1ddd8f] Submitted process > PyDeface (sub-001003_ses-01_T1w.nii.gz)
+Nov-23 13:20:20.332 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 5; name: ValidateBIDS; status: COMPLETED; exit: 1; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4f/657ce6ef2fa5384860bff033918891]
+Nov-23 13:20:20.334 [Task monitor] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=ValidateBIDS; work-dir=/home/mzaz021/ImagePreprocessing/work/4f/657ce6ef2fa5384860bff033918891
+  error [nextflow.exception.ProcessFailedException]: Process `ValidateBIDS` terminated with an error exit status (1)
+Nov-23 13:20:20.336 [Task monitor] INFO  nextflow.processor.TaskProcessor - [4f/657ce6] NOTE: Process `ValidateBIDS` terminated with an error exit status (1) -- Error is ignored
+Nov-23 13:21:49.912 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 6; name: PyDeface (sub-001003_ses-01_T1w.nii.gz); status: COMPLETED; exit: 0; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/23/1ddd8f8a0d9b025a58a7e6594c8d7d]
+Nov-23 13:22:00.639 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 7; name: PyDeface (sub-001003_ses-01_T2w.nii.gz); status: COMPLETED; exit: 0; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/99/b6f54e45d8c8c93cb84955726820ff]
+Nov-23 13:23:51.222 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 13:28:51.271 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 13:33:51.347 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 13:38:51.378 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 13:43:51.473 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 13:48:51.519 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 13:53:51.551 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 13:58:51.597 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:03:51.640 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:08:51.669 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:13:51.688 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:18:51.707 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:23:51.741 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:28:51.770 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:33:51.870 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 2 -- submitted tasks are shown below
+~> TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:36:29.400 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 3; name: runMRIQC (Participant: 001003); status: COMPLETED; exit: 0; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362]
+Nov-23 14:36:29.405 [Task monitor] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
+  task: name=runMRIQC (Participant: 001003); work-dir=/home/mzaz021/ImagePreprocessing/work/4d/3f767adacafeb65387bcf13fd9b362
+  error [nextflow.exception.MissingFileException]: Missing output file(s) `reports/*.html` expected by process `runMRIQC (Participant: 001003)`
+Nov-23 14:36:29.405 [Task monitor] INFO  nextflow.processor.TaskProcessor - [4d/3f767a] NOTE: Missing output file(s) `reports/*.html` expected by process `runMRIQC (Participant: 001003)` -- Error is ignored
+Nov-23 14:38:51.882 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:43:51.926 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:48:51.939 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:53:52.015 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 14:58:52.081 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:03:52.154 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:08:52.218 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:13:52.251 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:18:52.277 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:23:52.370 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:28:52.443 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:33:52.513 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:38:52.526 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:43:52.591 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:48:52.670 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:53:52.682 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 4; name: runFmriprep (Participant: 001003); status: RUNNING; exit: -; error: -; workDir: /home/mzaz021/ImagePreprocessing/work/66/d1f935d584c6404457b717fb59e3f0]
+Nov-23 15:57:32.773 [SIGINT handler] DEBUG nextflow.Session - Session aborted -- Cause: SIGINT
+Nov-23 15:57:32.806 [Task monitor] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local) - terminating tasks monitor poll loop
+Nov-23 15:57:32.824 [main] DEBUG nextflow.Session - Session await > all processes finished
+Nov-23 15:57:32.824 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Nov-23 15:57:32.834 [main] WARN  n.processor.TaskPollingMonitor - Killing running tasks (1)
+Nov-23 15:57:32.876 [main] DEBUG n.executor.local.LocalTaskHandler - Unable to kill runFmriprep (Participant: 001003) -- command: kill -TERM 802573; exit: 1 
+ bash: line 1: kill: (802573) - No such process
+
+Nov-23 15:57:32.878 [main] DEBUG n.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=4; failedCount=2; ignoredCount=2; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=1; succeedDuration=4m 40s; failedDuration=5h 5m 4s; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=5; peakCpus=8; peakMemory=32 GB; ]
+Nov-23 15:57:32.878 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow completed -- saving trace file
+Nov-23 15:57:32.880 [main] DEBUG nextflow.trace.ReportObserver - Workflow completed -- rendering execution report
+Nov-23 15:57:33.548 [SIGINT handler] INFO  nextflow.Session - Adieu
