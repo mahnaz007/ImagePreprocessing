@@ -301,6 +301,29 @@ nextflow run main.nf -profile singularity -c /path/to/custom.config
 ### Option 2: Running Individual Pipeline Processes with Bash Scripts 
 For each pipeline step, different processes such as dcm2Bids, Pydeface, and MRIQC need to be executed using specific command-line bash scripts. These commands are intended for users who are containerizing the execution environment with Apptainer or Singularity, ensuring consistent and reproducible results. Each process can be run independently by specifying the appropriate commands for the desired task. The example codes are bash commands and can be used directly in a terminal or used, saved and accessed as bash scripts. Make sure to adapt all paths before running the commands.
 
+#### How to make and run bash scripts
+Bash scripts can be created using the command-line directly using 
+```
+touch [scriptname].sh
+```
+They can subsequently be edited using 
+```
+nano [scriptname].sh
+```
+if youre in the folder you created it in.
+
+To exectute them use 
+```
+bash [scriptname].sh
+```
+
+You can also create and edit your bash scripts using notepad++ in Windows. However Windows and the Linux Server use different ways to mark line breaks, so to avoid errors you have to use the following line once after creating the file to fix this:
+```
+dos2unix [scriptname].sh
+```
+
+The code below can be copy pasted into shell scripts and executed on the MR server.
+
 ### Running Dcm2Bids 
 #### For Running 1 Participant
 ```
@@ -346,44 +369,107 @@ for folder in "$sourceDir"/*; do
 done
 ```
 #### For Running the Entire Project
+**Prerequisites**: 
+- config.json file
+- adjust all parameters indicated with [] brackets at the beginning of the code to your own paths.
+	logFile: /home/imlohrf1/-> the folder you want the logfile to be in
+	test_run: 2-> which if/else scenrio you want to run
+	sourceDir: folder with your raw data
+	outputDir: where to savethe results
+	configPath: folder where your config file is 
+	configName: name of your config file
+
+- in the "subject=$(basename "$folder" | cut -d '_' -f 3)" line make sure your subject ID is in the 3rd part of the filename when cutting it at every " _ " otherwise change the 3 to the number that works for your fileformat
+- the same goes fot the session label/number in the line below
+
+- this assumes your data is safed similarly to the following folder structure (all raw data in your home/user directory in a folder named "00_raw").
+home/[YOURHOME]/
+    ├── 00_raw
+    │   ├── subj-01
+    │   │   ├── *_MR_Prisma_1
+    │   │   │   ├── 01_headscout
+    │   │   │   ├──  ...
+    │   │   │   ├── 29_mprage               
+    │   ├── subj-02
+    │   │   ├── *_MR_Prisma_1
+    │   │   │   ├── 01_headscout
+    │   │   │   ├──  ...
+    │   │   │   ├── 29_mprage
+    │   ├── ...
+
+**Start**: navigate to your working directory/where you have created the script called "01_dicom2bids.sh" with the code below and execute your script like:
+```
+cd /home/[YOURHOME]/
+bash 01_dicom2bids.sh
+```
+or exectute it like:
+```
+bash /home/[YOURHOME]/01_dicom2bids.sh
+```
+
+**01_dicom2bids.sh** 
 ```
 #!/bin/bash
-# Define the base directory
 
-sourceDir="/home/to/input"
-configFile="/home/to/config.json"
-outputDir="/home/to/output"
-container="/home/to/dcm2bids_3.2.0.sif"
+# Create logfile 
+logFile="/home/[YOURHOME]/01_bids_conversion_`date +"%Y-%m-%d-%H-%M"`.log"
+# Clear the log file at the start
+echo "BIDS Conversion Log - $(date)" > "$logFile"
 
-# Loop over all subdirectories in the source directory
-for folder in "$sourceDir"/*/; do
-    if [ -d "$folder" ]; then
-        # Extract subject and session from the folder name
-        subject=$(basename "$folder" | cut -d '_' -f 2)
-        sesStr=$(basename "$folder" | cut -d '_' -f 3)
-        ses=$(echo "$sesStr" | grep -oP 'S\K\d+')
-        
-        # Default session to 01 if empty
-        [ -z "$ses" ] && ses="01"
-        session_label="ses-$(printf '%02d' "$ses")"
-        echo "Processing participant: sub-${subject}, session: $session_label"
+# Define the base directories
+test_run=2 # here you can choose which scenario you want to run
 
-        # Call dcm2bids using Apptainer, without BIDS validation
-        apptainer run \
-            -e --containall \
-            -B "$folder:/dicoms:ro" \
-            -B "$configFile:/config.json:ro" \
-            -B "$outputDir:/bids" \
-            "$container" \
-            -d /dicoms -p "sub-${subject}" -s "$session_label" -c /config.json -o /bids
-    else
-        echo "$folder not found."
-    fi
+if [[ $test_run -eq 1 ]]; then 
+	# for testing only one datasets
+	sourceDir="/home/[YOURHOME]/00_test_data" # folder with only 1 datasets for testing
+	outputDir="/home/[YOURHOME]/01_dcm2bids_test" # where to save
+	configPath="/home/[YOURHOME]"  # config file path
+	configName="/config.json" # config file 
+else
+	# all data
+	sourceDir="/home/[YOURHOME]/00_raw" # folder with raw data
+	outputDir="/home/[YOURHOME]/01_dcm2bids"
+	configPath="/home/[YOURHOME]" 
+	configName="/config.json"
+fi
+
+mkdir -p $outputDir # create output folder
+
+# Loop through all folders in the source directory
+for folder in "$sourceDir"/*; do
+	echo "$folder"
+	if [ -d "$folder" ]; then  
+		subject=$(basename "$folder" | cut -d '_' -f 2)  # Extract subject name 3rd position
+		sesStr=$(basename "$folder" | cut -d '_' -f 3)   # Extract session name 4th position 
+		# Default session label (use full session string directly)
+		session_label="$sesStr"
+		echo "Processing participant: ${subject}, session: $session_label"
+		# Call dcm2bids using apptainer
+		if ! apptainer run \
+			-e --containall \
+			-B "$folder:/dicoms:ro" \
+			-B "$configPath$configName":/"$configName:ro" \
+			-B "$outputDir:/bids" \
+			/nic/sw/IRTG/sif/dcm2bids_3.2.0.sif \
+			-d /dicoms -p "sub-${subject}" -s "$session_label" -c /"$configName" -o /bids --force_dcm2bids; then
+			# Log failure
+			echo "Failed: ${subject}, session: $session_label" | tee -a "$logFile"
+		else
+			echo "Success: ${subject}, session: $session_label" >> "$logFile"
+		fi
+	else
+		# If not a directory, log the issue
+		echo "$folder is not a directory" | tee -a "$logFile"
+	fi
 done
 ```
 
 ### Running BIDS Validator
 **Note**: Before running BIDS validation, the tmp_dcm2bids directory should be either ignored by adding it to a .bidsignore file or removed manually to prevent any errors. The tmp_dcm2bids folder is created during the BIDSing process and not further needed.
+
+
+
+
 #### For Running 1 Participant
 ```
 #!/bin/bash
@@ -404,25 +490,84 @@ apptainer run --cleanenv \
   --verbose > "$LOG_DIR/$LOG_FILE" 2>&1
 ```
 #### For Running the Entire Project
+
+**Prerequisites**: 
+- dataset_description.json in your BIDsed data folder
+- README.md in your BIDsed data folder
+- .BIDSignore in your BIDsed data folder 
+  this is a hidden file: it can be seen using
+    ```
+    ls -lisa [foldername]
+    ```
+    can be created using
+    ```
+    touch [BIDSfoldername]/.BIDSignore
+    ```
+    and can be edited using 
+    ```
+    nano .BIDSignore
+    ```
+    if youre in the folder you created it in.
+- optional: a nonhidden file that 'shows' that the .BIDSignore exists
+	    can be created in notepad++/windows or using
+  ```
+  touch invisiblebidsignoreinthisfolder.txt
+  ```
+  this isnt used for anything other than reminding you of the hidden file
+
+
+
+**Notes**
+- you can see hidden files in the windows window manager: ansicht-> ausgeblendete elemente -> enable
+- you dont manually need to move the tmp_dcm2bids directory or worry about the .bidsignore not properly adressing it, the script moves it one directory up and renames it to whatever you choose as [outputDirLog]
+
+**Start**: navigate to your working directory/where you have created the script called "02_validate.sh" with the code below and execute your script like:
+```
+cd /home/[YOURHOME]/
+bash 02_validate.sh
+```
+or exectute it like:
+```
+bash /home/[YOURHOME]/02_validate.sh
+```
+
+**02_validate.sh**
 ```
 #!/bin/bash
-input_dir="/path/to/input"
-output_dir="/path/to/output"
 
-# Loop through all participant folders ('sub-XXXXXX')
-for participant in "$input_dir"/sub-*; do
-    participant_id=$(basename "$participant")
-    echo "Running BIDS validation for $participant_id..."
+test_run=1
+if [[ $test_run -eq 1 ]]; then 
+	# for testing one dataset
+inputDir="/home/[YOURHOME]/01_dcm2bids_test" # folder with only 1 datasets for testing
+	outputDir="/home/[YOURHOME]/02_validate_test"
+	outputDirLog="/home/[YOURHOME]/01_dcm2bids_test_log"
+else
+	# all data
+	inputDir="/home/[YOURHOME]/01_dcm2bids"
+	outputDir="/home/[YOURHOME]/02_validate"
+	outputDirLog="/home/[YOURHOME]/01_dcm2bids_log"
+fi
 
-    # Run bids-validator for each participant and save the log in bidsValidatorLogs
-    singularity run --cleanenv \
-        "$IRTG/sif/validator_1.14.13.sif" \
-        "$participant" \
-        --verbose > "$output_dir/${participant_id}_validation_log.txt" 2>&1
+# move temporary files away from the folder into another one 
+if [ -d "$inputDir/tmp_dcm2bids" ]; then
+	mkdir -p $outputDirLog
+	mv "$inputDir/tmp_dcm2bids" "$outputDirLog"
+	echo "moved $inputDir/tmp_dcm2bids to $outputDirLog"
+else
+	echo "no $inputDir/tmp_dcm2bids so nothing had to be moved"	
+fi
 
-    echo "Log saved for $participant_id at $output_dir/${participant_id}_validation_log.txt"
-done
+# create output folder
+mkdir -p $outputDir
+
+# Run bids-validator for each participant and save the log in bidsValidatorLogs
+singularity run --cleanenv \
+    /nic/sw/IRTG/sif/validator_1.14.13.sif \
+    "$inputDir" \
+    --verbose > "$outputDir/validation_log.txt" 2>&1
+echo "Log saved at $outputDir/validation_log.txt"
 ```
+
 **Note**: All errors need to be resolved, while warnings do not, though they should be considered.
 
 **Common Errors**:
@@ -492,28 +637,66 @@ singularity run \
   --verbose-reports
 ```
 #### For Running the Entire Project
+**Prerequisites**: 
+- change the directories at the beginning of the script marked with [YOURHOME]
+
+**Start**: navigate to your working directory/where you have created the script called "03_mriqc.sh" with the code below and execute your script like:
+```
+cd /home/[YOURHOME]/
+bash 03_mriqc.sh
+```
+or exectute it like:
+```
+bash /home/[YOURHOME]/03_mriqc.sh
+```
+
+**03_mriqc**
 ```
 #!/bin/bash
+#!/bin/bash
 
-input_dir="/path/to/input" #BIDS dataset
-output_dir="/path/to/output"
-# Path to your MRIQC work directory
-work_dir="/path/to/work/directory"
-singularity_image="$IRTG/sif/mriqc_24.0.2.sif"  
+# change this to your home directory/ folder where output dir should be made
+cd /home/[YOURHOME]/
+# change this to the run/option you want to chose below
+test_run=1
+if [[ $test_run -eq 1 ]]; then 
+	# for one dataset
+	sourceDir="/home/[YOURHOME]/01_dcm2bids_test" # folder with only 1 dataset for testing
+	outputDir="/home/[YOURHOME]/03_mriqc_test" # where to save
+else 
+	# all data
+	sourceDir="/home/[YOURHOME]/01_dcm2bids" 
+	outputDir="/home/[YOURHOME]/03_mriqc"
+fi
 
-# Loop through each participant folder starting with 'sub-'
-for participant in $(ls $input_dir | grep 'sub-'); do
+# dont change anything after here
+
+workDir="${outputDir}work" # Add _work suffix to the output directory path
+# Create the directories if they don't already exist
+mkdir -p $outputDir 
+mkdir -p $workDir
+echo "Created $outputDir and $workDir "
+
+sif_file="/nic/sw/IRTG/sif/mriqc_24.0.2.sif"  
+NPROCS=4 # processors
+OMP_THREADS=4 # threads
+MEM_GB=8 # memory
+
+for participant in $(ls $sourceDir | grep 'sub-'); do
     echo "Running MRIQC on $participant"
-    singularity run --bind $work_dir:$work_dir $singularity_image \
-        $input_dir $output_dir participant \
-        --participant_label ${participant#sub-} \
-        --nprocs 4 \
-        --omp-nthreads 4 \
-        --mem_gb 8 \
-        --no-sub \
-        -vvv \
-        --verbose-reports \
-        --work-dir $work_dir
+	# Singularity command to run MRIQC
+    singularity run --bind $workDir:$workDir $sif_file \
+		  "$sourceDir" \
+		  "$outputDir" participant \
+		  participant \
+		  --participant-label ${participant#sub-} \
+		  --nprocs "$NPROCS" \
+		  --omp-nthreads "$OMP_THREADS" \
+		  --mem_gb "$MEM_GB" \
+		  --no-sub \
+		  -vvv \
+		  --verbose-reports
+		  --work-dir $workDir
     echo "Finished processing $participant"
 done
 ```
@@ -618,6 +801,12 @@ for SESSION in "${SESSIONS[@]}"; do
 done
 ```
 #### For Running the entire project
+
+
+
+
+
+
 ```
 #!/bin/bash
 
