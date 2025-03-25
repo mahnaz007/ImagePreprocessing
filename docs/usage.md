@@ -130,12 +130,19 @@ The first step of the pipeline converts raw neuroimaging data - DICOM files - in
  ### Example of DICOM input structure:
 ```
 input/
-IRTG01/
-├── 01_AAHead_Scout_r1/
-├── 02_AAHead_Scout_r1_MPR_sag/
-├── 03_AAHead_Scout_r1_MPR_cor/
-├── 05_gre_field_mapping_MIST/
-└── ... (other DICOM folders)
+IRTG02/
+└── IRTG02_002002_S1_b20020101/
+    └── 20240308_141641_MR_MAGNETOM_Prisma_1/
+        ├── 01_AAHead_Scout_r1/
+        │   └── 0001_0001/
+        ├── 02_AAHead_Scout_r1_MPR_sag/
+        ├── 03_AAHead_Scout_r1_MPR_cor/
+        ├── 04_AAHead_Scout_r1_MPR_tra/
+        ├── 05_gre_field_mapping_MIST/
+        ├── 06_gre_field_mapping_MIST/
+        ├── 07_refMIST_cmrr_mbep2d_bold_TR1.4_PA_SBRef/
+        ├── 08_refMIST_cmrr_mbep2d_bold_TR1.4_PA/
+        ├── 09_MIST1_cmrr_mbep2d_bold_TR1.4_AP_SBRef/      
 ```
 
 **Output**:
