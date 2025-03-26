@@ -130,12 +130,19 @@ The first step of the pipeline converts raw neuroimaging data - DICOM files - in
  ### Example of DICOM input structure:
 ```
 input/
-IRTG01/
-├── 01_AAHead_Scout_r1/
-├── 02_AAHead_Scout_r1_MPR_sag/
-├── 03_AAHead_Scout_r1_MPR_cor/
-├── 05_gre_field_mapping_MIST/
-└── ... (other DICOM folders)
+IRTG02/
+└── IRTG02_002002_S1_b20020101/
+    └── 20240308_141641_MR_MAGNETOM_Prisma_1/
+        ├── 01_AAHead_Scout_r1/
+        │   └── 0001_0001/
+        ├── 02_AAHead_Scout_r1_MPR_sag/
+        ├── 03_AAHead_Scout_r1_MPR_cor/
+        ├── 04_AAHead_Scout_r1_MPR_tra/
+        ├── 05_gre_field_mapping_MIST/
+        ├── 06_gre_field_mapping_MIST/
+        ├── 07_refMIST_cmrr_mbep2d_bold_TR1.4_PA_SBRef/
+        ├── 08_refMIST_cmrr_mbep2d_bold_TR1.4_PA/
+        ├── 09_MIST1_cmrr_mbep2d_bold_TR1.4_AP_SBRef/      
 ```
 
 **Output**:
@@ -157,34 +164,74 @@ This pipeline creates a BIDS-compliant output, organized by four main imaging mo
 
 - dwi: Diffusion-weighted imaging shows water diffusion in tissues, highlighting white matter pathways.
 ```
-output/
-├── sub-001001
-│   ├── ses-01
-│   │   ├── anat
-│   │   │   ├── sub-001001_ses-01_T1w.nii.gz              # NIfTI file (T1-weighted image)
-│   │   │   ├── sub-001001_ses-01_T1w.json                # Metadata for T1w image
-│   │   │   ├── sub-001001_ses-01_T2w.nii.gz              # NIfTI file (T2-weighted image)
-│   │   │   ├── sub-001001_ses-01_T2w.json                # Metadata for T2w image
-│   │   ├── func
-│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.nii.gz   # NIfTI file for BOLD fMRI
-│   │   │   ├── sub-001001_ses-01_task-rest_dir-AP_bold.json     # Metadata for BOLD fMRI
-│   │   ├── fmap
-│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.nii.gz       # NIfTI file for magnitude fieldmap
-│   │   │   ├── sub-001001_ses-01_run-01_magnitude1.json         # Metadata for magnitude1
-│   │   │   ├── sub-001001_ses-01_run-01_phasediff.nii.gz        # NIfTI file for phase difference map
-│   │   │   ├── sub-001001_ses-01_run-01_phasediff.json          # Metadata for phase difference map
-│   │   ├── dwi
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.nii.gz   # NIfTI file for diffusion-weighted imaging
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bvec     # Diffusion gradient directions
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.bval     # Diffusion weighting factors
-│   │   │   ├── sub-001001_ses-01_acq-DGD006_dir-PA_dwi.json     # Metadata for DWI
-│   ├── ses-02
-│   │   ├── anat
-│   │   │   ├── sub-001001_ses-02_T1w.nii.gz              # NIfTI file for session 2
-│   │   │   └── sub-001001_ses-02_T1w.json                # Metadata for session 2
-├── dataset_description.json  # Metadata file describing the dataset
-├── participants.tsv          # Participant-level metadata
-└── README                    # Optional readme file describing the dataset
+IRTG02/
+└── 01_BIDS_IRTG02/
+    ├── dataset_description.json           # Describing the dataset
+    ├── participants.tsv                   # Participant-level metadata
+    ├── README.txt                         # README file for the dataset
+    ├── derivatives/                       # Output from processing tools 
+    ├── logs_dcm2bids/                     # Logs for BIDS conversion
+    ├── tmp_dcm2bids/                      # Temporary folder used during BIDS conversion
+    ├── sourcedata/                        # Original DICOM data  for BIDS conversion
+    ├── sub-002002/                        
+    ├── sub-002004/
+    │   └── ses-01/
+    │       ├── anat/
+    │       │   ├── sub-002004_ses-01_T1w.nii.gz # NIfTI file (T1-weighted image)
+    │       │   ├── sub-002004_ses-01_T1w.json   # Metadata for T1w image
+    │       │   ├── sub-002004_ses-01_T2w.nii.gz # NIfTI file (T2-weighted image)
+    │       │   └── sub-002004_ses-01_T2w.json   # Metadata for T2w image
+    │       ├── func/
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-01_bold.nii.gz  # NIfTI file for BOLD fMRI
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-01_bold.json    # Metadata for BOLD fMRI
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-01_sbref.nii.gz # SBRef for run 01
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-01_sbref.json   # Metadata for SBRef
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-02_bold.nii.gz
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-02_bold.json
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-02_sbref.nii.gz
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-02_sbref.json
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-03_bold.nii.gz
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-03_bold.json
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-03_sbref.nii.gz
+    │       │   ├── sub-002004_ses-01_task-MIST_dir-AP_run-03_sbref.json
+    │       │   ├── sub-002004_ses-01_task-rest_dir-AP_bold.nii.gz
+    │       │   ├── sub-002004_ses-01_task-rest_dir-AP_bold.json
+    │       │   ├── sub-002004_ses-01_task-rest_dir-AP_sbref.nii.gz
+    │       │   └── sub-002004_ses-01_task-rest_dir-AP_sbref.json
+    │       ├── fmap/
+    │       │   ├── sub-002004_ses-01_run-01_magnitude1.nii.gz # NIfTI file for magnitude fieldmap
+    │       │   ├── sub-002004_ses-01_run-01_magnitude1.json   # Metadata for magnitude1
+    │       │   ├── sub-002004_ses-01_run-01_magnitude2.nii.gz
+    │       │   ├── sub-002004_ses-01_run-01_magnitude2.json
+    │       │   ├── sub-002004_ses-01_run-01_phasediff.nii.gz # NIfTI file for phase difference map
+    │       │   ├── sub-002004_ses-01_run-01_phasediff.json   # Metadata for phase difference map
+    │       │   ├── sub-002004_ses-01_run-02_magnitude1.nii.gz
+    │       │   ├── sub-002004_ses-01_run-02_magnitude1.json
+    │       │   ├── sub-002004_ses-01_run-02_magnitude2.nii.gz
+    │       │   ├── sub-002004_ses-01_run-02_magnitude2.json
+    │       │   ├── sub-002004_ses-01_run-02_phasediff.nii.gz
+    │       │   ├── sub-002004_ses-01_run-02_phasediff.json
+    │       │   ├── sub-002004_ses-01_acq-DGD006_dir-PA_epi.nii.gz # EPI distortion map
+    │       │   ├── sub-002004_ses-01_acq-DGD006_dir-PA_epi.json   # Metadata for EPI distortion map
+    │       │   ├── sub-002004_ses-01_acq-DGD006_dir-PA_epi.bval
+    │       │   ├── sub-002004_ses-01_acq-DGD006_dir-PA_epi.bvec
+    │       │   ├── sub-002004_ses-01_acq-MIST_dir-PA_epi.nii.gz
+    │       │   ├── sub-002004_ses-01_acq-MIST_dir-PA_epi.json
+    │       │   ├── sub-002004_ses-01_acq-rest_dir-PA_epi.nii.gz
+    │       │   └── sub-002004_ses-01_acq-rest_dir-PA_epi.json
+    │       └── dwi/
+    │           ├── sub-002004_ses-01_acq-DGD074_dir-AP_dwi.nii.gz   # NIfTI file for diffusion-weighted imaging
+    │           ├── sub-002004_ses-01_acq-DGD074_dir-AP_dwi.json     # Metadata for DWI
+    │           ├── sub-002004_ses-01_acq-DGD074_dir-AP_dwi.bval     # Diffusion weighting factors
+    │           ├── sub-002004_ses-01_acq-DGD074_dir-AP_dwi.bvec     # Diffusion gradient directions
+    │           ├── sub-002004_ses-01_acq-DGD074_dir-AP_sbref.nii.gz # SBRef image for DWI (DGD074)
+    │           ├── sub-002004_ses-01_acq-DGD074_dir-AP_sbref.json   # Metadata for SBRef (DGD074)
+    │           ├── sub-002004_ses-01_acq-DGD103_dir-AP_dwi.nii.gz
+    │           ├── sub-002004_ses-01_acq-DGD103_dir-AP_dwi.json
+    │           ├── sub-002004_ses-01_acq-DGD103_dir-AP_dwi.bval
+    │           ├── sub-002004_ses-01_acq-DGD103_dir-AP_dwi.bvec
+    │           ├── sub-002004_ses-01_acq-DGD103_dir-AP_sbref.nii.gz
+    │           └── sub-002004_ses-01_acq-DGD103_dir-AP_sbref.json
 ```
 ### Step 2: BIDS Validation
 Once the data is converted to BIDS format, the pipeline performs validation using the `bids-validator` tool. This tool checks that the dataset complies with the BIDS standard, ensuring that the format and required metadata are correct.
