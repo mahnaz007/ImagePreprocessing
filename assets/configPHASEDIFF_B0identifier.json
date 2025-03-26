@@ -1,4 +1,5 @@
-{
+{   
+    "bids_uri": "relative",
     "descriptions": [
         {
             "datatype": "anat",
@@ -6,6 +7,9 @@
             "criteria": {
                 "SeriesDescription": "T1w_MPR",
                 "EchoTime": 0.00222
+            },
+            "sidecar_changes": {
+                "ParallelReductionFactorOutOfPlane": 1
             }
         },
         {
@@ -13,122 +17,9 @@
             "suffix": "T2w",
             "criteria": {
                 "SeriesDescription": "T2w_SPC"
-            }
-        },
-        {
-            "datatype": "dwi", 
-            "suffix": "sbref",
-            "modalityLabel": "sbref",
-            "custom_entities": "acq-DGD103_dir-AP",
-            "criteria": {
-                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP_SBRef",
-                "EchoTime": 0.071
             },
             "sidecar_changes": {
-                "PhaseEncodingDirection": "j-",
-                "bids_ignore": ["bval", "bvec"]
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "dwi",
-            "custom_entities": "acq-DGD103_dir-AP",
-            "criteria": {
-                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP",
-                "EchoTime": 0.071
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j-"
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "ADC",
-            "modalityLabel": "ADC",
-            "custom_entities": "acq-DGD103_dir-AP",
-            "criteria": {
-                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP_ADC",
-                "EchoTime": 0.071
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j-"
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "sbref",
-            "modalityLabel": "sbref",
-            "custom_entities": "acq-DGD006_dir-PA",
-            "criteria": {
-                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA_SBRef"
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j",
-                "bids_ignore": ["bval", "bvec"]
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "dwi",
-            "custom_entities": "acq-DGD006_dir-PA",
-            "criteria": {
-                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA",
-                "EchoTime": 0.0668
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j"
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "ADC",
-            "modalityLabel": "ADC",
-            "custom_entities": "acq-DGD006_dir-PA",
-            "criteria": {
-                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA_ADC",
-                "EchoTime": 0.0668
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j"
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "sbref",
-            "modalityLabel": "sbref",
-            "custom_entities": "acq-DGD074_dir-AP",
-            "criteria": {
-                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP_SBRef"
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j-",
-                "bids_ignore": ["bval", "bvec"]
-               
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "dwi",
-            "custom_entities": "acq-DGD074_dir-AP",
-            "criteria": {
-                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP",
-                "EchoTime": 0.0668
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j-"
-            }
-        },
-        {
-            "datatype": "dwi",
-            "suffix": "ADC",
-            "modalityLabel": "ADC",
-            "custom_entities": "acq-DGD074_dir-AP",
-            "criteria": {
-                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP_ADC",
-                "EchoTime": 0.0668
-            },
-            "sidecar_changes": {
-                "PhaseEncodingDirection": "j-"
+                "ParallelReductionFactorOutOfPlane": 1
             }
         },
         {
@@ -153,7 +44,12 @@
             },
             "sidecar_changes": {
                 "TaskName": "MIST1",
-		"B0FieldSource": "phasediff_fmap_MIST"
+                "TaskDescription": "The Montreal Imaging Stress Test (MIST) is a neuroimaging psychosocial stress paradigm (Dedovic et al., 2005) with alternating control (~61s) and stress (~90s) conditions, starting with control. Each ~5-minute run repeats this sequence twice across three runs. Outside the MR scanner, participants complete a training session with control tasks. In stress conditions, they face time pressure, social evaluation via feedback (TIME OUT, WRONG, CORRECT), and performance comparisons to a fictional group. Negative comments between runs are used to increase stress, though feedback is adjusted if signs of distress (e.g., trembling voice, breath-holding) appear. For adults, tasks are set to high difficulty and low speed, with minor timing variations. For children/adolescents (Project IRTG01), the hardest level (“Level 3”) is used unless accuracy falls below 50% during the training session, prompting a reduction.",
+                "Instructions": "We are testing cognitive performance in relation to hormones using math tasks in the scanner. There are two conditions: control and experimental. In the experimental condition, a blue bar shows your time limit, and your performance is compared to a control group. Use your index and ring fingers to enter answers, your middle finger to confirm. The screen will show if you are correct. Stay still and silent. Now, we’ll practice without time limits or recording.",
+                "B0FieldSource": [
+                    "phasediff_fmap_MIST",
+                    "pepolar_fmap0_MIST"
+                ]
             }
         },
         {
@@ -178,7 +74,12 @@
             },
             "sidecar_changes": {
                 "TaskName": "MIST2",
-		"B0FieldSource": "phasediff_fmap_MIST"
+                "TaskDescription": "The Montreal Imaging Stress Test (MIST) is a neuroimaging psychosocial stress paradigm (Dedovic et al., 2005) with alternating control (~61s) and stress (~90s) conditions, starting with control. Each ~5-minute run repeats this sequence twice across three runs. Outside the MR scanner, participants complete a training session with control tasks. In stress conditions, they face time pressure, social evaluation via feedback (TIME OUT, WRONG, CORRECT), and performance comparisons to a fictional group. Negative comments between runs are used to increase stress, though feedback is adjusted if signs of distress (e.g., trembling voice, breath-holding) appear. For adults, tasks are set to high difficulty and low speed, with minor timing variations. For children/adolescents (Project IRTG01), the hardest level (“Level 3”) is used unless accuracy falls below 50% during the training session, prompting a reduction.",
+                "Instructions": "We are testing cognitive performance in relation to hormones using math tasks in the scanner. There are two conditions: control and experimental. In the experimental condition, a blue bar shows your time limit, and your performance is compared to a control group. Use your index and ring fingers to enter answers, your middle finger to confirm. The screen will show if you are correct. Stay still and silent. Now, we’ll practice without time limits or recording.",
+                "B0FieldSource": [
+                    "phasediff_fmap_MIST",
+                    "pepolar_fmap0_MIST"
+                ]
             }
         },
         {
@@ -203,7 +104,12 @@
             },
             "sidecar_changes": {
                 "TaskName": "MIST3",
-		"B0FieldSource": "phasediff_fmap_MIST"
+                "TaskDescription": "The Montreal Imaging Stress Test (MIST) is a neuroimaging psychosocial stress paradigm (Dedovic et al., 2005) with alternating control (~61s) and stress (~90s) conditions, starting with control. Each ~5-minute run repeats this sequence twice across three runs. Outside the MR scanner, participants complete a training session with control tasks. In stress conditions, they face time pressure, social evaluation via feedback (TIME OUT, WRONG, CORRECT), and performance comparisons to a fictional group. Negative comments between runs are used to increase stress, though feedback is adjusted if signs of distress (e.g., trembling voice, breath-holding) appear. For adults, tasks are set to high difficulty and low speed, with minor timing variations. For children/adolescents (Project IRTG01), the hardest level (“Level 3”) is used unless accuracy falls below 50% during the training session, prompting a reduction.",
+                "Instructions": "We are testing cognitive performance in relation to hormones using math tasks in the scanner. There are two conditions: control and experimental. In the experimental condition, a blue bar shows your time limit, and your performance is compared to a control group. Use your index and ring fingers to enter answers, your middle finger to confirm. The screen will show if you are correct. Stay still and silent. Now, we’ll practice without time limits or recording.",
+                "B0FieldSource": [
+                    "phasediff_fmap_MIST",
+                    "pepolar_fmap0_MIST"
+                ]
             }
         },
         {
@@ -221,8 +127,7 @@
                     "task-MIST2",
                     "task-MIST3"
                 ],
-		"B0FieldIdentifier": "phasediff_fmap_MIST"
-
+                "B0FieldIdentifier": "phasediff_fmap_MIST"
             }
         },
         {
@@ -241,7 +146,7 @@
                     "task-MIST2",
                     "task-MIST3"
                 ],
-		"B0FieldIdentifier": "phasediff_fmap_MIST"
+                "B0FieldIdentifier": "phasediff_fmap_MIST"
             }
         },
         {
@@ -262,138 +167,104 @@
                     "task-MIST2",
                     "task-MIST3"
                 ],
-		"B0FieldIdentifier": "phasediff_fmap_MIST"
+                "B0FieldIdentifier": "phasediff_fmap_MIST"
             }
         },
         {
             "datatype": "fmap",
-            "suffix": "magnitude1",
-            "customLabel": "acq-rest",
+            "suffix": "epi",
+            "custom_entities": "acq-MIST_dir-PA",
             "criteria": {
-                "SeriesDescription": "gre_field_mapping_rest",
-                "EchoTime": 0.00519,
-                "EchoNumber": 1
+                "SeriesDescription": "refMIST_cmrr_mbep2d_bold_TR1.4_PA",
+                "EchoTime": 0.03
             },
             "sidecar_changes": {
-                "IntendedFor": "task-rest",
-		"B0FieldIdentifier": "phasediff_fmap_rest"
-            }
-		
-        },
-        {
-            "datatype": "fmap",
-            "suffix": "magnitude2",
-            "customLabel": "acq-rest",
-            "criteria": {
-                "SeriesDescription": "gre_field_mapping_rest",
-                "EchoTime": 0.00765,
-                "EchoNumber": 2,
-                "ImageType": ["ORIGINAL", "PRIMARY", "M", "NONE"]
-            },
-            "sidecar_changes": {
-                "IntendedFor": "task-rest",
-		"B0FieldIdentifier": "phasediff_fmap_rest"
-            }
-        },
-        {
-            "datatype": "fmap",
-            "suffix": "phasediff",
-            "customLabel": "acq-rest",
-            "criteria": {
-                "SeriesDescription": "gre_field_mapping_rest",
-                "EchoTime1": 0.00519,
-                "EchoTime2": 0.00765,
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "NONE", "PHASE"]
-            },
-            "sidecar_changes": {
-                "EchoTime1": 0.00519,
-                "EchoTime2": 0.00765,
-                "IntendedFor": "task-rest",
-		"B0FieldIdentifier": "phasediff_fmap_rest"
-            }
-        },
-        {
-            "datatype": "fmap",
-            "suffix": "magnitude1",
-            "criteria": {
-                "SeriesDescription": "gre_field_mapping",
-                "EchoTime": 0.00519,
-                "EchoNumber": 1
-            },
-            "sidecar_changes": {
+                "TaskName": "refMIST",
+                "PhaseEncodingDirection": "j",
                 "IntendedFor": [
-                    "task-EATlong",
-                    "task-EATshort",
-                    "task-ERT",
-                    "task-rest"
+                    "task-MIST1",
+                    "task-MIST2",
+                    "task-MIST3"
                 ],
-		"B0FieldIdentifier": "phasediff_fmap"
-            }
-        },
-        {
-            "datatype": "fmap",
-            "suffix": "magnitude2",
-            "criteria": {
-                "SeriesDescription": "gre_field_mapping",
-                "EchoTime": 0.00765,
-                "EchoNumber": 2,
-                "ImageType": ["ORIGINAL", "PRIMARY", "M", "NONE"]
-            },
-            "sidecar_changes": {
-                "IntendedFor": [
-                    "task-EATlong",
-                    "task-EATshort",
-                    "task-ERT",
-                    "task-rest"
-                ],
-		"B0FieldIdentifier": "phasediff_fmap"
-            }
-        },
-        {
-            "datatype": "fmap",
-            "suffix": "phasediff",
-            "criteria": {
-                "SeriesDescription": "gre_field_mapping",
-                "EchoTime1": 0.00519,
-                "EchoTime2": 0.00765,
-                "ImageType": ["ORIGINAL", "PRIMARY", "P", "NONE", "PHASE"]
-            },
-            "sidecar_changes": {
-                "EchoTime1": 0.00519,
-                "EchoTime2": 0.00765,
-                "IntendedFor": [
-                    "task-EATlong",
-                    "task-EATshort",
-                    "task-ERT",
-                    "task-rest"
-                ],
-		"B0FieldIdentifier": "phasediff_fmap"
+                "B0FieldIdentifier": "pepolar_fmap0_MIST"
             }
         },
         {
             "datatype": "func",
             "suffix": "sbref",
-            "custom_entities": "task-all_dir-PA",
+            "custom_entities": "task-rest_dir-AP",
             "criteria": {
-                "SeriesDescription": "ref_cmrr_mbep2d_bold_TR1.4_PA_SBRef",
+                "SeriesDescription": "rest_cmrr_mbep2d_bold_TR1.4_AP_SBRef"
+            },
+            "sidecar_changes": {
+                "TaskName": "rest"
+            }
+        },
+        {
+            "id": "task-rest",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-rest_dir-AP",
+            "criteria": {
+                "SeriesDescription": "rest_cmrr_mbep2d_bold_TR1.4_AP",
                 "EchoTime": 0.03
             },
             "sidecar_changes": {
-                "TaskName": "ref",
-                "PhaseEncodingDirection": "j"
+                "TaskName": "rest",
+                "TaskDescription": "An extended 10-minute version of the Inscapes video (Vanderwal et al., 2015) was shown. This computer-generated animation features abstract 3D shapes with slow, continuous transitions.",
+                "Instructions": "You will now watch a video for the next 10 minutes. While watching, you don’t need to do anything. Please lie still, think of nothing specific, and stay awake during the recording.",
+                "B0FieldSource": [
+                    "phasediff_fmap",
+                    "pepolar_fmap0",
+                    "phasediff_fmap_rest",
+                    "pepolar_fmap0_rest"
+                ]
             }
         },
         {
             "datatype": "fmap",
-            "suffix": "bold",
-            "custom_entities": "task-all_dir-PA",
+            "suffix": "magnitude1",
+            "customLabel": "acq-rest",
             "criteria": {
-                "SeriesDescription": "ref_cmrr_mbep2d_bold_TR1.4_PA",
-                "EchoTime": 0.03
+                "SeriesDescription": "gre_field_mapping_rest",
+                "EchoTime": 0.00519,
+                "EchoNumber": 1
             },
             "sidecar_changes": {
-                "TaskName": "ref",
-                "PhaseEncodingDirection": "j"
+                "IntendedFor": "task-rest",
+                "B0FieldIdentifier": "phasediff_fmap_rest"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude2",
+            "customLabel": "acq-rest",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_rest",
+                "EchoTime": 0.00765,
+                "EchoNumber": 2,
+                "ImageType": ["ORIGINAL", "PRIMARY", "M", "NONE"]
+            },
+            "sidecar_changes": {
+                "IntendedFor": "task-rest",
+                "B0FieldIdentifier": "phasediff_fmap_rest"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "phasediff",
+            "customLabel": "acq-rest",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping_rest",
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "NONE", "PHASE"]
+            },
+            "sidecar_changes": {
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "IntendedFor": "task-rest",
+                "B0FieldIdentifier": "phasediff_fmap_rest"
             }
         },
         {
@@ -419,83 +290,42 @@
             },
             "sidecar_changes": {
                 "TaskName": "EATlong",
-		"B0FieldSource": "phasediff_fmap"
-            }
-        },
-        {
-            "datatype": "func",
-            "suffix": "sbref",
-            "custom_entities": "task-rest_dir-PA",
-            "criteria": {
-                "SeriesDescription": "refRest_cmrr_mbep2d_bold_TR1.4_PA_SBRef"
-            },
-            "sidecar_changes": {
-                "TaskName": "refRest",
-                "PhaseEncodingDirection": "j"
-            }
-        },
-        {
-            "datatype": "fmap",
-            "suffix": "bold",
-            "custom_entities": "task-rest_dir-PA",
-            "criteria": {
-                "SeriesDescription": "refRest_cmrr_mbep2d_bold_TR1.4_PA"
-            },
-            "sidecar_changes": {
-                "TaskName": "refRest",
-                "PhaseEncodingDirection": "j"
-            }
-        },
-        {
-            "datatype": "func",
-            "suffix": "sbref",
-            "custom_entities": "task-MIST_dir-PA",
-            "criteria": {
-                "SeriesDescription": "refMIST_cmrr_mbep2d_bold_TR1.4_PA_SBRef"
-            },
-            "sidecar_changes": {
-                "TaskName": "refMIST",
-                "PhaseEncodingDirection": "j"
-            }
-        },
-        {
-            "datatype": "fmap",
-            "suffix": "bold",
-            "custom_entities": "task-MIST_dir-PA",
-            "criteria": {
-                "SeriesDescription": "refMIST_cmrr_mbep2d_bold_TR1.4_PA",
-                "EchoTime": 0.03
-            },
-            "sidecar_changes": {
-                "TaskName": "refMIST",
-                "PhaseEncodingDirection": "j"
-            }
-        },
-        {
-            "datatype": "func",
-            "suffix": "sbref",
-            "custom_entities": "task-rest_dir-AP",
-            "criteria": {
-                "SeriesDescription": "rest_cmrr_mbep2d_bold_TR1.4_AP_SBRef"
-            },
-            "sidecar_changes": {
-                "TaskName": "rest"
-            }
-        },
-        {
-            "id": "task-rest",
-            "datatype": "func",
-            "suffix": "bold",
-            "custom_entities": "task-rest_dir-AP",
-            "criteria": {
-                "SeriesDescription": "rest_cmrr_mbep2d_bold_TR1.4_AP",
-                "EchoTime": 0.03
-            },
-            "sidecar_changes": {
-                "TaskName": "rest",
-		"B0FieldSource": [
+                "TaskDescription": "The Effort Allocation Task (EAT) involves participants earning food or money by using a grip force device to move a virtual ball upwards on a screen, keeping it above a red line to score points. It varies by reward type (money or food), reward magnitude (low: 1 point, high: 10 points), and difficulty (60% or 70% of maximum effort). After a training phase (~5 minutes) to determine maximum effort, participants enter the experimental phase (~28 minutes).",
+                "Instructions": "You play for money and food by using pressure to move the ball above a red line. You earn points for every full second the ball stays above the line. The exchange rate is 100 money points = 32 cents and 100 food points = 25kcal, and you can convert points to money and snacks afterward. The experiment lasts about 30 minutes.",
+                "B0FieldSource": [
                     "phasediff_fmap",
-                    "phasediff_fmap_rest"
+                    "pepolar_fmap0"
+                ]
+            }
+        },
+        {
+            "datatype": "func",
+            "suffix": "sbref",
+            "custom_entities": "task-EATshort_dir-AP",
+            "criteria": {
+                "SeriesDescription": "EATshort_cmrr_mbep2d_bold_TR1.4_AP_SBRef",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "EATshort"
+            }
+        },
+        {
+            "id": "task-EATshort",
+            "datatype": "func",
+            "suffix": "bold",
+            "custom_entities": "task-EATshort_dir-AP",
+            "criteria": {
+                "SeriesDescription": "EATshort_cmrr_mbep2d_bold_TR1.4_AP",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "EATshort",
+                "TaskDescription": "The Effort Allocation Task (EAT) involves participants earning money by using a grip force device to move a virtual ball upwards on a screen, keeping it above a red line to score points. It varies by reward magnitude (low: 1 point, high: 10 points) and difficulty (adults: 75% or 85% of maximum effort, adolescents (IRTG09): 60% or 70%). After a training phase (~3 minutes) to determine maximum effort, participants enter the experimental phase (~17 minutes).",
+                "Instructions": "You play for money by using pressure to move the ball above a red line. You earn points for every full second the ball stays above the line. The exchange rate is 100 points = 32 cents, and you can convert points to money afterward. The experiment lasts about 15 minutes.",
+                "B0FieldSource": [
+                    "phasediff_fmap",
+                    "pepolar_fmap0"
                 ]
             }
         },
@@ -522,33 +352,214 @@
             },
             "sidecar_changes": {
                 "TaskName": "ERT",
-		"B0FieldSource": "phasediff_fmap"
+                "TaskDescription": "The Erotic Rating Task (ERT) contains 60 black-and-white images across three categories: erotic couple, non-erotic positive couple, and non-erotic neutral couple (20 each). Each image appears for 5 seconds, followed by a 0.5-second fixation cross before participants rate their sexual arousal (0–100) via a button box. A randomized inter-trial interval (2–8s, mean 4s) follows. Pseudo-randomization prevents more than two consecutive images from the same category. A practice run with three images precedes the task. Stimuli were pre-validated in an online study of women aged 35–60 (N=96, Age_mean=44.68, Age_SD=7.63).",
+                "Instructions": "You will see different images on the screen. Indicate how much each image sexually arouses you by moving the pointer via the left and right buttons and confirming the current position with the middle button. The scale ranges from 'not at all' to 'moderate' to 'very strong'.",
+                "B0FieldSource": [
+                    "phasediff_fmap",
+                    "pepolar_fmap0"
+                ]
             }
         },
         {
-            "datatype": "func",
+            "datatype": "fmap",
+            "suffix": "magnitude1",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping",
+                "EchoTime": 0.00519,
+                "EchoNumber": 1
+            },
+            "sidecar_changes": {
+                "IntendedFor": [
+                    "task-rest",
+					"task-EATlong",
+                    "task-EATshort",
+                    "task-ERT"
+                ],
+                "B0FieldIdentifier": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "magnitude2",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping",
+                "EchoTime": 0.00765,
+                "EchoNumber": 2,
+                "ImageType": ["ORIGINAL", "PRIMARY", "M", "NONE"]
+            },
+            "sidecar_changes": {
+                "IntendedFor": [
+                    "task-rest",
+                    "task-EATlong",
+                    "task-EATshort",
+                    "task-ERT"  
+                ],
+                "B0FieldIdentifier": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "phasediff",
+            "criteria": {
+                "SeriesDescription": "gre_field_mapping",
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "ImageType": ["ORIGINAL", "PRIMARY", "P", "NONE", "PHASE"]
+            },
+            "sidecar_changes": {
+                "EchoTime1": 0.00519,
+                "EchoTime2": 0.00765,
+                "IntendedFor": [
+                    "task-rest",
+                    "task-EATlong",
+                    "task-EATshort",
+                    "task-ERT"
+                ],
+                "B0FieldIdentifier": "phasediff_fmap"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "epi",
+            "custom_entities": "acq-rest_dir-PA",
+            "criteria": {
+                "SeriesDescription": "refRest_cmrr_mbep2d_bold_TR1.4_PA"
+            },
+            "sidecar_changes": {
+                "TaskName": "refRest",
+                "PhaseEncodingDirection": "j",
+                "IntendedFor": "task-rest",
+                "B0FieldIdentifier": "pepolar_fmap0_rest"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "epi",
+            "custom_entities": "acq-tasksall_dir-PA",
+            "criteria": {
+                "SeriesDescription": "ref_cmrr_mbep2d_bold_TR1.4_PA",
+                "EchoTime": 0.03
+            },
+            "sidecar_changes": {
+                "TaskName": "ref",
+                "PhaseEncodingDirection": "j",
+                "IntendedFor": [
+                    "task-rest",
+                    "task-EATlong",
+                    "task-EATshort",
+                    "task-ERT"
+                ],
+                "B0FieldIdentifier": "pepolar_fmap0"
+            }
+        },
+        {
+            "datatype": "dwi",
             "suffix": "sbref",
-            "custom_entities": "task-EATshort_dir-AP",
+            "custom_entities": "acq-DGD074_dir-AP",
             "criteria": {
-                "SeriesDescription": "EATshort_cmrr_mbep2d_bold_TR1.4_AP_SBRef",
-                "EchoTime": 0.03
+                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP_SBRef",
+                "EchoTime": 0.0668
             },
             "sidecar_changes": {
-                "TaskName": "EATshort"
+                "PhaseEncodingDirection": "j-"
             }
         },
         {
-            "id": "task-EATshort",
-            "datatype": "func",
-            "suffix": "bold",
-            "custom_entities": "task-EATshort_dir-AP",
+            "id": "dwi-DGD074",
+            "datatype": "dwi",
+            "suffix": "dwi",
+            "custom_entities": "acq-DGD074_dir-AP",
             "criteria": {
-                "SeriesDescription": "EATshort_cmrr_mbep2d_bold_TR1.4_AP",
-                "EchoTime": 0.03
+                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP",
+                "EchoTime": 0.0668
             },
             "sidecar_changes": {
-                "TaskName": "EATshort",
-		"B0FieldSource": "phasediff_fmap"
+                "PhaseEncodingDirection": "j-",
+                "TotalReadoutTime": 0.052124,
+                "B0FieldSource": "pepolar_fmap0_DTI"
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "ADC",
+            "custom_entities": "acq-DGD074_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_standard_1p5mm_SMS4_AP_ADC",
+                "EchoTime": 0.0668
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
+            }
+        },
+        {
+            "datatype": "dwi", 
+            "suffix": "sbref",
+            "custom_entities": "acq-DGD103_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP_SBRef",
+                "EchoTime": 0.071
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
+            }
+        },
+        {
+            "id": "dwi-DGD103",
+            "datatype": "dwi",
+            "suffix": "dwi",
+            "custom_entities": "acq-DGD103_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP",
+                "EchoTime": 0.071
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-",
+                "TotalReadoutTime": 0.0444809,
+                "B0FieldSource": "pepolar_fmap0_DTI"
+            }
+        },
+        {
+            "datatype": "dwi",
+            "suffix": "ADC",
+            "custom_entities": "acq-DGD103_dir-AP",
+            "criteria": {
+                "SeriesDescription": "diff_advanced_1p5mm_SMS4_AP_ADC",
+                "EchoTime": 0.071
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "epi",
+            "modalityLabel": "dwi",
+            "custom_entities": "acq-DGD006_dir-PA",
+            "criteria": {
+                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA",
+                "EchoTime": 0.0668
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j",
+                "TotalReadoutTime": 0.052124,
+                "IntendedFor": [
+                    "dwi-DGD074",
+                    "dwi-DGD103"
+                ],
+                "B0FieldIdentifier": "pepolar_fmap0_DTI"
+            }
+        },
+        {
+            "datatype": "fmap",
+            "suffix": "ADC",
+            "modalityLabel": "dwi",
+            "custom_entities": "acq-DGD006_dir-PA",
+            "criteria": {
+                "SeriesDescription": "diff_refscan_1p5mm_SMS4_PA_ADC",
+                "EchoTime": 0.0668
+            },
+            "sidecar_changes": {
+                "PhaseEncodingDirection": "j-"
             }
         }
     ]
